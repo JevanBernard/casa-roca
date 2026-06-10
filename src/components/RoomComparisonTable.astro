@@ -1,0 +1,40 @@
+---
+export interface ComparisonRow {
+  feature: string;
+  superior: string;
+  deluxe: string;
+}
+
+export interface Props {
+  rows: ComparisonRow[];
+}
+
+const { rows } = Astro.props;
+---
+
+<section class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop py-section-gap">
+  <h2 class="font-headline-md text-headline-md mb-12 text-center">
+    Superior vs Deluxe - Which room is right for you?
+  </h2>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="border-b-2 border-secondary">
+          <th class="py-6 px-4 font-label-md text-label-md uppercase text-outline">Feature</th>
+          <th class="py-6 px-4 font-headline-md text-headline-md text-secondary">Superior</th>
+          <th class="py-6 px-4 font-headline-md text-headline-md text-secondary">Deluxe</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-outline-variant">
+        {rows.map(({ feature, superior, deluxe }) => (
+          <tr>
+            <td class="py-6 px-4 font-label-md text-label-md">{feature}</td>
+            <td class="py-6 px-4 font-body-md text-body-md">{superior}</td>
+            <td class="py-6 px-4 font-body-md text-body-md">{deluxe}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+</section>

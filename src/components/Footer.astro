@@ -1,0 +1,122 @@
+---
+const exploreLinks = [
+  { label: 'Rooms', href: '/rooms' },
+  { label: 'Location', href: '/location' },
+  { label: 'About', href: '/about' },
+  { label: 'Blog', href: '/blog' },
+];
+
+const legalLinks = [
+  { label: 'Terms', href: '/terms' },
+  { label: 'Privacy', href: '/privacy' },
+];
+---
+
+<footer class="bg-surface-container-low">
+  <div
+    class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-margin-mobile md:px-margin-desktop py-section-gap max-w-container-max mx-auto"
+  >
+    <!-- Brand -->
+    <div class="md:col-span-4">
+      <a href="/" class="font-headline-md text-headline-md text-secondary mb-6 block">
+        Casa Roca
+      </a>
+      <p class="text-on-surface-variant font-body-md text-body-md max-w-xs mb-8">
+        Private rooms in the heart of Canggu. 5 minutes walk to Batu Bolong Beach.
+      </p>
+      <div class="flex gap-4">
+        <a
+          href="https://instagram.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-on-surface-variant hover:text-secondary transition-colors"
+          aria-label="Instagram"
+        >
+          <span class="material-symbols-outlined">public</span>
+        </a>
+        <a
+          href="mailto:casaroca@villavillabali.com"
+          class="text-on-surface-variant hover:text-secondary transition-colors"
+          aria-label="Email"
+        >
+          <span class="material-symbols-outlined">alternate_email</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Explore -->
+    <div class="md:col-span-2">
+      <h5 class="font-label-md text-label-md text-on-surface mb-6">Explore</h5>
+      <ul class="space-y-4">
+        {
+          exploreLinks.map(({ label, href }) => (
+            <li>
+              <a
+                href={href}
+                class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors"
+              >
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- Legal -->
+    <div class="md:col-span-2">
+      <h5 class="font-label-md text-label-md text-on-surface mb-6">Legal</h5>
+      <ul class="space-y-4">
+        {
+          legalLinks.map(({ label, href }) => (
+            <li>
+              <a
+                href={href}
+                class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors"
+              >
+                {label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <!-- Contact -->
+    <div class="md:col-span-4">
+      <h5 class="font-label-md text-label-md text-on-surface mb-6">Contact</h5>
+      <address class="not-italic space-y-2">
+        <p class="font-label-sm text-label-sm text-on-surface-variant">
+          Jl. Batu Bolong, Canggu
+        </p>
+        <p class="font-label-sm text-label-sm text-on-surface-variant">
+          Kuta Utara, Badung, Bali 80361
+        </p>
+        <a
+          href="mailto:casaroca@villavillabali.com"
+          class="font-label-sm text-label-sm text-on-surface-variant hover:text-secondary transition-colors block mt-2"
+        >
+          casaroca@villavillabali.com
+        </a>
+        <a
+          href="https://wa.me/62XXXXXXXXX"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="font-label-sm text-label-sm text-secondary hover:opacity-80 transition-colors block"
+        >
+          WhatsApp us →
+        </a>
+      </address>
+    </div>
+
+    <!-- Bottom bar -->
+    <div
+      class="md:col-span-12 pt-12 border-t border-outline-variant mt-4 flex flex-col sm:flex-row justify-between items-center gap-4"
+    >
+      <p class="font-label-sm text-label-sm text-on-surface-variant">
+        © {new Date().getFullYear()} Casa Roca Canggu. Managed by Villa Villa Bali.
+      </p>
+      <p class="font-label-sm text-label-sm text-on-surface-variant">Made by JC Flow Media.</p>
+    </div>
+  </div>
+</footer>

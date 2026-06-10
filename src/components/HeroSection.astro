@@ -1,0 +1,51 @@
+---
+// Hero section for homepage
+// Image should be replaced with actual Casa Roca photography
+const heroImage =
+  'https://lh3.googleusercontent.com/aida-public/AB6AXuAWVt3WSY8oJVhea5blpj1bwoTtFuwx05I3wbeeuxh_ej_FFwiG7mtobuQ65OlSMM-XoG4vcvrvN8Yt5lIHHaqrG9YtIgAcuni6H13wAzm5N0A6fx5mp_xd_JXWLiv7aBeQHCpI7-GZjrVnmLVWUxraCQL4ojNcS4uZlM1oZMRjtEo_q2RLHJeU27gH_ndUbKNCVYL18ATvJWFbllWTtpSOSly4SzJJYoZJ0wJ4RZ9Ie-cyfvvWKjuqFNQFxJJgD7WyWfOdGGUUW-E';
+---
+
+<section class="relative h-[921px] flex items-center overflow-hidden">
+  <!-- Background image -->
+  <div class="absolute inset-0 z-0">
+    <img
+      src={heroImage}
+      alt="Casa Roca Canggu - boutique guest house interior with teak wood furniture and tropical garden"
+      class="w-full h-full object-cover"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="absolute inset-0 bg-black/20"></div>
+  </div>
+
+  <!-- Content -->
+  <div
+    class="relative z-10 w-full px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto text-white"
+  >
+    <div class="max-w-2xl">
+      <h1
+        class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl mb-6 text-shadow-hero"
+      >
+        Private Rooms in the Heart of Batu Bolong, Canggu
+      </h1>
+      <p class="font-body-lg text-body-lg mb-8 opacity-90 max-w-lg">
+        10 private rooms each with a balcony, en-suite bathroom & free parking. 5 minutes walk
+        to Batu Bolong Beach.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a
+          href="/availability"
+          class="bg-surface text-on-surface px-8 py-4 rounded-lg font-label-md text-label-md hover:bg-surface-container-high transition-all active:scale-95 shadow-lg text-center"
+        >
+          Book a Room - Best Rate Direct
+        </a>
+        <a
+          href="/rooms"
+          class="border border-white/50 backdrop-blur-md text-white px-8 py-4 rounded-lg font-label-md text-label-md hover:bg-white/10 transition-all active:scale-95 text-center"
+        >
+          See All Rooms
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

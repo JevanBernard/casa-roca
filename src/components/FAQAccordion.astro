@@ -1,0 +1,75 @@
+---
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  items: FAQItem[];
+  title?: string;
+}
+
+const { items, title = 'Casa Roca — Quick Facts' } = Astro.props;
+
+// FAQ Schema
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map(({ question, answer }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: answer,
+    },
+  })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<section class="py-section-gap bg-surface-container">
+  <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+      <!-- Sticky title -->
+      <div class="md:col-span-4">
+        <h2 class="font-headline-lg text-headline-lg text-on-surface md:sticky md:top-32">
+          {title}
+        </h2>
+      </div>
+
+      <!-- Accordion -->
+      <div class="md:col-span-8 space-y-4">
+        {
+          items.map(({ question, answer }, index) => (
+            <details class="group bg-surface rounded-xl overflow-hidden" open={index === 0}>
+              <summary class="flex justify-between items-center p-8 cursor-pointer list-none">
+                <h4 class="font-label-md text-label-md text-on-surface pr-4">{question}</h4>
+                <span class="material-symbols-outlined transition-transform group-open:rotate-180 shrink-0">
+                  expand_more
+                </span>
+              </summary>
+              <div class="px-8 pb-8 text-on-surface-variant font-body-md text-body-md">
+                {answer}
+              </div>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Close other accordions when one opens
+  const allDetails = document.querySelectorAll('details');
+  allDetails.forEach((targetDetail) => {
+    targetDetail.addEventListener('click', () => {
+      allDetails.forEach((detail) => {
+        if (detail !== targetDetail) {
+          detail.removeAttribute('open');
+        }
+      });
+    });
+  });
+</script>

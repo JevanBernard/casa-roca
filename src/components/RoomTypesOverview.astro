@@ -1,0 +1,53 @@
+---
+import RoomCard from './RoomCard.astro';
+
+const rooms = [
+  {
+    name: 'Superior Room',
+    description:
+      'Private balcony, en-suite rain shower bathroom, AC, and flat screen TV. Available in Twin (2 single beds) and Double (1 queen bed).',
+    priceFrom: 'IDR 1,200,000',
+    image:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuD_A56Z44qIW7Lw_KIAy2V_wwYkRpqtIU7zFU3wD_AIOTfmjQQ_QgH7p8IwvoJC-bIElBoxkxAOMyc6_2PP8PeIDSF-KjISckWy6v--U864IOFVRtHAioCjpIhFc1YTHeOGq9iziGD2Bgb8I3LhDxJOi4cGtbaUSSbag_McN1QHDTpQphtpM4e3MZEsFrcamUIruaXhK7apsVlAzQEDV2zj_x0TNyXG74-Dk4pSN88k0uxTy42lylbPPbRZa8OjJUepnmN4Cbuz2Rg',
+    imageAlt:
+      'Superior Room at Casa Roca Canggu — teak wood furniture, private balcony, en-suite bathroom',
+    href: '/rooms#superior',
+  },
+  {
+    name: 'Deluxe Room',
+    description:
+      'More floor space, the same premium finishes. Available in Double (king), Twin, and Double+Twin sleeps up to 3 guests.',
+    priceFrom: 'IDR 1,800,000',
+    image:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuDVfpwQw9fY0mSl-mZkRodyYKMwHDQ6myHjm-N3DyF_0GLbBDrRQVQEN_XMkZOOO2TzPcrdjzPPxIxd9cYt6W2B61hY0zNBgqYQwX6qZjhJwNOvEBN93ap5xvLf5Wd8VDlBm6h3qRF9cYDeqzWtZ2Mf4N_EPe1oX0LvPYvE0guaqY1VVZ9X7rrvpih-fhVETXtNSlrNNN1StbAv6DP2Wtu7CRGB5-QXGzg4Sd7d9sE45iYwn15RFtUUGUrCJpFsiWffFuGY7vbCrjk',
+    imageAlt:
+      'Deluxe Room at Casa Roca Canggu — spacious private room with teak wood and en-suite bathroom',
+    href: '/rooms#deluxe',
+  },
+];
+---
+
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+  <div class="text-center mb-16">
+    <h2 class="font-headline-lg text-headline-lg text-on-surface">
+      Superior and Deluxe rooms - What's the difference?
+    </h2>
+    <p class="text-on-surface-variant mt-4 font-body-lg text-body-lg">
+      Both room types include every essential. The Deluxe gives you more space.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+    {rooms.map((room) => <RoomCard {...room} />)}
+  </div>
+
+  <div class="text-center mt-12">
+    <a
+      href="/rooms"
+      class="inline-flex items-center gap-2 border border-outline text-on-surface px-8 py-3 rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors"
+    >
+      View all rooms & configurations
+      <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+    </a>
+  </div>
+</section>

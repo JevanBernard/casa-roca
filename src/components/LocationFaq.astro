@@ -1,0 +1,96 @@
+---
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  items: FAQItem[];
+}
+
+const { items } = Astro.props;
+
+const locationFaqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map(({ question, answer }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: { '@type': 'Answer', text: answer },
+  })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(locationFaqSchema)} />
+
+<section class="bg-surface-container-low/50 py-section-gap px-margin-mobile md:px-margin-desktop">
+  <div class="max-w-3xl mx-auto">
+    <h2 class="font-headline-lg text-headline-lg text-center mb-12">
+      Frequently asked questions about Casa Roca's location
+    </h2>
+
+    <div class="space-y-4" id="location-faq">
+      {items.map(({ question, answer }, i) => (
+        <div
+          class="bg-surface-container-lowest rounded-xl border border-outline-variant/40 hover:border-secondary/20 transition-colors overflow-hidden"
+          data-faq-item
+        >
+          <button
+            class="w-full flex justify-between items-center px-6 py-5 text-left gap-4"
+            aria-expanded={i === 0 ? 'true' : 'false'}
+            data-faq-btn
+          >
+            <h4 class="font-body-md text-body-md font-medium text-on-surface">{question}</h4>
+            <span
+              class="material-symbols-outlined text-secondary shrink-0 transition-transform duration-300"
+              data-faq-icon
+            >
+              expand_more
+            </span>
+          </button>
+
+          <div
+            class="grid transition-all duration-300 ease-in-out"
+            style={i === 0 ? 'grid-template-rows: 1fr;' : 'grid-template-rows: 0fr;'}
+            data-faq-panel
+          >
+            <div class="overflow-hidden">
+              <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed px-6 pb-5 border-t border-outline-variant/30 pt-4">
+                {answer}
+              </p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const faqContainer = document.getElementById('location-faq');
+
+  faqContainer?.querySelectorAll('[data-faq-btn]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('[data-faq-item]');
+      const panel = item?.querySelector('[data-faq-panel]') as HTMLElement | null;
+      const icon = btn.querySelector('[data-faq-icon]');
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+
+      // Close all
+      faqContainer.querySelectorAll('[data-faq-btn]').forEach((b) => {
+        b.setAttribute('aria-expanded', 'false');
+        const p = b.closest('[data-faq-item]')?.querySelector('[data-faq-panel]') as HTMLElement | null;
+        const ic = b.querySelector('[data-faq-icon]');
+        if (p) p.style.gridTemplateRows = '0fr';
+        if (ic) ic.classList.remove('rotate-180');
+      });
+
+      // Open clicked (if it was closed)
+      if (!isOpen) {
+        btn.setAttribute('aria-expanded', 'true');
+        if (panel) panel.style.gridTemplateRows = '1fr';
+        if (icon) icon.classList.add('rotate-180');
+      }
+    });
+  });
+</script>

@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import HeroSection from '../components/HeroSection.astro';
+import AboutBlock from '../components/AboutBlock.astro';
+import WhyCasaRoca from '../components/WhyCasaRoca.astro';
+import RoomTypesOverview from '../components/RoomTypesOverview.astro';
+import FAQAccordion from '../components/FAQAccordion.astro';
+import CTABanner from '../components/CTABanner.astro';
+
+import type { FAQItem } from '../components/FAQAccordion.astro';
+
+const faqItems: FAQItem[] = [
+  {
+    question: 'Where is Casa Roca located?',
+    answer:
+      'Casa Roca is on Jl. Batu Bolong, Canggu, Kuta Utara, Badung, Bali — next to Aston Canggu Hotel. Batu Bolong Beach is approximately 400 meters away, a 5-minute walk.',
+  },
+  {
+    question: 'How far is the beach?',
+    answer:
+      'Batu Bolong Beach is exactly 400 meters from Casa Roca — a flat, easy 5-minute walk past popular cafés and the surf school.',
+  },
+  {
+    question: 'Is breakfast included?',
+    answer:
+      'Casa Roca is a room-only property. Breakfast is not included, but Canggu\'s wide range of cafés and warungs — including Crate Café and Motion Café — are within a short walk.',
+  },
+  {
+    question: 'Does Casa Roca have free parking?',
+    answer:
+      'Yes. Casa Roca provides free basement parking for all guests, accommodating both motorbikes and cars — a rare convenience in central Canggu.',
+  },
+  {
+    question: 'Does Casa Roca have a swimming pool?',
+    answer:
+      'Casa Roca does not have a shared pool. The property is designed as private room accommodation. Batu Bolong Beach is a 5-minute walk, and Canggu Club (with a pool) is a 10-minute ride.',
+  },
+  {
+    question: 'What are the check-in and check-out times?',
+    answer:
+      'Check-in is from 14:00 WITA. Check-out is by 12:00 WITA. Early check-in and late check-out can be requested subject to availability. Reception is open daily 08:00–20:00 WITA.',
+  },
+];
+---
+
+<BaseLayout
+  title="Casa Roca Canggu - Private Rooms in Batu Bolong, Bali | Book Direct"
+  description="Stay at Casa Roca, a 10-room guest house on Jl. Batu Bolong, Canggu. Private balcony, en-suite bathroom, AC, TV & free parking. Walk to Batu Bolong Beach in 5 minutes. Book direct for best rates."
+  canonical="https://casaroca.com/"
+>
+  <Header />
+
+  <main>
+    <HeroSection />
+    <AboutBlock />
+    <WhyCasaRoca />
+    <RoomTypesOverview />
+    <FAQAccordion items={faqItems} title="Casa Roca — Quick Facts" />
+    <CTABanner
+      title="Ready to stay in Canggu?"
+      body="Experience one of Canggu's best-located private rooms - 2 minutes walk to Batu Bolong Beach. Book direct for the lowest rate."
+      ctaLabel="Check Availability"
+      ctaHref="/availability"
+    />
+  </main>
+
+  <Footer />
+</BaseLayout>

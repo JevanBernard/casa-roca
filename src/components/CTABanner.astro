@@ -1,0 +1,32 @@
+---
+export interface Props {
+  title?: string;
+  body?: string;
+  ctaLabel?: string;
+  ctaHref?: string;
+}
+
+const {
+  title = 'Ready to stay in Canggu?',
+  body = "Experience one of Canggu's best-located private rooms. Our 10 rooms book up quickly — reserve direct for the best rate.",
+  ctaLabel = 'Check Availability',
+  ctaHref = '/availability',
+} = Astro.props;
+---
+
+<section class="py-section-gap px-margin-mobile md:px-margin-desktop">
+  <div
+    class="max-w-container-max mx-auto bg-secondary rounded-3xl p-12 md:p-24 text-center text-on-secondary"
+  >
+    <h2 class="font-headline-lg text-headline-lg mb-8">{title}</h2>
+    <p class="font-body-lg text-body-lg mb-12 opacity-90 max-w-xl mx-auto">
+      {body}
+    </p>
+    <a
+      href={ctaHref}
+      class="inline-block bg-surface text-secondary px-12 py-5 rounded-full font-label-md text-label-md hover:scale-105 transition-transform active:scale-95"
+    >
+      {ctaLabel}
+    </a>
+  </div>
+</section>

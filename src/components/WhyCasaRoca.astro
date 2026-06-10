@@ -1,0 +1,41 @@
+---
+const pillars = [
+  {
+    icon: 'shield',
+    title: 'Private - no shared spaces',
+    body: 'Every room has its own private balcony and en-suite bathroom. No shared kitchen, no shared lounge, no hostel vibe. Complete privacy from check-in to check-out.',
+  },
+  {
+    icon: 'location_on',
+    title: 'Location - Batu Bolong, Canggu',
+    body: 'Casa Roca sits on Jl. Batu Bolong one of Canggu\'s most sought-after streets. Batu Bolong Beach is a 2-minute walk. Old Man\'s, Canggu Club, and the island\'s top cafés are within easy reach.',
+  },
+  {
+    icon: 'moped',
+    title: 'Free parking - motorbikes & cars',
+    body: 'Complimentary basement parking for all guests, accommodating both motorbikes and cars. A rare convenience in central Canggu.',
+  },
+];
+---
+
+<section class="bg-surface-container-low py-section-gap">
+  <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+    <div class="text-center mb-16">
+      <h2 class="font-headline-lg text-headline-lg text-on-surface">Why guests choose Casa Roca</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      {
+        pillars.map(({ icon, title, body }) => (
+          <div class="space-y-6">
+            <div class="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center text-on-secondary-container">
+              <span class="material-symbols-outlined">{icon}</span>
+            </div>
+            <h3 class="font-headline-md text-headline-md text-on-surface">{title}</h3>
+            <p class="text-on-surface-variant font-body-md text-body-md">{body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

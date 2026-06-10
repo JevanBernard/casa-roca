@@ -1,0 +1,214 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import RoomSection from '../components/RoomSection.astro';
+import RoomComparisonTable from '../components/RoomComparisonTable.astro';
+import BentoGallery from '../components/BentoGallery.astro';
+import CTABanner from '../components/CTABanner.astro';
+
+import type { ComparisonRow } from '../components/RoomComparisonTable.astro';
+import type { BentoImage } from '../components/BentoGallery.astro';
+
+// ─── Superior Room data ───────────────────────────────────────────────────────
+const superiorRoom = {
+  id: 'superior',
+  badge: 'Essential Luxury',
+  title: 'Superior Room',
+  description:
+    'Crafted for the discerning traveler who values intimacy and focus. Built with solid teak furniture and premium cream tile finishes, the room has a clean, grounded feel that reflects Bali\'s natural materials. Natural light enters through large windows and your private balcony is a calm spot to start the morning before heading five minutes down the road to Batu Bolong Beach.',
+  image:
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuDzj4PYq9JUwsyRTjnDM5kQytTq5WFNtq5Z7qjcctVLtn2mrCfYvdSBpLqKFRlUmXwTOi-oVDM1AYiilvsNfl8k_J1-PNQGefxDbMWuhJb8i5sOylzMMbbqkc9H_luqnP0mlZ6QU8Zmjdv9YmQfb6E6UNj9WFPYz0o0mV18GmcnkGdgvOl6cPZSSPsUGqvuirhThmOkz8NCYLatNZwiaKPTOiHMeK_KyTt9Cn3nn5VAfXnYPhja40ZrrpDZjPACndZ2dS5LFpLl4WU',
+  imageAlt: 'Superior Room at Casa Roca Canggu — teak wood furniture and private balcony',
+  roomTypes: [
+    { icon: 'bed', label: 'Superior Twin (2 single beds)' },
+    { icon: 'bed', label: 'Superior Double (1 queen bed)' },
+  ],
+  facilities: [
+    { icon: 'shower', label: 'Rain shower + hot water' },
+    { icon: 'ac_unit', label: 'Air conditioning' },
+    { icon: 'wifi', label: 'Free high-speed WiFi' },
+    { icon: 'tv', label: 'Flat screen TV' },
+    { icon: 'balcony', label: 'Private balcony' },
+    { icon: 'local_parking', label: 'Free basement parking' },
+  ],
+  priceFrom: 'IDR 1,250,000',
+};
+
+// ─── Deluxe Room data ─────────────────────────────────────────────────────────
+const deluxeRoom = {
+  id: 'deluxe',
+  badge: 'Spacious Sanctuary',
+  title: 'Deluxe Room',
+  description:
+    'More floor space, more natural light, more room to actually settle in. If you\'re staying longer than a few nights, or simply prefer not to feel squeezed, the Deluxe is worth the step up. The teak wood furniture and warm-toned walls create a calm atmosphere enough to work from, to spread out, to breathe.',
+  image:
+    'https://lh3.googleusercontent.com/aida-public/AB6AXuAV2fKg7EcTpeU2h18CCOmzUfaV5YoKotEUlrBt_c3ZoqZCpBAe73CFCuf-OuaiyQcc_koqDxsG9UGlJqA2zOExvadCVIRYtaQFJGSVTVa1jABKVvjJhR37t9A7JTgRqur1II1hfpymNj9ZthJE3qcK6IKieTUFZrPVpxKpXgb7WxRrWCchE3Kcke7tko0oRaBgJcpQEHbfs3pE_ezTeFOzT-5g2giHKoom0H_peL4E_U4YsmIWE3T7_cUAJNdsCV6ZE9IeJBCX3SQ',
+  imageAlt: 'Deluxe Room at Casa Roca Canggu — spacious room with teak wood and en-suite bathroom',
+  roomTypes: [
+    { icon: 'king_bed', label: 'Deluxe Double (1 king bed)' },
+    { icon: 'bed', label: 'Deluxe Twin (2 single beds)' },
+    { icon: 'group', label: 'Double + Twin (sleeps 3)' },
+  ],
+  facilities: [
+    { icon: 'shower', label: 'Rain shower + hot water' },
+    { icon: 'ac_unit', label: 'Air conditioning' },
+    { icon: 'wifi', label: 'Free high-speed WiFi' },
+    { icon: 'tv', label: 'Flat screen TV' },
+    { icon: 'balcony', label: 'Private balcony' },
+    { icon: 'local_parking', label: 'Free basement parking' },
+  ],
+  priceFrom: 'IDR 1,850,000',
+  reversed: true,
+  bgClass: 'bg-surface-container-low',
+};
+
+// ─── Comparison table data ────────────────────────────────────────────────────
+const comparisonRows: ComparisonRow[] = [
+  { feature: 'Room Size', superior: '24 sqm', deluxe: '38 sqm' },
+  { feature: 'Max Occupancy', superior: '2 Adults', deluxe: '3 Adults' },
+  { feature: 'Bed Options', superior: 'Twin or Double (queen)', deluxe: 'Double (king), Twin, or Double+Twin' },
+  { feature: 'Private Balcony', superior: 'Yes', deluxe: 'Yes' },
+  { feature: 'En-suite Bathroom', superior: 'Yes', deluxe: 'Yes' },
+  { feature: 'Rain Shower', superior: 'Yes', deluxe: 'Yes' },
+  { feature: 'Furniture', superior: 'Teak desk & wardrobe', deluxe: 'Lounge area & vanity' },
+  { feature: 'Amenities', superior: 'Kettle, local coffee', deluxe: 'Nespresso, mini bar' },
+  { feature: 'Best for', superior: 'Solo, couples, short stays', deluxe: 'Couples, families, longer stays' },
+];
+
+// ─── Bento gallery data ───────────────────────────────────────────────────────
+const bentoImages: BentoImage[] = [
+  {
+    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDMRhQ2zKARH6ThiRmoi3pbWMYIoXtf0IuwjvoqMnvPKaxDjMaXMa-YZ9nf0DxuwKX9qItTwOmtD2K6r_xypJSZMkllyPJDjdO93zz8OdQb8c2T8GxfkbZ2DiZESyApNevafc5g6a86LShmh6cLJ_-gIBHoKHKu5NP1G2BWDdKe9CSEk85iYYC5L8w2F1OdqyCQWDxPFaaFkjqVttxknvUTHSpGecXvfm7kn2hnXMKgxj8Mr0VpcYmIYM2uEBl6HVGwBAk6njImSwU',
+    alt: 'Casa Roca Canggu — architectural detail, natural stone and teak wood',
+    caption: 'Architectural Intent',
+    colSpan: 2,
+    rowSpan: 2,
+  },
+  {
+    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuB12Hs19Xmk6WdcsTecXltqEWybgOH9osRLWt6ng-0cVC5T--44Tw6RT4sV1ZtjoFgLUYqJZkCAEQga0KcltP0sLbb3bbBvr-AgsDCrx_tCGHZweR3jyjsx378T6A8-80D2tWcbqXB2MkuiLPv-Ho_K7EW9ICh7km-nqwrUvCoFJPihyfGllXTNt6C2YimgHZotBcjuKAkqKpArIf-vMHNdZxBwy50zJteoSySKpdsAMqTqYnFMKmwAY5qYzCQjURe6dLQv_jd6XOk',
+    alt: 'Casa Roca Canggu — rainfall shower detail',
+    colSpan: 2,
+    rowSpan: 1,
+  },
+  {
+    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBnGBIcTJmV-6-rA3wzndEhj5pgiP-oSU7foddpmB7KpvKKbCQCfBW11nECnECokO0uEiSGU0RKnsaWb0Fu7WzGIlZbka3nIbJojWqs8Mf81tw3c7DQNC2p-vf5YIAp_-wLxqO4Zha64oiiCoy6jjmL2lrUocwPF3D0jR5LfOOnUTE3tVP4HIiT1hBVUQVmwaI3mAOkCEaPGupYFPuezJevjnA8Y_eR5VT7Qm_v7_s5inVIsSqdVxKBC0vT3rEygNGLY7V6F09R0c',
+    alt: 'Casa Roca Canggu — minimalist Balinese decor',
+    colSpan: 1,
+    rowSpan: 1,
+  },
+  {
+    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDS5qseZoB9duotKYGGmIXxgckMmFC8V8Y03ZjzNwYk_pF7qeXM7qJwr2w7wefzsurFE91s8vnSiruuEA6YqxkALOQiiA_RTXKcJigmE6B3bQu4Iw7jyMfZgWoHQHM-wn4l9WFYq4-_WKNkII_rPH1rU8FDMcRUfRcDSj8A3tZMWTXZ2AzIPsbsApaz2MS3FEAibqqBFdwRd8GwXbLCxU-_8XaA_7TURGRoL-nVieBDqH4xJFz5aLZmClZFq0',
+    alt: 'Casa Roca Canggu — premium white linens and teak headboard',
+    colSpan: 1,
+    rowSpan: 1,
+  },
+];
+
+// ─── HotelRoom schema ─────────────────────────────────────────────────────────
+const schemaRooms = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HotelRoom',
+    name: 'Superior Room — Casa Roca Canggu',
+    description: 'Private room with solid teak furniture, private balcony, en-suite rain shower bathroom, AC, and TV. Available in Twin and Double configurations.',
+    occupancy: { '@type': 'QuantitativeValue', maxValue: 2 },
+    amenityFeature: [
+      { '@type': 'LocationFeatureSpecification', name: 'Private balcony', value: true },
+      { '@type': 'LocationFeatureSpecification', name: 'Rain shower', value: true },
+      { '@type': 'LocationFeatureSpecification', name: 'Air conditioning', value: true },
+      { '@type': 'LocationFeatureSpecification', name: 'Flat screen TV', value: true },
+      { '@type': 'LocationFeatureSpecification', name: 'Free WiFi', value: true },
+    ],
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'HotelRoom',
+    name: 'Deluxe Room — Casa Roca Canggu',
+    description: 'Larger private room with more floor space, private balcony, en-suite rain shower bathroom, AC, and TV. Available in Double (king), Twin, and Double+Twin configurations.',
+    occupancy: { '@type': 'QuantitativeValue', maxValue: 3 },
+    amenityFeature: [
+      { '@type': 'LocationFeatureSpecification', name: 'Private balcony', value: true },
+      { '@type': 'LocationFeatureSpecification', name: 'Rain shower', value: true },
+      { '@type': 'LocationFeatureSpecification', name: 'Air conditioning', value: true },
+      { '@type': 'LocationFeatureSpecification', name: 'Flat screen TV', value: true },
+      { '@type': 'LocationFeatureSpecification', name: 'Free WiFi', value: true },
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Rooms at Casa Roca Canggu - Superior & Deluxe Private Rooms in Batu Bolong"
+  description="Browse Superior and Deluxe rooms at Casa Roca Canggu. All rooms include private balcony, en-suite bathroom with rain shower, AC, TV & free parking. Book direct."
+  canonical="https://casaroca.com/rooms"
+>
+  <!-- Extra schema for room types -->
+  {schemaRooms.map((schema) => (
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} slot="head" />
+  ))}
+
+  <Header />
+
+  <main>
+    <!-- Page header -->
+    <header class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pt-32 pb-section-gap">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-end">
+        <div class="lg:col-span-8">
+          <h1 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl mb-8 leading-tight">
+            Private Rooms at<br />Casa Roca Batu Bolong, Canggu
+          </h1>
+          <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+            10 private rooms across two categories Superior and Deluxe on Jl. Batu Bolong,
+            Canggu, Bali. Every room includes a private balcony, en-suite bathroom with rain
+            shower, air conditioning, flat screen TV, and free basement parking.
+          </p>
+        </div>
+        <div class="lg:col-span-4 flex lg:justify-end">
+          <div class="lg:text-right">
+            <span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">
+              Est. 2026
+            </span>
+            <div class="flex gap-1 mt-2">
+              {[...Array(5)].map(() => (
+                <span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1">star</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Jump links -->
+    <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pb-16">
+      <div class="flex gap-4">
+        <a
+          href="#superior"
+          class="border border-outline text-on-surface px-5 py-2 rounded-full font-label-md text-label-md hover:bg-surface-container transition-colors"
+        >
+          Superior Room
+        </a>
+        <a
+          href="#deluxe"
+          class="border border-outline text-on-surface px-5 py-2 rounded-full font-label-md text-label-md hover:bg-surface-container transition-colors"
+        >
+          Deluxe Room
+        </a>
+      </div>
+    </div>
+
+    <RoomSection {...superiorRoom} />
+    <RoomSection {...deluxeRoom} />
+    <RoomComparisonTable rows={comparisonRows} />
+    <BentoGallery images={bentoImages} />
+
+    <CTABanner
+      title="Ready to book your room?"
+      body="Direct bookings always get the lowest rate no OTA fees, no markup. Superior and Deluxe rooms available now."
+      ctaLabel="Check Availability"
+      ctaHref="/availability"
+    />
+  </main>
+
+  <Footer />
+</BaseLayout>

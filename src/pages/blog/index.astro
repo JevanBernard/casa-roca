@@ -1,0 +1,106 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Header from '../../components/Header.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+function formatDate(date) {
+  return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+---
+
+<BaseLayout
+  title="Canggu Travel Guide & Local Tips — Casa Roca Blog"
+  description="The Casa Roca Canggu blog — local tips, surf guides, neighborhood recommendations, and everything you need to know about staying in Batu Bolong, Canggu, Bali."
+  canonical="https://casaroca.com/blog"
+>
+  <Header />
+
+  <main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+
+    <header class="pt-24 pb-16 md:pt-32 md:pb-24">
+      <span class="font-label-md text-label-md text-secondary uppercase tracking-widest mb-4 block">
+        Local Knowledge
+      </span>
+      <h1 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-surface mb-8">
+        Canggu Travel Guide
+      </h1>
+      <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+        Everything you need to know about visiting and staying in Canggu, Bali — written from the
+        perspective of people based on Jl. Batu Bolong.
+      </p>
+    </header>
+
+    <!-- Featured post (latest) -->
+    {posts.length > 0 && (
+      <a href={`/blog/${posts[0].slug}`} class="group block mb-16">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
+          <div class="rounded-xl overflow-hidden aspect-[16/10]">
+            <img
+              src={posts[0].data.image}
+              alt={posts[0].data.imageAlt}
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="eager"
+            />
+          </div>
+          <div class="space-y-4">
+            <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">
+              {posts[0].data.category}
+            </span>
+            <h2 class="font-headline-lg text-headline-lg text-on-surface group-hover:text-secondary transition-colors">
+              {posts[0].data.title}
+            </h2>
+            <p class="font-body-lg text-body-lg text-on-surface-variant">
+              {posts[0].data.description}
+            </p>
+            <p class="font-label-sm text-label-sm text-outline">
+              {formatDate(posts[0].data.pubDate)}
+            </p>
+            <span class="inline-flex items-center gap-2 text-secondary font-label-md text-label-md group-hover:gap-3 transition-all">
+              Read article
+              <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </span>
+          </div>
+        </div>
+      </a>
+    )}
+
+    <!-- Divider -->
+    <div class="border-t border-outline-variant mb-16"></div>
+
+    <!-- Post grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-section-gap">
+      {posts.slice(1).map((post) => (
+        <a href={`/blog/${post.slug}`} class="group block space-y-4">
+          <div class="rounded-xl overflow-hidden aspect-[16/10]">
+            <img
+              src={post.data.image}
+              alt={post.data.imageAlt}
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+          </div>
+          <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest block">
+            {post.data.category}
+          </span>
+          <h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-secondary transition-colors">
+            {post.data.title}
+          </h3>
+          <p class="font-body-md text-body-md text-on-surface-variant">
+            {post.data.description}
+          </p>
+          <p class="font-label-sm text-label-sm text-outline">
+            {formatDate(post.data.pubDate)}
+          </p>
+        </a>
+      ))}
+    </div>
+
+  </main>
+
+  <Footer />
+</BaseLayout>

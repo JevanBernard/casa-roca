@@ -1,0 +1,82 @@
+---
+export interface Props {
+  title?: string;
+  description?: string;
+  canonical?: string;
+}
+
+const {
+  title = 'Casa Roca Canggu - Private Rooms in Batu Bolong, Bali',
+  description = 'Stay at Casa Roca, a 10-room guest house on Jl. Batu Bolong, Canggu. Private balcony, en-suite bathroom, AC, TV & free parking. Walk to Batu Bolong Beach in 5 minutes. Book direct for best rates.',
+  canonical = 'https://casaroca.com/',
+} = Astro.props;
+
+const schemaLodging = {
+  '@context': 'https://schema.org',
+  '@type': 'LodgingBusiness',
+  name: 'Casa Roca Canggu',
+  description:
+    'Casa Roca is a 10-room private guest house on Jl. Batu Bolong, Canggu, Bali. Superior and Deluxe rooms with private balconies, en-suite bathrooms, AC, TV, and free parking.',
+  url: 'https://casaroca.com',
+  email: 'casaroca@villavillabali.com',
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: 'Jl. Batu Bolong',
+    addressLocality: 'Canggu',
+    addressRegion: 'Kuta Utara, Badung, Bali',
+    postalCode: '80361',
+    addressCountry: 'ID',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: -8.6527,
+    longitude: 115.1334,
+  },
+  numberOfRooms: 10,
+  amenityFeature: [
+    { '@type': 'LocationFeatureSpecification', name: 'Free parking', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Air conditioning', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Private bathroom', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Private balcony', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Flat screen TV', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Daily housekeeping', value: true },
+    { '@type': 'LocationFeatureSpecification', name: 'Reception', value: true },
+  ],
+  checkinTime: '14:00',
+  checkoutTime: '12:00',
+  priceRange: '$$',
+};
+---
+
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify(schemaLodging)} />
+  </head>
+
+  <body class="bg-background text-on-background font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,117 @@
+---
+export interface RoomType {
+  icon: string;
+  label: string;
+}
+
+export interface Facility {
+  icon: string;
+  label: string;
+}
+
+export interface Props {
+  id: string;
+  badge: string;
+  title: string;
+  description: string;
+  image: string;
+  imageAlt: string;
+  roomTypes: RoomType[];
+  facilities: Facility[];
+  priceFrom: string;
+  availabilityHref?: string;
+  reversed?: boolean;
+  bgClass?: string;
+}
+
+const {
+  id,
+  badge,
+  title,
+  description,
+  image,
+  imageAlt,
+  roomTypes,
+  facilities,
+  priceFrom,
+  availabilityHref = '/availability',
+  reversed = false,
+  bgClass = '',
+} = Astro.props;
+---
+
+<section id={id} class={`py-section-gap ${bgClass}`}>
+  <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
+      <!-- Image -->
+      <div class:list={['relative aspect-[4/5] rounded-xl overflow-hidden shadow-sm group', reversed ? 'order-1 lg:order-2' : '']}>
+        <img
+          src={image}
+          alt={imageAlt}
+          class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          loading="lazy"
+        />
+      </div>
+
+      <!-- Content -->
+      <div class:list={['space-y-8', reversed ? 'order-2 lg:order-1' : '']}>
+        <div>
+          <span class="font-label-sm text-label-sm text-secondary bg-secondary-fixed/30 px-3 py-1 rounded-full">
+            {badge}
+          </span>
+          <h2 class="font-headline-lg text-headline-lg mt-4 mb-6">{title}</h2>
+          <p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
+            {description}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Room types -->
+          <div>
+            <h3 class="font-label-md text-label-md mb-4 uppercase text-outline">Room types</h3>
+            <ul class="space-y-2">
+              {roomTypes.map(({ icon, label }) => (
+                <li class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary scale-75">{icon}</span>
+                  <span class="font-body-md text-body-md">{label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <!-- Facilities -->
+          <div>
+            <h3 class="font-label-md text-label-md mb-4 uppercase text-outline">Facilities</h3>
+            <ul class="space-y-2">
+              {facilities.map(({ icon, label }) => (
+                <li class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-secondary scale-75">{icon}</span>
+                  <span class="font-body-md text-body-md">{label}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <!-- Price + CTA -->
+        <div class="pt-8 border-t border-outline-variant flex items-center justify-between">
+          <div>
+            <p class="font-label-sm text-label-sm text-on-surface-variant">Starting from</p>
+            <p class="font-headline-md text-headline-md text-secondary">
+              {priceFrom}
+              <span class="text-body-md font-normal text-on-surface-variant">/ night</span>
+            </p>
+          </div>
+          <a
+            href={availabilityHref}
+            class="bg-secondary text-on-secondary px-8 py-4 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity active:scale-95"
+          >
+            Check availability
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>

@@ -1,0 +1,255 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const stats = [
+  { value: '10', label: 'Private Rooms' },
+  { value: '0', label: 'Shared Pools' },
+];
+
+const privacyPoints = [
+  {
+    icon: 'no_accounts',
+    title: 'No Shared Areas',
+    body: 'To ensure absolute tranquility, we do not feature shared pools, kitchens, or communal lounges. Your focus remains on your personal experience.',
+  },
+  {
+    icon: 'door_front',
+    title: 'Private Entrance',
+    body: 'Every room is a self-contained sanctuary with its own secure entrance, allowing you to come and go with the freedom of a private residence.',
+  },
+  {
+    icon: 'balcony',
+    title: 'En-suite Living',
+    body: 'Each of our 10 rooms features its own private balcony and en-suite bathroom, providing a complete living experience within your four walls.',
+  },
+];
+
+const amenities = [
+  { icon: 'wifi', label: 'Connectivity', description: 'Free High-Speed WiFi throughout the property, optimized for remote work.', wide: true },
+  { icon: 'shower', label: 'Rain Shower', description: null, wide: false },
+  { icon: 'ac_unit', label: 'Split AC', description: null, wide: false },
+  { icon: 'garage', label: 'Parking', description: 'Free Basement Parking for cars & motorbikes.', wide: false },
+  { icon: 'cleaning_services', label: 'Service', description: 'Daily housekeeping ensuring your sanctuary remains pristine.', wide: true },
+  { icon: 'tv', label: 'Flat Screen TV', description: null, wide: false },
+];
+
+const glanceRows = [
+  { label: 'Location', value: 'Jl. Batu Bolong, Canggu, Bali' },
+  { label: 'Total Rooms', value: '10 Private Rooms' },
+  { label: 'Check-In / Out', value: '14:00 WITA / 12:00 WITA' },
+  { label: 'Management', value: 'Managed by Villa Villa Bali' },
+];
+
+const heroImage = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDdBDfVofBc1pV8xI9DcMPl1gMhMwm5e5gMsHatwoZv3AuEjkeJNtxUNgJ4Zg8tf31A0plfLfsl3YYXOPmf7wgX7c_TgUebzkeLkRlqlKfib5NniXKF09kkz9YDofh7g5azOmiQ06RpknZSJaPJklko619cSNaRmWbPCcrdAtFkSlJNERK-avMRxKJD8MQvOZNTZPMxwLgWPXGqWzwiN7IOJrWEGE38w13QlwTpta5TNa5BE5kVHdyUglV9VvF60UKUzf5s0MlI3nQ';
+const teakImage = 'https://lh3.googleusercontent.com/aida-public/AB6AXuDHGtOCuaYZv6CGbRlt4q1mmyLS8bZU-mXAM6vbzHY3hrytMTJKSIdnhXcdGrQGyLY2DeYkGfrlERnrh6e6vG3i-_-KgSksfrgD2Ct_-baouwLetmQPFmZ3dy-EE_ZLRDwXemXP4X4LR-lGmpCaEWh4DCd3Ajm0SDgWF8pmdy1FPSQJyd-0Q97ZMqbhfkTrb3R42m5FnLU0xYwOe7tj1TpzRaXco6XUYQnvpuTCai0EqUJ6aICEtWJ5h1_DhmQ7Y14B5CpSGM_Fe4Y';
+const teamImage = 'https://lh3.googleusercontent.com/aida-public/AB6AXuBowvDlLG1Pr7v1rf2ZxKcTX86dBDnKftjT1B-h4cj6wpVEYzHYF6lS0XHv6p1S8BU0UK1ujqVrZuCWCmzknP5-Q9m5sVqSsw7922HGUjWQH6-ZaxxUBAmsmOM-cmwoxPM0DAzh1ChwXlTNSI1rohVNy8bgz6qXqmlb4nrRhjnewD_0WPu_t3jYoExdWFbukIys2ALyEPDqym6Wu_jCRPcG6CgXCsBiBeisS9wT0jC1Qifyf2MUSS7XXseKrhBBNhhNaLYsS1X3-bE';
+---
+
+<BaseLayout
+  title="About Casa Roca - Private Guest House in Batu Bolong, Canggu, Bali"
+  description="Casa Roca is a 10-room private guest house on Jl. Batu Bolong, Canggu, Bali. Superior and Deluxe rooms with en-suite bathrooms, private balconies, and free parking. Managed by Villa Villa Bali."
+  canonical="https://casaroca.com/about"
+>
+  <Header />
+
+  <main>
+    <!-- Hero -->
+    <section class="relative pt-12 overflow-hidden">
+      <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop pb-16">
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter items-end">
+          <div class="md:col-span-8">
+            <span class="font-label-md text-label-md text-secondary tracking-widest uppercase mb-4 block">
+              Boutique Guest House
+            </span>
+            <h1 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-background mb-8">
+              About Casa Roca -<br />Canggu, Bali
+            </h1>
+            <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+              A refined 10-room private guest house nestled on the iconic Jl. Batu Bolong. We offer
+              a quiet alternative to the bustling Canggu scene, where architectural intent meets the
+              warmth of Balinese hospitality.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="w-full h-[614px]">
+        <img
+          src={heroImage}
+          alt="Casa Roca exterior — modern Bali guest house at dusk with teak screens and stone walls"
+          class="w-full h-full object-cover"
+          loading="eager"
+        />
+      </div>
+    </section>
+
+    <!-- Property Philosophy -->
+    <section class="py-section-gap bg-surface-container-low">
+      <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+          <div class="relative group aspect-[4/5] overflow-hidden rounded-lg shadow-sm">
+            <img
+              src={teakImage}
+              alt="Solid teak wood chair and hand-carved stone side table at Casa Roca"
+              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+              loading="lazy"
+            />
+          </div>
+
+          <div>
+            <h2 class="font-headline-lg text-headline-lg text-on-background mb-6">
+              Designed with Intention
+            </h2>
+            <div class="space-y-6 font-body-md text-body-md text-on-surface-variant">
+              <p>
+                At Casa Roca, our philosophy is anchored in "Bali Modern" — a design language that
+                prioritizes tactile honesty and architectural permanence. We have replaced the
+                standard tropical clichés with a curated selection of materials: solid teak
+                furniture crafted by local artisans and natural river stone that stays cool under
+                the Indonesian sun.
+              </p>
+              <p>
+                Every corner of the property is an invitation to slow down. We serve as a sanctuary
+                for the discerning traveler and digital nomad who seeks the pulse of Canggu but
+                values a private, high-quality retreat to return to at the end of the day.
+              </p>
+            </div>
+
+            <div class="mt-10 flex gap-12">
+              {stats.map(({ value, label }) => (
+                <div>
+                  <p class="text-secondary font-headline-md text-headline-md mb-1">{value}</p>
+                  <p class="font-label-sm text-label-sm uppercase tracking-wider text-outline">{label}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- True Privacy -->
+    <section class="py-section-gap">
+      <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop text-center">
+        <h2 class="font-headline-lg text-headline-lg text-on-background mb-4">
+          True Privacy Defined
+        </h2>
+        <p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl mx-auto mb-16">
+          We've reimagined the guest house experience. Casa Roca is built on the principle of
+          individual sanctuary, ensuring your space is entirely yours.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+          {privacyPoints.map(({ icon, title, body }) => (
+            <div class="p-8 bg-primary-container rounded-xl text-left">
+              <span class="material-symbols-outlined text-secondary text-4xl mb-6 block">{icon}</span>
+              <h3 class="font-headline-md text-headline-md mb-4">{title}</h3>
+              <p class="font-body-md text-body-md text-on-surface-variant">{body}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Curated Amenities -->
+    <section class="py-section-gap bg-surface-container-highest/30">
+      <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+        <h2 class="font-headline-lg text-headline-lg text-on-background mb-12">
+          Curated Amenities
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+          {amenities.map(({ icon, label, description, wide }) => (
+            <div class:list={['p-8 bg-background border border-outline-variant rounded-lg flex flex-col justify-between', wide ? 'md:col-span-2' : '']}>
+              <span class="material-symbols-outlined text-tertiary mb-4 block">{icon}</span>
+              <div>
+                <h4 class="font-label-md text-label-md text-on-background mb-2">{label}</h4>
+                {description && (
+                  <p class="font-body-md text-body-md text-on-surface-variant">{description}</p>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Property at a Glance + Team -->
+    <section class="py-section-gap">
+      <div class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 xl:gap-16">
+
+          <!-- Table -->
+          <div>
+            <h2 class="font-headline-md text-headline-md text-on-background mb-8">
+              Property at a Glance
+            </h2>
+            <div class="overflow-hidden border-t border-outline-variant">
+              <table class="w-full text-left border-collapse">
+                <tbody>
+                  {glanceRows.map(({ label, value }) => (
+                    <tr class="border-b border-outline-variant">
+                      <th class="py-4 font-label-md text-label-md text-on-surface-variant w-1/3 font-normal">
+                        {label}
+                      </th>
+                      <td class="py-4 font-body-md text-body-md text-on-background">{value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Team -->
+          <div class="bg-tertiary-container/30 p-10 rounded-xl">
+            <h2 class="font-headline-md text-headline-md text-on-background mb-6">The Team</h2>
+            <p class="font-body-md text-body-md text-on-surface-variant mb-8 leading-relaxed">
+              Our dedicated reception team is available daily from{' '}
+              <span class="font-semibold text-on-background">08:00 to 20:00 WITA</span> to assist
+              with your stay, from scooter rentals to local dining recommendations. Outside these
+              hours, our security team ensures your peace of mind.
+            </p>
+            <div class="flex items-center gap-4">
+              <div class="w-12 h-12 rounded-full overflow-hidden shrink-0">
+                <img
+                  src={teamImage}
+                  alt="Casa Roca reception team member"
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <p class="font-label-md text-label-md text-on-background">Guest Services</p>
+                <p class="font-label-sm text-label-sm text-on-tertiary-container">
+                  Available 12 hours daily
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="py-24 px-5 md:px-16">
+      <div class="max-w-5xl mx-auto">
+        <div class="rounded-2xl py-20 px-8 text-center bg-secondary">
+          <h2 class="font-headline-lg text-headline-lg text-on-secondary mb-8">
+            Experience the Quiet Side of Canggu
+          </h2>
+          <a
+            href="/availability"
+            class="inline-block bg-surface text-secondary px-10 py-4 rounded-lg font-label-md text-label-md hover:bg-surface-container-low transition-colors"
+          >
+            Secure Your Room
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

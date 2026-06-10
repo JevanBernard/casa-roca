@@ -1,0 +1,50 @@
+---
+export interface NearbyItem {
+  name: string;
+  distance: string;
+  mapsUrl: string;
+}
+
+export interface Props {
+  title: string;
+  image: string;
+  imageAlt: string;
+  items: NearbyItem[];
+  class?: string;
+}
+
+const { title, image, imageAlt, items, class: className = '' } = Astro.props;
+---
+
+<div class={`space-y-6 ${className}`}>
+  <div class="rounded-xl overflow-hidden aspect-[3/2] shadow-sm">
+    <img
+      src={image}
+      alt={imageAlt}
+      class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+      loading="lazy"
+    />
+  </div>
+
+  <div class="space-y-1">
+    <h3 class="font-headline-md text-headline-md text-secondary border-b border-outline-variant pb-3 mb-3">
+      {title}
+    </h3>
+    {items.map(({ name, distance, mapsUrl }) => (
+      <a
+        href={mapsUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="flex justify-between items-center py-3 border-b border-outline-variant/30 hover:bg-surface-container rounded-lg px-2 -mx-2 transition-colors group"
+      >
+        <span class="font-body-md text-body-md group-hover:text-secondary transition-colors flex items-center gap-1.5">
+          {name}
+          <span class="material-symbols-outlined text-[14px] text-outline group-hover:text-secondary transition-colors">
+            open_in_new
+          </span>
+        </span>
+        <span class="font-label-sm text-label-sm text-outline shrink-0 ml-4">{distance}</span>
+      </a>
+    ))}
+  </div>
+</div>
