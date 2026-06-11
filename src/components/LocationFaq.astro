@@ -8,7 +8,7 @@ export interface Props {
   items: FAQItem[];
 }
 
-const { items } = Astro.props;
+const { items = [] } = Astro.props;
 
 const locationFaqSchema = {
   '@context': 'https://schema.org',
@@ -69,17 +69,18 @@ const locationFaqSchema = {
 <script>
   const faqContainer = document.getElementById('location-faq');
 
-  faqContainer?.querySelectorAll('[data-faq-btn]').forEach((btn) => {
+  faqContainer.querySelectorAll('[data-faq-btn]').forEach((btn) => {
     btn.addEventListener('click', () => {
       const item = btn.closest('[data-faq-item]');
-      const panel = item?.querySelector('[data-faq-panel]') as HTMLElement | null;
+      const panel = item ? item.querySelector('[data-faq-panel]') : null;
       const icon = btn.querySelector('[data-faq-icon]');
       const isOpen = btn.getAttribute('aria-expanded') === 'true';
 
       // Close all
       faqContainer.querySelectorAll('[data-faq-btn]').forEach((b) => {
         b.setAttribute('aria-expanded', 'false');
-        const p = b.closest('[data-faq-item]')?.querySelector('[data-faq-panel]') as HTMLElement | null;
+        const parentItem = b.closest('[data-faq-item]');
+        const p = parentItem ? parentItem.querySelector('[data-faq-panel]') : null;
         const ic = b.querySelector('[data-faq-icon]');
         if (p) p.style.gridTemplateRows = '0fr';
         if (ic) ic.classList.remove('rotate-180');
