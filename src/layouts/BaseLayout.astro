@@ -3,12 +3,14 @@ export interface Props {
   title?: string;
   description?: string;
   canonical?: string;
+  schema?: object;
 }
 
 const {
-  title = 'Casa Roca Canggu - Private Rooms in Batu Bolong, Bali',
+  title = 'Casa Roca Canggu — Private Rooms in Batu Bolong, Bali',
   description = 'Stay at Casa Roca, a 10-room guest house on Jl. Batu Bolong, Canggu. Private balcony, en-suite bathroom, AC, TV & free parking. Walk to Batu Bolong Beach in 5 minutes. Book direct for best rates.',
   canonical = 'https://casaroca.com/',
+  schema,
 } = Astro.props;
 
 const schemaLodging = {
@@ -74,6 +76,7 @@ const schemaLodging = {
 
     <!-- Schema -->
     <script type="application/ld+json" set:html={JSON.stringify(schemaLodging)} />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
 
   <body class="bg-background text-on-background font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">

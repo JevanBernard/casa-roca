@@ -14,7 +14,7 @@ import type { BentoImage } from '../components/BentoGallery.astro';
 const superiorRoom = {
   id: 'superior',
   badge: 'Essential Luxury',
-  title: 'Superior Room',
+  title: 'Superior Room — Casa Roca Canggu',
   description:
     'Crafted for the discerning traveler who values intimacy and focus. Built with solid teak furniture and premium cream tile finishes, the room has a clean, grounded feel that reflects Bali\'s natural materials. Natural light enters through large windows and your private balcony is a calm spot to start the morning before heading five minutes down the road to Batu Bolong Beach.',
   image:
@@ -39,9 +39,9 @@ const superiorRoom = {
 const deluxeRoom = {
   id: 'deluxe',
   badge: 'Spacious Sanctuary',
-  title: 'Deluxe Room',
+  title: 'Deluxe Room — Casa Roca Canggu',
   description:
-    'More floor space, more natural light, more room to actually settle in. If you\'re staying longer than a few nights, or simply prefer not to feel squeezed, the Deluxe is worth the step up. The teak wood furniture and warm-toned walls create a calm atmosphere enough to work from, to spread out, to breathe.',
+    'More floor space, more natural light, more room to actually settle in. If you\'re staying longer than a few nights, or simply prefer not to feel squeezed, the Deluxe is worth the step up. The teak wood furniture and warm-toned walls create a calm atmosphere — enough to work from, to spread out, to breathe.',
   image:
     'https://lh3.googleusercontent.com/aida-public/AB6AXuAV2fKg7EcTpeU2h18CCOmzUfaV5YoKotEUlrBt_c3ZoqZCpBAe73CFCuf-OuaiyQcc_koqDxsG9UGlJqA2zOExvadCVIRYtaQFJGSVTVa1jABKVvjJhR37t9A7JTgRqur1II1hfpymNj9ZthJE3qcK6IKieTUFZrPVpxKpXgb7WxRrWCchE3Kcke7tko0oRaBgJcpQEHbfs3pE_ezTeFOzT-5g2giHKoom0H_peL4E_U4YsmIWE3T7_cUAJNdsCV6ZE9IeJBCX3SQ',
   imageAlt: 'Deluxe Room at Casa Roca Canggu — spacious room with teak wood and en-suite bathroom',
@@ -139,14 +139,10 @@ const schemaRooms = [
 ---
 
 <BaseLayout
-  title="Rooms at Casa Roca Canggu - Superior & Deluxe Private Rooms in Batu Bolong"
+  title="Rooms at Casa Roca Canggu — Superior & Deluxe Private Rooms in Batu Bolong"
   description="Browse Superior and Deluxe rooms at Casa Roca Canggu. All rooms include private balcony, en-suite bathroom with rain shower, AC, TV & free parking. Book direct."
   canonical="https://casaroca.com/rooms"
 >
-  <!-- Extra schema for room types -->
-  {schemaRooms.map((schema) => (
-    <script type="application/ld+json" set:html={JSON.stringify(schema)} slot="head" />
-  ))}
 
   <Header />
 
@@ -156,10 +152,10 @@ const schemaRooms = [
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-end">
         <div class="lg:col-span-8">
           <h1 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl mb-8 leading-tight">
-            Private Rooms at<br />Casa Roca Batu Bolong, Canggu
+            Private Rooms at<br />Casa Roca — Batu Bolong, Canggu
           </h1>
           <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
-            10 private rooms across two categories Superior and Deluxe on Jl. Batu Bolong,
+            10 private rooms across two categories — Superior and Deluxe — on Jl. Batu Bolong,
             Canggu, Bali. Every room includes a private balcony, en-suite bathroom with rain
             shower, air conditioning, flat screen TV, and free basement parking.
           </p>
@@ -167,7 +163,7 @@ const schemaRooms = [
         <div class="lg:col-span-4 flex lg:justify-end">
           <div class="lg:text-right">
             <span class="font-label-sm text-label-sm uppercase tracking-widest text-outline">
-              Est. 2026
+              Est. 2024
             </span>
             <div class="flex gap-1 mt-2">
               {[...Array(5)].map(() => (
@@ -204,7 +200,7 @@ const schemaRooms = [
 
     <CTABanner
       title="Ready to book your room?"
-      body="Direct bookings always get the lowest rate no OTA fees, no markup. Superior and Deluxe rooms available now."
+      body="Direct bookings always get the lowest rate — no OTA fees, no markup. Superior and Deluxe rooms available now."
       ctaLabel="Check Availability"
       ctaHref="/availability"
     />
