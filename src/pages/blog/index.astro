@@ -4,103 +4,329 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { getCollection } from 'astro:content';
 
-const posts = (await getCollection('blog')).sort(
+const allPosts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-function formatDate(date) {
+const featured = allPosts.find((p) => p.data.featured);
+const rest     = allPosts.filter((p) => !p.data.featured);
+
+const categories = [
+  'Neighborhood & Dining',
+  'Surf & Tides',
+  'Architecture & Design',
+  'Mindful Travel',
+  'Host Recommendations',
+];
+
+function formatDate(date: Date) {
   return date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 }
 ---
 
 <BaseLayout
-  title="Canggu Travel Guide & Local Tips — Casa Roca Blog"
-  description="The Casa Roca Canggu blog — local tips, surf guides, neighborhood recommendations, and everything you need to know about staying in Batu Bolong, Canggu, Bali."
-  canonical="https://casaroca.com/blog"
+  title="Canggu Journal — Casa Roca Blog | Local Chronicles & Coastal Living"
+  description="Curated insider insights, neighborhood discoveries, surf rituals, and mindful travel stories shared directly from our sanctuary on Jalan Batu Bolong, Canggu, Bali."
+  canonical="https://casarocacanggu.com/blog"
 >
   <Header />
 
-  <main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+  <main class="w-full pt-20 bg-[#fcf9f4]">
 
-    <header class="pt-24 pb-16 md:pt-32 md:pb-24">
-      <span class="font-label-md text-label-md text-secondary uppercase tracking-widest mb-4 block">
-        Local Knowledge
-      </span>
-      <h1 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-surface mb-8">
-        Canggu Travel Guide
-      </h1>
-      <p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
-        Everything you need to know about visiting and staying in Canggu, Bali — written from the
-        perspective of people based on Jl. Batu Bolong.
-      </p>
-    </header>
-
-    <!-- Featured post (latest) -->
-    {posts.length > 0 && (
-      <a href={`/blog/${posts[0].slug}`} class="group block mb-16">
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-gutter items-center">
-          <div class="rounded-xl overflow-hidden aspect-[16/10]">
-            <img
-              src={posts[0].data.image}
-              alt={posts[0].data.imageAlt}
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              loading="eager"
-            />
+    <!-- HEADER -->
+    <section class="w-full bg-[#FAF7F2] pt-10 pb-16">
+      <div class="max-w-[1360px] mx-auto px-5 lg:px-12">
+        <div class="flex flex-col max-w-4xl">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="w-2 h-2 rounded-full bg-[#6E5249]"></span>
+            <span class="text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#6E5249]">
+              Casa Roca Canggu — The Canggu Journal & Stories
+            </span>
           </div>
-          <div class="space-y-4">
-            <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest">
-              {posts[0].data.category}
-            </span>
-            <h2 class="font-headline-lg text-headline-lg text-on-surface group-hover:text-secondary transition-colors">
-              {posts[0].data.title}
-            </h2>
-            <p class="font-body-lg text-body-lg text-on-surface-variant">
-              {posts[0].data.description}
-            </p>
-            <p class="font-label-sm text-label-sm text-outline">
-              {formatDate(posts[0].data.pubDate)}
-            </p>
-            <span class="inline-flex items-center gap-2 text-secondary font-label-md text-label-md group-hover:gap-3 transition-all">
-              Read article
-              <span class="material-symbols-outlined text-[18px]">arrow_forward</span>
-            </span>
+          <h1 class="font-['Playfair_Display'] text-[38px] lg:text-[56px] font-[400] leading-[46px] lg:leading-[64px] tracking-[-0.02em] text-[#1E1B18] mb-5">
+            Local Chronicles, Coastal Living & The Mindful Bali Guide
+          </h1>
+          <p class="text-[16px] font-[400] leading-[26px] text-[#504441] max-w-2xl">
+            Curated insider insights, neighborhood discoveries, surf rituals, and mindful travel stories shared directly from our intimate sanctuary on Jalan Batu Bolong.
+          </p>
+        </div>
+
+        <!-- Category filters + search -->
+        <div class="mt-10 pt-6 flex flex-col md:flex-row md:items-center justify-between gap-4 border-t border-[#EAE5DC]">
+          <div class="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0" id="category-tabs">
+            <button
+              class="filter-tab px-4 py-1.5 rounded-full text-[13px] font-[500] bg-[#6E5249] text-white whitespace-nowrap transition-all shadow-sm"
+              data-category="all"
+            >
+              All Stories ({allPosts.length})
+            </button>
+            {categories.map((cat) => (
+              <button
+                class="filter-tab px-4 py-1.5 rounded-full text-[13px] font-[500] bg-[#F3EFE8] text-[#504441] hover:text-[#1E1B18] hover:bg-[#f0ede9] whitespace-nowrap transition-all"
+                data-category={cat}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+
+          <div class="relative w-full md:w-72">
+            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-[#8A6D63] text-[18px]">search</span>
+            <input
+              class="w-full pl-9 pr-4 py-2 bg-[#f6f3ee] rounded-md text-[14px] text-[#1E1B18] placeholder:text-[#8A6D63]/70 focus:outline-none focus:ring-1 focus:ring-[#6E5249] transition-colors"
+              id="journal-search"
+              placeholder="Search stories & guides..."
+              type="text"
+            />
           </div>
         </div>
-      </a>
+      </div>
+    </section>
+
+    <!-- FEATURED POST -->
+    {featured && (
+      <section class="w-full bg-[#F3EFE8] py-12">
+        <div class="max-w-[1360px] mx-auto px-5 lg:px-12">
+          <a href={`/blog/${featured.slug}`} class="group block">
+            <article class="grid grid-cols-1 lg:grid-cols-2 gap-0 bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300">
+              <div class="relative aspect-[16/10] lg:aspect-auto lg:min-h-[420px] overflow-hidden">
+                <img
+                  src={featured.data.image || '/images/blog/default.jpg'}
+                  alt={featured.data.imageAlt || featured.data.title}
+                  class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                  loading="eager"
+                />
+                <div class="absolute top-4 left-4 bg-[#6E5249] text-white px-3 py-1 rounded-full text-[11px] font-[600] uppercase tracking-widest">
+                  Featured Story
+                </div>
+              </div>
+              <div class="p-8 lg:p-12 flex flex-col justify-between">
+                <div class="space-y-4">
+                  <div class="flex items-center gap-3">
+                    <span class="text-[11px] font-[600] uppercase tracking-widest text-[#6E5249] bg-[#F3EFE8] px-2 py-0.5 rounded">
+                      {featured.data.category}
+                    </span>
+                    <span class="text-[12px] font-[500] text-[#8A6D63]">{featured.data.readTime}</span>
+                  </div>
+                  <h2 class="font-['Playfair_Display'] text-[28px] font-[500] leading-[36px] text-[#1E1B18] group-hover:text-[#6E5249] transition-colors">
+                    {featured.data.title}
+                  </h2>
+                  <p class="text-[14px] font-[400] leading-[22px] text-[#504441]">
+                    {featured.data.description}
+                  </p>
+                </div>
+                <div class="pt-6 mt-6 border-t border-[#EAE5DC] flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-[#F3EFE8] flex items-center justify-center text-[#6E5249]">
+                      <span class="material-symbols-outlined text-[16px]">person</span>
+                    </div>
+                    <div>
+                      <span class="text-[13px] font-[600] text-[#1E1B18] block">{featured.data.author}</span>
+                      <span class="text-[12px] font-[500] text-[#8A6D63]">{formatDate(featured.data.pubDate)}</span>
+                    </div>
+                  </div>
+                  <span class="inline-flex items-center gap-1 text-[13px] font-[600] text-[#6E5249] group-hover:gap-2 transition-all">
+                    Read Full Article
+                    <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  </span>
+                </div>
+              </div>
+            </article>
+          </a>
+        </div>
+      </section>
     )}
 
-    <!-- Divider -->
-    <div class="border-t border-outline-variant mb-16"></div>
-
-    <!-- Post grid -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-section-gap">
-      {posts.slice(1).map((post) => (
-        <a href={`/blog/${post.slug}`} class="group block space-y-4">
-          <div class="rounded-xl overflow-hidden aspect-[16/10]">
-            <img
-              src={post.data.image}
-              alt={post.data.imageAlt}
-              class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              loading="lazy"
-            />
+    <!-- ARTICLE GRID -->
+    <section class="w-full py-12 lg:py-16">
+      <div class="max-w-[1360px] mx-auto px-5 lg:px-12">
+        <div class="flex items-end justify-between mb-8">
+          <div>
+            <span class="text-[11px] font-[600] uppercase tracking-widest text-[#8A6D63] block mb-1">In-Depth Guides</span>
+            <h2 class="font-['Playfair_Display'] text-[28px] font-[500] leading-[36px] text-[#1E1B18]">
+              Curated Dispatches from Jl. Batu Bolong
+            </h2>
           </div>
-          <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest block">
-            {post.data.category}
+          <span class="hidden sm:block text-[13px] font-[500] text-[#8A6D63]">
+            {rest.length} stories
           </span>
-          <h3 class="font-headline-md text-headline-md text-on-surface group-hover:text-secondary transition-colors">
-            {post.data.title}
-          </h3>
-          <p class="font-body-md text-body-md text-on-surface-variant">
-            {post.data.description}
-          </p>
-          <p class="font-label-sm text-label-sm text-outline">
-            {formatDate(post.data.pubDate)}
-          </p>
-        </a>
-      ))}
-    </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8" id="article-grid">
+          {rest.map((post) => (
+            <article
+              class="blog-card flex flex-col bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-[0_12px_28px_-6px_rgba(110,82,73,0.09)] transition-all duration-300 group"
+              data-category={post.data.category}
+            >
+              <div class="relative aspect-[16/10] overflow-hidden bg-[#F3EFE8]">
+                <img
+                  src={post.data.image || '/images/blog/default.jpg'}
+                  alt={post.data.imageAlt || post.data.title}
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+                <div class="absolute top-3 left-3 bg-[#FAF7F2]/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[#1E1B18] text-[11px] font-[600] uppercase tracking-widest">
+                  {post.data.category}
+                </div>
+                <div class="absolute bottom-3 right-3 bg-[#1E1B18]/75 backdrop-blur-md text-white px-2 py-0.5 rounded text-[12px] font-[500]">
+                  {post.data.readTime}
+                </div>
+              </div>
+
+              <div class="p-6 flex flex-col flex-1 justify-between">
+                <div>
+                  <div class="text-[#8A6D63] text-[12px] font-[500] mb-2">{formatDate(post.data.pubDate)}</div>
+                  <h3 class="font-['Playfair_Display'] text-[22px] font-[500] leading-[30px] text-[#1E1B18] group-hover:text-[#6E5249] transition-colors">
+                    <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+                  </h3>
+                  <p class="text-[14px] font-[400] leading-[22px] text-[#504441] line-clamp-2 mt-2">
+                    {post.data.description}
+                  </p>
+                </div>
+                <div class="pt-4 mt-4 border-t border-[#EAE5DC] flex items-center justify-between">
+                  <span class="text-[12px] font-[500] text-[#8A6D63]">{post.data.author}</span>
+                  <a
+                    href={`/blog/${post.slug}`}
+                    class="text-[13px] font-[600] text-[#6E5249] hover:text-[#553b33] flex items-center gap-1 transition-all group-hover:translate-x-0.5"
+                  >
+                    Read Note <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- NEWSLETTER -->
+    <section class="w-full bg-[#F3EFE8] py-16">
+      <div class="max-w-[1360px] mx-auto px-5 lg:px-12">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+          <div>
+            <span class="text-[11px] font-[600] uppercase tracking-widest text-[#6E5249] block mb-2">Private Dispatch</span>
+            <h2 class="font-['Playfair_Display'] text-[40px] font-[400] leading-[48px] tracking-[-0.01em] text-[#1E1B18] mb-4">
+              The Batu Bolong Letter
+            </h2>
+            <p class="text-[16px] font-[400] leading-[26px] text-[#504441]">
+              Monthly: tide charts, new café discoveries, seasonal surf conditions, and direct booking offers for those on our list. No noise, no daily emails.
+            </p>
+          </div>
+          <div>
+            <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3" onsubmit="handleNewsletter(event)">
+              <input
+                type="email"
+                placeholder="Your email address"
+                required
+                class="flex-1 px-4 py-3 rounded-md bg-white border border-[#EAE5DC] text-[14px] text-[#1E1B18] placeholder:text-[#8A6D63] focus:outline-none focus:ring-1 focus:ring-[#6E5249]"
+              />
+              <button
+                type="submit"
+                class="px-6 py-3 bg-[#6E5249] hover:bg-[#553b33] text-white rounded-md text-[13px] font-[600] transition-colors whitespace-nowrap"
+              >
+                Subscribe
+              </button>
+            </form>
+            <div class="hidden mt-3 text-[#5A6351] text-[13px] font-[500] flex items-center gap-1.5" id="newsletter-success">
+              <span class="material-symbols-outlined text-[18px]">check_circle</span>
+              Suksma! You are now on our private dispatch list.
+            </div>
+            <p class="text-[#8A6D63] text-[12px] font-[500] mt-3">We honor your quietude. Unsubscribe effortlessly at any moment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="w-full bg-[#6E5249] text-white py-24 relative overflow-hidden">
+      <div class="absolute -top-32 -left-32 w-80 h-80 rounded-full border border-white/10 pointer-events-none"></div>
+      <div class="absolute -bottom-32 -right-32 w-96 h-96 rounded-full border border-white/10 pointer-events-none"></div>
+      <div class="max-w-[1360px] mx-auto px-5 lg:px-12 relative z-10 text-center flex flex-col items-center">
+        <span class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-white/10 backdrop-blur-md text-[#e3beb3] text-[11px] font-[600] uppercase tracking-widest mb-6">
+          <span class="material-symbols-outlined text-[14px]">hotel</span>
+          Intimate Boutique Living
+        </span>
+        <h2 class="font-['Playfair_Display'] text-[40px] font-[400] leading-[48px] text-white max-w-2xl mb-5">
+          Experience Canggu From Our Sanctuary
+        </h2>
+        <p class="text-[16px] font-[400] leading-[26px] text-[#e3beb3] max-w-xl mb-10">
+          Only 10 private rooms tucked into a quiet, peaceful pocket along Jalan Batu Bolong. Book direct for guaranteed lowest rates, flexible arrival, and dedicated basement parking.
+        </p>
+        <div class="flex flex-col sm:flex-row items-center gap-4 mb-12">
+          <a
+            href="/availability"
+            class="inline-flex items-center justify-center gap-2 bg-white text-[#1E1B18] hover:bg-[#F3EFE8] px-8 py-4 rounded-md text-[13px] font-[600] transition-all shadow-xl hover:-translate-y-0.5"
+          >
+            <span>Check Availability & Rates</span>
+            <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+          </a>
+          <a
+            href="https://wa.me/62XXXXXXXXX"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-2 border border-white/40 text-white hover:bg-white/10 px-8 py-4 rounded-md text-[13px] font-[500] transition-colors"
+          >
+            <span class="material-symbols-outlined text-[18px]">chat</span>
+            Chat with Villa Host
+          </a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-8 border-t border-white/15 w-full max-w-3xl">
+          {[
+            { icon: 'verified',       label: 'Best Rate Guaranteed' },
+            { icon: 'local_parking',  label: 'Free Basement Parking' },
+            { icon: 'schedule',       label: 'Flexible Check-In Host' },
+          ].map(({ icon, label }) => (
+            <div class="flex items-center justify-center gap-2 text-[#e3beb3]">
+              <span class="material-symbols-outlined text-[20px]">{icon}</span>
+              <span class="text-[13px] font-[500]">{label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
 
   </main>
 
   <Footer />
+
 </BaseLayout>
+
+<script>
+  // Category filter
+  document.querySelectorAll('.filter-tab').forEach((tab) => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.filter-tab').forEach((t) => {
+        t.classList.remove('bg-[#6E5249]', 'text-white', 'shadow-sm');
+        t.classList.add('bg-[#F3EFE8]', 'text-[#504441]');
+      });
+      tab.classList.add('bg-[#6E5249]', 'text-white', 'shadow-sm');
+      tab.classList.remove('bg-[#F3EFE8]', 'text-[#504441]');
+
+      const category = (tab as HTMLElement).dataset.category;
+      document.querySelectorAll('.blog-card').forEach((card) => {
+        const el = card as HTMLElement;
+        el.style.display = (category === 'all' || el.dataset.category === category) ? '' : 'none';
+      });
+    });
+  });
+
+  // Search
+  document.getElementById('journal-search')?.addEventListener('input', (e) => {
+    const query = (e.target as HTMLInputElement).value.toLowerCase();
+    document.querySelectorAll('.blog-card').forEach((card) => {
+      const el   = card as HTMLElement;
+      const text = el.textContent?.toLowerCase() || '';
+      el.style.display = text.includes(query) ? '' : 'none';
+    });
+  });
+
+  // Newsletter
+  function handleNewsletter(e: Event) {
+    e.preventDefault();
+    const form    = document.getElementById('newsletter-form');
+    const success = document.getElementById('newsletter-success');
+    if (form) form.style.display = 'none';
+    if (success) success.classList.remove('hidden');
+  }
+  (window as any).handleNewsletter = handleNewsletter;
+</script>

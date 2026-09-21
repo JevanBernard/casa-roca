@@ -8,8 +8,16 @@ const blog = defineCollection({
     pubDate: z.date(),
     image: z.string().optional(),
     imageAlt: z.string().optional(),
-    category: z.enum(['Canggu Guide', 'Travel Tips', 'Staying in Canggu']),
-    author: z.string().default('Casa Roca'),
+    category: z.enum([
+      'Neighborhood & Dining',
+      'Surf & Tides',
+      'Architecture & Design',
+      'Mindful Travel',
+      'Host Recommendations',
+    ]),
+    readTime: z.string().default('4 min read'),
+    author: z.string().default('Casa Roca Team'),
+    featured: z.boolean().default(false),
   }),
 });
 
