@@ -17,8 +17,17 @@ Allow: /
 User-agent: Applebot-Extended
 Allow: /
 
+User-agent: Amazonbot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
 # Block training-only crawlers
 User-agent: CCBot
 Disallow: /
 
-Sitemap: https://casaroca.com/sitemap.xml
+Sitemap: https://casarocacanggu.com/sitemap.xml
