@@ -1,42 +1,145 @@
 ---
-export interface Props {
-  name: string;
-  description: string;
-  priceFrom: string;
-  image: string;
-  imageAlt: string;
-  href: string;
+export interface Spec {
+  icon: string;
+  label: string;
 }
 
-const { name, description, priceFrom, image, imageAlt, href } = Astro.props;
+export interface Props {
+  id: string;
+  roomCode: string;
+  name: string;
+  tagline: string;
+  description: string;
+  price: string;
+  badge: string;
+  image: string;
+  imageAlt: string;
+  specs: Spec[];
+  inclusions: string[];
+  bookHref?: string;
+  reversed?: boolean;
+}
+
+const {
+  id,
+  roomCode,
+  name,
+  tagline,
+  description,
+  price,
+  badge,
+  image,
+  imageAlt,
+  specs,
+  inclusions,
+  bookHref = '/availability',
+  reversed = false,
+} = Astro.props;
 ---
 
-<a href={href} class="group block cursor-pointer">
-  <div
-    class="relative aspect-[16/10] overflow-hidden rounded-xl mb-6 shadow-md transition-shadow group-hover:shadow-xl"
-  >
-    <img
-      src={image}
-      alt={imageAlt}
-      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-      loading="lazy"
-    />
-    <div
-      class="absolute top-4 right-4 bg-white/90 backdrop-blur px-4 py-2 rounded-full font-label-sm text-label-sm text-on-surface"
-    >
-      from {priceFrom}/night
-    </div>
-  </div>
+<article
+  class="room-item bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl"
+  id={`room-card-${id}`}
+  data-room={id}
+>
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-0">
 
-  <div class="flex justify-between items-start">
-    <div>
-      <h3 class="font-headline-md text-headline-md text-on-surface mb-2">{name}</h3>
-      <p class="text-on-surface-variant font-body-md text-body-md max-w-md">{description}</p>
+    <!-- Image column -->
+    <div class:list={[
+      'relative min-h-[380px] lg:min-h-[500px]',
+      reversed ? 'lg:col-span-7 order-1 lg:order-2' : 'lg:col-span-7 order-1',
+    ]}>
+      <img
+        src={image}
+        alt={imageAlt}
+        class="w-full h-full object-cover absolute inset-0"
+        loading="lazy"
+      />
+
+      <!-- Badge top -->
+      <div class:list={['absolute top-6', reversed ? 'right-6' : 'left-6']}>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-[#EFF2EC] text-[#3b4433] text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase rounded shadow-sm backdrop-blur-md">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#5A6351]"></span>
+          {badge}
+        </span>
+      </div>
+
+      <!-- Price bottom -->
+      <div class:list={['absolute bottom-6', reversed ? 'left-6' : 'right-6', 'bg-[#1E1B18]/85 backdrop-blur-md text-white px-4 py-2 rounded shadow-md']}>
+        <p class="text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#e5e2dd]">Direct Best Rate</p>
+        <p class="font-['Playfair_Display'] text-[22px] font-[500] leading-[30px]">
+          {price} <span class="text-[14px] font-[400] text-[#e5e2dd]">/ night</span>
+        </p>
+      </div>
     </div>
-    <span
-      class="material-symbols-outlined text-secondary group-hover:translate-x-2 transition-transform mt-1 shrink-0"
-    >
-      arrow_forward
-    </span>
+
+    <!-- Details column -->
+    <div class:list={[
+      'lg:col-span-5 p-6 lg:p-10 flex flex-col justify-between',
+      reversed ? 'order-2 lg:order-1' : 'order-2',
+    ]}>
+      <div class="space-y-4">
+
+        <!-- Room label -->
+        <div>
+          <div class="flex items-center gap-1 text-[#8A6D63] text-[12px] font-[500] mb-1">
+            <span class="material-symbols-outlined text-[16px]">hotel</span>
+            <span>{roomCode}</span>
+          </div>
+          <h2 class="font-['Playfair_Display'] text-[28px] font-[500] leading-[36px] tracking-[-0.01em] text-[#1E1B18]">
+            {name}
+          </h2>
+        </div>
+
+        <!-- Specs pills -->
+        <div class="flex flex-wrap gap-2">
+          {specs.map(({ icon, label }) => (
+            <span class="inline-flex items-center gap-1 text-[#504441] text-[12px] font-[500] px-2.5 py-1 bg-[#F3EFE8] rounded">
+              <span class="material-symbols-outlined text-[16px]">{icon}</span>
+              {label}
+            </span>
+          ))}
+        </div>
+
+        <!-- Description -->
+        <p class="text-[14px] font-[400] leading-[22px] text-[#504441] leading-relaxed">
+          {description}
+        </p>
+
+        <!-- Inclusions -->
+        <div class="space-y-2">
+          <span class="text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#8A6D63] block">
+            Key Room Inclusions
+          </span>
+          <ul class="space-y-2">
+            {inclusions.map((item) => (
+              <li class="flex items-start gap-2 text-[14px] font-[400] leading-[22px] text-[#504441]">
+                <span class="material-symbols-outlined text-[#6E5249] text-[18px] shrink-0 mt-0.5">check_circle</span>
+                <span>{item}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="pt-6 flex flex-col sm:flex-row gap-3 items-stretch">
+        <a
+          href={bookHref}
+          class="flex-1 inline-flex items-center justify-center gap-2 py-3 px-6 bg-[#6E5249] hover:bg-[#553b33] text-white text-[13px] font-[500] rounded shadow-sm transition-all hover:-translate-y-0.5"
+        >
+          <span>Reserve {name.split(' ')[0]} {name.split(' ')[1]}</span>
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </a>
+        <a
+          href="/gallery"
+          class="inline-flex items-center justify-center gap-2 py-3 px-4 bg-[#F3EFE8] hover:bg-[#f0ede9] text-[#1E1B18] text-[13px] font-[500] rounded transition-colors"
+        >
+          <span class="material-symbols-outlined text-[18px]">photo_library</span>
+          <span>Gallery</span>
+        </a>
+      </div>
+    </div>
+
   </div>
-</a>
+</article>

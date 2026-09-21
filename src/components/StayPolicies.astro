@@ -1,0 +1,46 @@
+---
+const policies = [
+  {
+    icon: 'schedule',
+    title: 'Check-in & Out',
+    desc: 'Check-in begins at <strong class="text-[#1E1B18]">14:00 WITA</strong>. Early luggage drop-off welcomed anytime after 08:00. Check-out is by <strong class="text-[#1E1B18]">12:00 WITA</strong>.',
+  },
+  {
+    icon: 'child_care',
+    title: 'Children & Extra Beds',
+    desc: 'Children are welcome. Rooms accommodate a maximum of the specified guest count per room category. No rollaway beds or extra cots available.',
+  },
+  {
+    icon: 'pets',
+    title: 'Pet Policy',
+    desc: 'Casa Roca is a pet-free property to maintain the highest standards of hygiene and cleanliness for all guests.',
+  },
+  {
+    icon: 'cancel',
+    title: 'Cancellation',
+    desc: 'Free cancellation up to 48 hours before check-in. Cancellations within 48 hours incur the first night charge. No-shows are charged in full.',
+  },
+];
+---
+
+<section class="w-full max-w-[1360px] mx-auto px-5 lg:px-12 pb-16 lg:pb-24">
+  <div class="p-8 lg:p-10 bg-white rounded-xl shadow-md">
+    <div class="max-w-xl mb-10 space-y-1">
+      <span class="text-[11px] font-[600] leading-[16px] tracking-[0.2em] uppercase text-[#8A6D63] block">Guest Essentials</span>
+      <h2 class="font-['Playfair_Display'] text-[28px] font-[500] leading-[36px] tracking-[-0.01em] text-[#1E1B18]">
+        Stay Policies & Practical Details
+      </h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {policies.map(({ icon, title, desc }) => (
+        <div class="space-y-2 p-4 bg-[#F3EFE8]/70 rounded-md">
+          <div class="flex items-center gap-2 text-[#6E5249]">
+            <span class="material-symbols-outlined text-[20px]">{icon}</span>
+            <span class="text-[18px] font-[600] leading-[26px] text-[#1E1B18]">{title}</span>
+          </div>
+          <p class="text-[14px] font-[400] leading-[22px] text-[#504441]" set:html={desc} />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

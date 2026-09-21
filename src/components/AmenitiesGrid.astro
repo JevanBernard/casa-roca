@@ -1,0 +1,44 @@
+---
+const amenities = [
+  { icon: 'bathroom',      title: 'Private Bathroom',      desc: 'En-suite in every room, zero shared facilities for total personal seclusion.' },
+  { icon: 'shower',        title: 'Walk-in Rain Shower',   desc: 'Powerful water pressure with hot water, toiletries, and spacious rainfall head.' },
+  { icon: 'water_heater',  title: 'Hot Water Heater',      desc: 'Instant, high-volume and continuous hot water 24 hours a day.' },
+  { icon: 'wifi',          title: 'High-Speed Free Wi-Fi', desc: 'Dedicated fiber connection (50+ Mbps) built for seamless remote working.' },
+  { icon: 'deck',          title: 'Private Balcony',       desc: 'Your personal outdoor sanctuary overlooking Batu Bolong.' },
+  { icon: 'garage_home',   title: 'Free Basement Parking', desc: 'Sheltered underground garage for motorbikes and rental vehicles with CCTV.' },
+  { icon: 'support_agent', title: 'Dedicated Receptionist',desc: 'Warm on-site front desk 08:00–20:00 WITA plus round-the-clock WhatsApp support.' },
+  { icon: 'smoke_free',    title: '100% Non-Smoking',      desc: 'Pristine indoor air quality. Outdoor smoking allowed only in designated zones.' },
+  { icon: 'ac_unit',       title: 'Individual Silent AC',  desc: 'Inverter split system AC with night-quiet technology.' },
+  { icon: 'tv',            title: 'Smart TV Flat Screen',  desc: 'Crisp 32" screen with streaming app access for cozy evenings.' },
+];
+---
+
+<section class="w-full bg-[#F3EFE8] py-16 lg:py-24">
+  <div class="max-w-[1360px] mx-auto px-5 lg:px-12">
+
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
+      <div class="space-y-1">
+        <span class="text-[11px] font-[600] leading-[16px] tracking-[0.2em] uppercase text-[#6E5249] block">No Compromises</span>
+        <h2 class="font-['Playfair_Display'] text-[40px] font-[400] leading-[48px] tracking-[-0.01em] text-[#1E1B18]">
+          Included in Every Single Room
+        </h2>
+      </div>
+      <p class="text-[14px] font-[400] leading-[22px] text-[#504441] max-w-md">
+        Every stay at Casa Roca comes with complete privacy, artisanal Balinese hospitality, and uncompromised modern essentials.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      {amenities.map(({ icon, title, desc }) => (
+        <div class="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-10 h-10 rounded-full bg-[#EFF2EC] flex items-center justify-center mb-4 text-[#5A6351]">
+            <span class="material-symbols-outlined text-[22px]">{icon}</span>
+          </div>
+          <h3 class="text-[18px] font-[600] leading-[26px] tracking-[-0.005em] text-[#1E1B18] mb-1">{title}</h3>
+          <p class="text-[14px] font-[400] leading-[22px] text-[#504441]">{desc}</p>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>
