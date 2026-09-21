@@ -1,0 +1,84 @@
+---
+export interface FAQItem {
+  question: string;
+  answer: string;
+}
+
+export interface Props {
+  items: FAQItem[];
+}
+
+const { items } = Astro.props;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map(({ question, answer }) => ({
+    '@type': 'Question',
+    name: question,
+    acceptedAnswer: { '@type': 'Answer', text: answer },
+  })),
+};
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+<section class="w-full bg-[#F3EFE8] py-16 lg:py-24" id="quick-facts">
+  <div class="max-w-[1360px] mx-auto px-6 lg:px-12">
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+
+      <!-- Sticky title -->
+      <div class="lg:col-span-4">
+        <span class="text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#8A6D63] block mb-2">
+          Quick Facts
+        </span>
+        <h2 class="font-['Playfair_Display'] text-[40px] font-[400] leading-[48px] tracking-[-0.01em] text-[#1E1B18] lg:sticky lg:top-32">
+          Casa Roca — Common Questions
+        </h2>
+      </div>
+
+      <!-- Accordion -->
+      <div class="lg:col-span-8 space-y-0">
+        {items.map(({ question, answer }, i) => (
+          <div class="faq-item border-b border-[#EAE5DC] cursor-pointer">
+            <button class="w-full flex justify-between items-center py-6 text-left gap-4">
+              <h4 class="text-[18px] font-[600] leading-[26px] tracking-[-0.005em] text-[#1E1B18]">{question}</h4>
+              <span class="material-symbols-outlined faq-icon text-[#6E5249] shrink-0 transition-transform duration-300">expand_more</span>
+            </button>
+            <div class:list={['faq-answer pb-6 text-[16px] font-[400] leading-[26px] text-[#504441]', i !== 0 && 'hidden']}>
+              {answer}
+            </div>
+          </div>
+        ))}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<script>
+  const items = document.querySelectorAll('.faq-item');
+  items.forEach((item) => {
+    item.addEventListener('click', () => {
+      const answer = item.querySelector('.faq-answer');
+      const icon = item.querySelector('.faq-icon');
+      const isOpen = !answer?.classList.contains('hidden');
+      // Close all
+      items.forEach((other) => {
+        other.querySelector('.faq-answer')?.classList.add('hidden');
+        const ic = other.querySelector('.faq-icon');
+        if (ic) ic.style.transform = 'rotate(0deg)';
+      });
+      // Toggle
+      if (!isOpen && answer && icon) {
+        answer.classList.remove('hidden');
+        icon.style.transform = 'rotate(180deg)';
+      }
+    });
+  });
+  // Open first
+  const first = document.querySelector('.faq-item');
+  first?.querySelector('.faq-answer')?.classList.remove('hidden');
+  const firstIcon = first?.querySelector('.faq-icon');
+  if (firstIcon) firstIcon.style.transform = 'rotate(180deg)';
+</script>

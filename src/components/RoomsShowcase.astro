@@ -1,0 +1,106 @@
+---
+const rooms = [
+  {
+    id: 'superior',
+    badge: 'Superior Room',
+    title: 'Superior Rooms',
+    subtitle: 'Twin & Double · Sleeps 2',
+    description:
+      'Clean-lined private rooms with solid teak furniture, large windows, and a private balcony overlooking the garden. Available in Twin (2 single beds) and Double (1 queen bed) configurations.',
+    priceFrom: 'IDR 1,250,000',
+    image: '/images/superior-room.jpg',
+    imageAlt: 'Superior Room at Casa Roca Canggu — teak wood furniture and private balcony',
+    href: '/rooms#superior',
+    amenities: ['Private balcony', 'En-suite rain shower', 'AC + flat screen TV', 'Free WiFi'],
+  },
+  {
+    id: 'deluxe',
+    badge: 'Deluxe Room',
+    title: 'Deluxe Room',
+    subtitle: 'Double + Twin · Sleeps up to 3',
+    description:
+      'More floor space, same premium finishes. The Deluxe is the right choice for longer stays, families, or anyone who wants room to actually breathe. Sleeps up to 3 guests.',
+    priceFrom: 'IDR 1,850,000',
+    image: '/images/deluxe-room.jpg',
+    imageAlt: 'Deluxe Room at Casa Roca Canggu — spacious room with en-suite bathroom',
+    href: '/rooms#deluxe',
+    amenities: ['Private balcony', 'En-suite rain shower', 'AC + flat screen TV', 'Sleeps 3'],
+  },
+];
+---
+
+<section class="w-full max-w-[1360px] mx-auto px-6 lg:px-12 py-16 lg:py-24" id="rooms-showcase">
+
+  <!-- Section header -->
+  <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-4 mb-12">
+    <div>
+      <span class="text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#8A6D63] block mb-2">
+        Guest Suites
+      </span>
+      <h2 class="font-['Playfair_Display'] text-[40px] font-[400] leading-[48px] tracking-[-0.01em] text-[#1E1B18]">
+        Superior and Deluxe rooms
+      </h2>
+    </div>
+    <a
+      href="/rooms"
+      class="inline-flex items-center gap-1 text-[13px] font-[500] text-[#6E5249] hover:text-[#553b33] transition-colors group shrink-0"
+    >
+      <span>View all rooms</span>
+      <span class="material-symbols-outlined text-[18px] transition-transform duration-200 group-hover:translate-x-1">arrow_forward</span>
+    </a>
+  </div>
+
+  <!-- Room cards -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    {rooms.map((room) => (
+      <a href={room.href} class="group block border border-[#EAE5DC] rounded-xl overflow-hidden hover:shadow-[0_12px_32px_-8px_rgba(110,82,73,0.08),0_4px_12px_-2px_rgba(30,27,24,0.04)] transition-all duration-300">
+
+        <!-- Image -->
+        <div class="relative aspect-[16/10] overflow-hidden">
+          <img
+            src={room.image}
+            alt={room.imageAlt}
+            class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            loading="lazy"
+          />
+          <!-- Price pill -->
+          <div class="absolute top-4 right-4 bg-[#1E1B18]/65 backdrop-blur-sm text-white px-3 py-1 rounded-full text-[12px] font-[500]">
+            from {room.priceFrom} / night
+          </div>
+          <!-- Badge -->
+          <div class="absolute top-4 left-4 bg-[#6E5249] text-white px-3 py-1 rounded-full text-[11px] font-[600] tracking-[0.08em] uppercase">
+            {room.badge}
+          </div>
+        </div>
+
+        <!-- Content -->
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h3 class="font-['Playfair_Display'] text-[22px] font-[500] leading-[30px] text-[#1E1B18]">
+                {room.title}
+              </h3>
+              <p class="text-[12px] font-[500] text-[#8A6D63] mt-0.5">{room.subtitle}</p>
+            </div>
+            <span class="material-symbols-outlined text-[#6E5249] group-hover:translate-x-1 transition-transform mt-1">arrow_forward</span>
+          </div>
+
+          <p class="text-[14px] font-[400] leading-[22px] text-[#504441] mb-5">
+            {room.description}
+          </p>
+
+          <!-- Amenity chips -->
+          <div class="flex flex-wrap gap-2">
+            {room.amenities.map((amenity) => (
+              <span class="inline-flex items-center gap-1 px-2 py-1 rounded-md bg-[#F3EFE8] text-[#504441] text-[12px] font-[500]">
+                {amenity}
+              </span>
+            ))}
+          </div>
+        </div>
+
+      </a>
+    ))}
+  </div>
+
+</section>

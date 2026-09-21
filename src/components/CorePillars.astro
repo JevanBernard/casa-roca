@@ -1,0 +1,61 @@
+---
+const pillars = [
+  {
+    icon: 'shield',
+    title: 'Private – no shared spaces',
+    body: 'Every room has its own private balcony and en-suite bathroom. No shared kitchen, no shared lounge, no hostel vibe. Complete privacy from check-in to check-out.',
+    footnote: 'Dedicated en-suite rain shower',
+  },
+  {
+    icon: 'location_on',
+    title: 'Location – Batu Bolong, Canggu',
+    body: "Casa Roca sits on Jl. Batu Bolong — one of Canggu's most sought-after strips. Batu Bolong Beach is a 2-minute walk. Old Man's, Canggu Club, and the island's top cafés are within easy reach.",
+    footnote: '400m to Batu Bolong surf break',
+  },
+  {
+    icon: 'directions_car',
+    title: 'Free parking – motorbikes & cars',
+    body: 'Complimentary secure basement parking for all guests, accommodating both motorbikes and cars. A rare convenience in central Canggu where street parking is increasingly scarce.',
+    footnote: 'Basement parking included',
+  },
+];
+---
+
+<section class="w-full bg-[#F3EFE8] py-16 lg:py-24">
+  <div class="max-w-[1360px] mx-auto px-6 lg:px-12">
+
+    <!-- Section header -->
+    <div class="text-center max-w-2xl mx-auto mb-16">
+      <span class="text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#8A6D63] block mb-2">
+        Thoughtful Simplicity
+      </span>
+      <h2 class="font-['Playfair_Display'] text-[40px] font-[400] leading-[48px] tracking-[-0.01em] text-[#1E1B18]">
+        Why guests choose Casa Roca
+      </h2>
+    </div>
+
+    <!-- Pillar cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+      {pillars.map(({ icon, title, body, footnote }) => (
+        <div class="bg-white p-8 rounded-xl shadow-[0_4px_20px_rgba(30,27,24,0.03)] hover:shadow-[0_12px_32px_-8px_rgba(110,82,73,0.1)] transition-all duration-300 flex flex-col justify-between group">
+          <div>
+            <div class="w-12 h-12 rounded-md bg-[#f6f3ee] flex items-center justify-center text-[#6E5249] mb-6 group-hover:bg-[#6E5249] group-hover:text-white transition-colors">
+              <span class="material-symbols-outlined text-[24px]">{icon}</span>
+            </div>
+            <h3 class="font-['Playfair_Display'] text-[22px] font-[500] leading-[30px] text-[#1E1B18] mb-3">
+              {title}
+            </h3>
+            <p class="text-[14px] font-[400] leading-[22px] text-[#504441] leading-relaxed">
+              {body}
+            </p>
+          </div>
+          <div class="pt-6 mt-6 bg-[#f6f3ee] -mx-8 -mb-8 p-4 rounded-b-xl flex items-center gap-1 text-[12px] font-[500] text-[#8A6D63]">
+            <span class="material-symbols-outlined text-[16px] text-[#5A6351]">check_circle</span>
+            <span>{footnote}</span>
+          </div>
+        </div>
+      ))}
+    </div>
+
+  </div>
+</section>

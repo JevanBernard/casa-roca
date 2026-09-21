@@ -7,9 +7,9 @@ export interface Props {
 }
 
 const {
-  title = 'Casa Roca Canggu — Private Rooms in Batu Bolong, Bali',
-  description = 'Stay at Casa Roca, a 10-room guest house on Jl. Batu Bolong, Canggu. Private balcony, en-suite bathroom, AC, TV & free parking. Walk to Batu Bolong Beach in 5 minutes. Book direct for best rates.',
-  canonical = 'https://casaroca.com/',
+  title = 'Casa Roca Canggu — Boutique Guest House in Batu Bolong, Bali',
+  description = 'Casa Roca is a 10-room boutique guest house on Jl. Batu Bolong, Canggu, Bali. Private balcony, en-suite bathroom, AC, TV & free parking. 2 minutes walk to Batu Bolong Beach. Book direct for best rates.',
+  canonical = 'https://casarocacanggu.com/',
   schema,
 } = Astro.props;
 
@@ -17,9 +17,8 @@ const schemaLodging = {
   '@context': 'https://schema.org',
   '@type': 'LodgingBusiness',
   name: 'Casa Roca Canggu',
-  description:
-    'Casa Roca is a 10-room private guest house on Jl. Batu Bolong, Canggu, Bali. Superior and Deluxe rooms with private balconies, en-suite bathrooms, AC, TV, and free parking.',
-  url: 'https://casaroca.com',
+  description: 'Casa Roca is a 10-room boutique guest house on Jl. Batu Bolong, Canggu, Bali.',
+  url: 'https://casarocacanggu.com',
   email: 'casaroca@villavillabali.com',
   address: {
     '@type': 'PostalAddress',
@@ -31,19 +30,10 @@ const schemaLodging = {
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: -8.6527,
-    longitude: 115.1334,
+    latitude: -8.657868626182607,
+    longitude: 115.13107593356986,
   },
   numberOfRooms: 10,
-  amenityFeature: [
-    { '@type': 'LocationFeatureSpecification', name: 'Free parking', value: true },
-    { '@type': 'LocationFeatureSpecification', name: 'Air conditioning', value: true },
-    { '@type': 'LocationFeatureSpecification', name: 'Private bathroom', value: true },
-    { '@type': 'LocationFeatureSpecification', name: 'Private balcony', value: true },
-    { '@type': 'LocationFeatureSpecification', name: 'Flat screen TV', value: true },
-    { '@type': 'LocationFeatureSpecification', name: 'Daily housekeeping', value: true },
-    { '@type': 'LocationFeatureSpecification', name: 'Reception', value: true },
-  ],
   checkinTime: '14:00',
   checkoutTime: '12:00',
   priceRange: '$$',
@@ -55,12 +45,9 @@ const schemaLodging = {
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-
-    <!-- Open Graph -->
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -70,7 +57,11 @@ const schemaLodging = {
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@500;600&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
       rel="stylesheet"
     />
 
@@ -79,7 +70,7 @@ const schemaLodging = {
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
   </head>
 
-  <body class="bg-background text-on-background font-body-md selection:bg-secondary-fixed selection:text-on-secondary-fixed">
+  <body class="bg-[#fcf9f4] font-[Inter] text-[14px] text-[#1c1c19] antialiased selection:bg-[#ffdbd0] selection:text-[#2b1610]">
     <slot />
   </body>
 </html>
