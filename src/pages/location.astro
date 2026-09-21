@@ -2,117 +2,62 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import NearbyCard from '../components/NearbyCard.astro';
-import LocationFAQ from '../components/LocationFAQ.astro';
 import CTABanner from '../components/CTABanner.astro';
 
-// ─── Real coordinates ─────────────────────────────────────────────────────────
-const LAT = -8.657868626182607;
-const LNG = 115.13107593356986;
-const MAPS_URL = 'https://maps.app.goo.gl/DK2PNL8ZCmrYri848';
+const MAPS_URL = 'https://maps.app.goo.gl/XDhPWpNPfqz8EDCD8';
+const ADDRESS  = 'Jl. Pantai Batu Bolong, Canggu, Kuta Utara, Badung, Bali 80361, Indonesia';
 
-// ─── Nearby data with direct Google Maps links ────────────────────────────────
-const nearbyBeaches = {
-  title: 'Beaches & Surf',
-  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuArekaOesNeZZ-Xmc5nt2AywFB4zXVwc1IU8yU10JJOM-kTw6A3VJjBLIhQNHX-qw2K-F3oU0e3HbyqHO3SJUlFlz3hsgylQoIalYhwtTABnioHTYe5-cgnMJQe-cdNwxGXC57zSAEMtchuwZAg_e4IgMoaed2aOttTjwlI0dMYXOU8Q6kT5eZxqtvWRm7dHmT4R8uVLk0De8tcAgNXzk2eORa2tAUGg4nbgh6eMPdToeleE1Wd09mYcrYJKU9VQfSeFzSqn0t89uY',
-  imageAlt: 'Batu Bolong Beach Canggu at golden hour with surfers',
-  items: [
-    { name: 'Batu Bolong Beach', distance: '5 min walk', mapsUrl: 'https://maps.app.goo.gl/3yvq3zd9VyKNwFYe6' },
-    { name: "Old Man's Surf Break", distance: '5 min walk', mapsUrl: 'https://maps.app.goo.gl/HVY3c3cHWk7YW4NK8' },
-    { name: 'Echo Beach', distance: '8 min ride', mapsUrl: 'https://maps.app.goo.gl/4mLBX4k4HGGZhADx8' },
-    { name: 'Berawa Beach', distance: '10 min ride', mapsUrl: 'https://maps.app.goo.gl/q7vj4N2YJMsBxaTZ7' },
-  ],
-};
+const highlights = [
+  { icon: 'surfing',        title: '2 Min Walk',        sub: 'Batu Bolong Beach (200m)' },
+  { icon: 'apartment',     title: 'Prime Landmark',     sub: 'Directly next to Aston Canggu' },
+  { icon: 'local_parking', title: 'Free Basement Parking', sub: 'Secure cars & motorbikes' },
+  { icon: 'flight_land',   title: '45–60 Min Drive',   sub: 'From Ngurah Rai Airport (DPS)' },
+];
 
-const nearbyFood = {
-  title: 'Food & Coffee',
-  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCbA3zEoQnLMP2nRDQOH8g5ZdD4qKoW7NeJpi5LG0rXbilhWaLetcVyOk7Bh0ec6-jsYzEPYVjGidJoca9pyg2P3wXyDX-VpqT8nOXm_27fsvZHuujIcq4E4-lBpxY9W_UqIIB-dDeo-j_W-GN42PqPj725keNa_zJiB33NolrZfQxzbrvM3EKv8ESTs7gX6d76E8ita4t6n9npR0Y9lhWvo6zWROs9Z1EbOVsLgYaR-4KNDwdzlymM2rIFFguUl2RWMYdiqbchO6M',
-  imageAlt: 'Artisanal coffee shop interior in Canggu with teak wood and tropical plants',
-  items: [
-    { name: "Old Man's Bar & Grill", distance: '5 min walk', mapsUrl: 'https://maps.app.goo.gl/5oB7fXjmPXVFhHWQ7' },
-    { name: 'Motion Café', distance: '5 min walk', mapsUrl: 'https://maps.app.goo.gl/GkBqZP9cKqEKhCwY9' },
-    { name: 'Crate Café', distance: '10 min walk', mapsUrl: 'https://maps.app.goo.gl/Wx4jkq3KgJfWfHZ56' },
-    { name: 'Shady Shack', distance: '10 min walk', mapsUrl: 'https://maps.app.goo.gl/iJSi5NbNKjAeWXKo7' },
-  ],
-};
+const distances = [
+  { dist: '200m', time: '2 MIN WALK',    timeBg: 'bg-[#EFF2EC] text-[#5A6351]', name: 'Batu Bolong Beach',     desc: 'Legendary surf break ideal for longboards and beginners, black volcanic sands, and vibrant oceanside community shacks.', icon: 'waves', tag: 'Surf & Sunsets' },
+  { dist: '120m', time: '1 MIN WALK',    timeBg: 'bg-[#e6ded9] text-[#504441]', name: "Old Man's Canggu",      desc: 'The quintessential open-air beachfront beer garden and social hub. Cold Bintang, live acoustic gigs, and sunset vibes.', icon: 'local_bar', tag: 'Iconic Social Spot' },
+  { dist: '210m', time: '3 MIN WALK',    timeBg: 'bg-[#e6ded9] text-[#504441]', name: 'The Lawn Canggu',       desc: 'Oceanfront daybeds, saltwater infinity pool, artisan cocktails, and refined dining facing the sunset surf lineup.', icon: 'pool', tag: 'Beach Club & Dining' },
+  { dist: '700m', time: '8 MIN WALK',    timeBg: 'bg-[#e6ded9] text-[#504441]', name: 'Crate Café',           desc: 'The pulse of Canggu breakfast culture. Generous chia bowls, specialty drip coffee, and an art-filled industrial space.', icon: 'local_cafe', tag: 'Specialty Coffee' },
+  { dist: '1.5km', time: '5 MIN SCOOTER', timeBg: 'bg-[#e6ded9] text-[#504441]', name: 'Echo Beach',           desc: 'Canggu's most photogenic sunset backdrop, with larger swell and a lively strip of sunset bars and warungs.', icon: 'beach_access', tag: 'Beach & Sunset' },
+];
 
-const nearbyEssentials = {
-  title: 'Essentials',
-  image: 'https://lh3.googleusercontent.com/aida-public/AB6AXuDXpYXt6ty0bTTq87yBZOfjeykR8w7jLSDecvfwdwImBDZrwlesCFqgAfcXq7oVbXBvYjYtr7PzDuCfCG92AoZz3C34GgNVoPMtjPGCYBwWawW3yBF-TkE26oocLrpxtTv8DqL-ZYt1-77SHbhoVxR8-JwsoVufDXlhga23rz1OdqDiZB6Ate2nV5JAQaqc5yEkqScEFgJ0g7pzAjr1XORgOLoyvMpRbCSPFEjI1ZAw1almMV0t1lGLigGHlzJx0UJ1-jIcZB9B308',
-  imageAlt: 'Local boutique and essentials store in Canggu',
-  items: [
-    { name: 'Kimia Farma Pharmacy', distance: '8 min walk', mapsUrl: 'https://maps.app.goo.gl/qZz4cM4RbbBWtbzJ7' },
-    { name: 'Bintang Supermarket', distance: '5 min ride', mapsUrl: 'https://maps.app.goo.gl/YrWj8VVxGXMmkSj27' },
-    { name: 'Canggu Club (pool & gym)', distance: '10 min ride', mapsUrl: 'https://maps.app.goo.gl/hs9TfNE7EkBZqbkJ6' },
-    { name: 'BCA ATM', distance: '3 min walk', mapsUrl: 'https://maps.app.goo.gl/8fxmCLT9pKxmGKNx5' },
-  ],
-};
+const curatedPlaces = [
+  { cat: 'dining',  dist: '700m • 8 min walk',     tag: 'Specialty Coffee',    name: 'Crate Café',              price: '$$',  desc: 'The pulse of Canggu breakfast culture. Generous, vibrant chia bowls, specialty drip coffee, and an art-filled industrial space.', tip: 'Arrive before 08:30 AM to secure a breezy table without queueing.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCvlGcVHZyKFllH3nD3inwlPLlxnFUqWYUKIu4eT77oQXvHlJMOtb3fFD1RW0GD7Gmrb5Kvn6crqGLEwbgzB5yp9ohgkohMSirlReBDdpM_QxerG5OlbRjPziWExSe9QMDEPBnITSny6FKAeIT2SeHUKiUr76V1CuDTmaWRzorvCRNKHoAOsOOcAl2iPlaH8-C222d5bZi9-LkzOx2Ut4PQ5OIs819P4DKiCZAVJJ0SaxACJWiBBNpKAmp0mZcA1WB4DNRwDmZHIUYG' },
+  { cat: 'sunset',  dist: '500m • 6 min walk',     tag: 'Beach Lounge',        name: 'The Lawn Canggu',         price: '$$$', desc: 'The premier spot for beachfront daybeds, elevated small plates, and cocktails as the ocean turns pink and purple at dusk.', tip: 'Our concierge can pre-book premium ocean daybeds for Casa Roca guests.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBY02_xaOAiUw87jJi6hMjMnFwSBMsz5uFTpRPXdaZrPJfCuN21CgCJoAgpNP_ae_SF2GAYJIH2U-C7LzHHsLyS8Wite00Dl2AwDJH5922HUxyaNKoiXY5iN2fa_ugcjQUClS0i2coR0z3W38nC3gLwOproFe3asXluBDCPvdmGDm2aqeYK4xA42KJLjpa4c5Sz0cKB1hdorFKEWEYm2Bs_UcH6fFHH9vi19MlXOA' },
+  { cat: 'wellness', dist: '400m • 3 min walk',    tag: 'Surf & Coaching',     name: 'Batu Bolong Surf Guides', price: '$$',  desc: 'Gentle reef breaks make Batu Bolong one of the world\'s best longboard waves. Dedicated local surf instructors for all skill levels.', tip: 'Mid-tide mornings offer the cleanest peeling waves with minimal offshore wind.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuChQyDKf7wIxKaOQhPLvfID81fyJY-QvSU_1EQyEGMdxlictlrxqgGcwZlO86i7snGN-FRxtqS2bwbwqQ2fulNnOVD0Ez9uGdn2RuPHIALZ0VSo8xXzOhA0UZTZQInazJLH0ROqT29vImCk-rRMNU41nxG8AG8huJKgM-fmKVa5oplvytvbQUJOT0Xz3wJ_HIeEizR4djG3x_CupGmGWsJ4F7nWcwWxNPVuHZYdwg' },
+  { cat: 'dining',  dist: '800m • 3 min scooter',  tag: 'Plant-Based Dining',  name: 'The Shady Shack',         price: '$$',  desc: 'Lush garden sanctuary overlooking rice fields, renowned for artisan vegetarian bowls, fresh cold-press tonics, and cacao treats.', tip: 'Try the halloumi wrap and fresh iced lemongrass brew under the shady tamarind tree.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAHQq3dKy4oFV8tiR7wG2Lzbk72MdH7Feq7QIMDHiaxtVNbY-6dPZvvXYxc4HA-_Nie5ETk2u2M6VQUKGG1Gf8kPWmkvL5z9ov04qGCzsxdOSCeleR0TfSzKyvmaZNbTfTNoC8VGOSIa5-iz0Wzqv7C_N2jL49j9nzqePc-YIn8aSXnMuXHPof3qGQBCjFUNlvOMmGhatDc4Q3f4YizrkyR2rTjebtU0fG3o5j8vA' },
+  { cat: 'wellness', dist: '1.2km • 4 min scooter', tag: 'Yoga & Wellness',    name: 'Samadi Yoga',             price: '$$',  desc: 'Authentic Ashtanga, Yin, and breathwork practices in an expansive open-air timber shala, alongside a weekly Sunday organic farmers market.', tip: 'Sunday 09:00 Yin followed by the local market is a Canggu classic.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuArFYTSZQHc-fRExdTvz2KF5U5PVWs9Kr1Ruh3QM-qzWL5qRuKlSyzFxQPtwp34zC1LiiL1YgTMiBhfTTS4L4s02jyXEYHcFaqASsFEixJL9IvYNKMs-_6RNpG7rY23Nehv8YpZzk64Iq3M3Y7kb3O6EYn9mMzsA3S7SorSpnZhWAJHtBdQh_qHB2CQGoW9J1xFvucDpMctlg5UJLUJeETe8oCn84Ugk__sjqReug' },
+  { cat: 'sunset',  dist: '450m • 5 min walk',     tag: 'Sunset & Music',      name: "Old Man's Sunset Social", price: '$',   desc: "The unpretentious cornerstone of Canggu's beach life. After-surf cold beers, casual burgers, live DJs, and sunset crowd gatherings.", tip: 'Wednesday evening features famous Canggu local live music and social sessions.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBLwMtzp3UPPyf4cPPrbbJ4HTxXQ4aIDrEjgR-GAu4TlfPJItTqCMysUZzd5MPuo2OeJvePgykFlICYmu-wm6E44VIv30vR6WH5xq5NKdsxULGVRavPDMk3OMhA6Ehnttiw7L90eN9cP0NK282jg94Ro05eah5bqH7UUbQagUvjnEOCQNd-PDqO3DG3g9zsWy7v7jzLDZe3dSOJq3U7OLhqrKfjsIfUANwAUPhkkA' },
+];
 
-// ─── Getting here ─────────────────────────────────────────────────────────────
-const gettingHere = [
+const faqs = [
   {
-    icon: 'flight_takeoff',
-    title: 'From Ngurah Rai Airport (DPS)',
-    body: 'Approx. 22 km, 45–60 mins depending on traffic. Use Grab for the cheapest and most reliable option avoid the airport taxi queue.',
-    detail: 'IDR 100k–150k via Grab',
-    detailIcon: 'directions_car',
+    q: 'How do I get to Casa Roca from Bali Ngurah Rai Airport?',
+    a: 'The simplest and most reliable way is booking our private Casa Roca airport transfer (IDR 350,000 net, approx. $22 USD). Our host monitors your flight arrival in real-time, meets you in the international arrivals hall with a personalized sign, assists with luggage and surfboards, and drives you straight to our private entrance in about 45 to 60 minutes. Alternatively, Grab and Gojek rideshares are accessible from the airport terminal.',
   },
   {
-    icon: 'local_cafe',
-    title: 'From Seminyak',
-    body: 'Approx. 6 km, 15–25 mins by motorbike or 20–40 mins by car. A quick coastal ride north along the beach road.',
-    detail: '15 mins by motorbike',
-    detailIcon: 'moped',
+    q: 'Is Jalan Batu Bolong noisy at night? Will I sleep well?',
+    a: "While Jalan Batu Bolong is lively during daytime and dinner hours, Casa Roca's suites were intentionally architected with deep recessed courtyard setbacks, thick limestone masonry, and double-glazed acoustic glass patio doors. Guests consistently comment on the surprising silence and peaceful tropical bird sounds in our suites despite being right in the heart of the action.",
   },
   {
-    icon: 'nature_people',
-    title: 'From Ubud',
-    body: 'Approx. 35 km, 60–90 mins depending on traffic. A scenic transition from jungle hills to the artisanal coast of Canggu.',
-    detail: 'Shuttle available daily',
-    detailIcon: 'directions_bus',
+    q: 'Can I rent a scooter or car directly at Casa Roca?',
+    a: 'Yes! Our concierge coordinates premium, insured Honda Scoopy or Yamaha NMAX scooters delivered directly to your basement parking slot upon arrival, complete with sanitized helmets and phone mounts. If you arrive with your own rental car or scooter, you enjoy complimentary, 24/7 keycard-secured subterranean basement parking—a genuine rarity in Canggu.',
   },
   {
-    icon: 'apartment',
-    title: 'Landmark for drivers',
-    body: 'Tell your driver: "Jl. Batu Bolong, next to Aston Canggu Hotel." Most Grab and Gojek drivers know this landmark well.',
-    detail: '5 min walk to beach',
-    detailIcon: 'explore',
+    q: 'Is it safe to walk around Batu Bolong at night?',
+    a: "Extremely safe. Batu Bolong is Canggu's most cosmopolitan, well-traveled, and well-lit thoroughfare. Unlike secluded back alleys, our strip features constant pedestrian movement, boutique security, operational restaurants until late, and wide paved walkways extending all the way to the sand. Solo travelers and couples walk comfortably at all hours.",
   },
 ];
 
-// ─── FAQ ──────────────────────────────────────────────────────────────────────
-const faqItems = [
-  {
-    question: 'Is Casa Roca walking distance from Batu Bolong Beach?',
-    answer: 'Yes. Casa Roca is approximately 180 meters about 2 minutes on foot from Batu Bolong Beach along a flat, easy path past cafés and the surf school.',
-  },
-  {
-    question: 'Is there parking available at the property?',
-    answer: 'Yes, Casa Roca provides free basement parking for all guests, accommodating both motorbikes and cars. A rare convenience in central Canggu no need to park on the street.',
-  },
-  {
-    question: 'What is the nearest landmark to give a taxi driver?',
-    answer: 'The best landmark is "Aston Canggu Hotel" on Jl. Batu Bolong. Casa Roca is located directly next to it. Most Grab and Gojek drivers are very familiar with this landmark.',
-  },
-  {
-    question: 'Is the location noisy at night?',
-    answer: "Despite being in the heart of Canggu, Casa Roca is set back slightly from the main road. All rooms have solid construction and AC, keeping noise levels comfortable. The loudest thing you'll hear at night is the ocean.",
-  },
-  {
-    question: "How far is Casa Roca from Bali's airport?",
-    answer: 'Ngurah Rai International Airport (DPS) is approximately 22 km from Casa Roca around 45-60 minutes by car depending on traffic. We recommend using Grab rather than the airport taxi queue for a cheaper, more reliable ride.',
-  },
-];
-
-// ─── LocalBusiness schema with real coordinates ───────────────────────────────
 const localSchema = {
   '@context': 'https://schema.org',
   '@type': 'LodgingBusiness',
   name: 'Casa Roca Canggu',
-  url: 'https://casaroca.com',
+  url: 'https://casarocacanggu.com',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'Jl. Batu Bolong',
+    streetAddress: 'Jl. Pantai Batu Bolong',
     addressLocality: 'Canggu',
     addressRegion: 'Kuta Utara, Badung, Bali',
     postalCode: '80361',
@@ -120,119 +65,233 @@ const localSchema = {
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: LAT,
-    longitude: LNG,
+    latitude: -8.655645276032939,
+    longitude: 115.12864398899805,
   },
   hasMap: MAPS_URL,
 };
 ---
 
 <BaseLayout
-  title="Casa Roca Location - Jl. Batu Bolong, Canggu, Bali | Near Batu Bolong Beach"
-  description="Casa Roca is on Jl. Batu Bolong, Canggu, next to Aston Canggu Hotel. 5 minutes walk to Batu Bolong Beach. Easy access to Echo Beach, Old Man's, and all of Canggu's top spots."
-  canonical="https://casaroca.com/location"
+  title="Location — Casa Roca Canggu | Jl. Batu Bolong, 200m to Beach"
+  description="Casa Roca is on Jl. Pantai Batu Bolong, Canggu — directly next to Aston Canggu Hotel, 200m (2 min walk) to Batu Bolong Beach. Free basement parking. 45 min from DPS airport."
+  canonical="https://casarocacanggu.com/location"
   schema={localSchema}
 >
-
   <Header />
 
-  <main>
-    <!-- Page hero -->
-    <section class="pt-16 pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-      <div class="max-w-4xl">
-        <span class="font-label-sm text-label-sm text-secondary uppercase tracking-widest mb-4 block">
-          Destination Canggu
-        </span>
-        <h1 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-surface mb-8">
-          Casa Roca Location
-          <span class="text-secondary"> <br />Batu Bolong, Canggu</span>
-        </h1>
+  <main class="w-full pt-20 bg-[#fcf9f4]">
 
-        <!-- GEO answer block -->
-        <div class="bg-surface-container-low rounded-xl p-8 border border-outline-variant/30 flex flex-col md:flex-row gap-8 items-start">
-          <div class="flex-1">
-            <h2 class="font-label-md text-label-md text-on-surface mb-3 flex items-center gap-2">
-              <span class="material-symbols-outlined text-secondary">location_on</span>
-              Address
-            </h2>
-            <p class="font-body-md text-body-md text-on-surface-variant mb-4">
-              Jl. Batu Bolong, Canggu, Kuta Utara, Badung, Bali 80361 directly next to Aston
-              Canggu Hotel. Batu Bolong Beach is a 2-minute walk.
+    <!-- HERO HEADER -->
+    <section class="relative w-full bg-[#FAF7F2] pb-24 pt-10">
+      <div class="max-w-[1360px] mx-auto px-5 lg:px-12">
+
+        <!-- Kicker -->
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#6E5249]"></span>
+            <span class="text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#6E5249]">
+              Location & Neighborhood • Jl. Batu Bolong, Canggu
+            </span>
+          </div>
+          <span class="text-[12px] font-[500] text-[#8A6D63] bg-[#ebe8e3]/80 px-2 py-1 rounded-full">
+            Coordinates: -8.655645, 115.128643
+          </span>
+        </div>
+
+        <!-- Headline grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-16">
+          <div class="lg:col-span-8 flex flex-col gap-3">
+            <h1 class="font-['Playfair_Display'] text-[40px] font-[400] leading-[48px] tracking-[-0.01em] text-[#1E1B18]">
+              In the Vibrant Heart of Canggu, Steps from the Surf
+            </h1>
+            <p class="text-[16px] font-[400] leading-[26px] text-[#504441] max-w-xl">
+              Situated on prestigious Jalan Pantai Batu Bolong, Casa Roca places you in Canggu's most coveted coastal enclave. Just 200 meters — an effortless 2-minute flat walk — from Batu Bolong Beach, our sanctuary offers serene retreat with instant access to Bali's top cafés, surf breaks, and sunset spots.
             </p>
-            <a
-              href={MAPS_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center gap-2 text-secondary font-label-md text-label-md hover:opacity-80 transition-opacity"
-            >
-              <span class="material-symbols-outlined text-[18px]">map</span>
-              Open in Google Maps
-            </a>
+          </div>
+          <div class="lg:col-span-4">
+            <div class="bg-[#f6f3ee] p-4 rounded-xl shadow-sm flex flex-col gap-1">
+              <span class="text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#5A6351]">The Address Privilege</span>
+              <p class="text-[18px] font-[600] leading-[26px] text-[#1E1B18]">Jl. Pantai Batu Bolong</p>
+              <p class="text-[14px] font-[400] leading-[22px] text-[#504441]">Quiet sanctuary rooms nestled off the bustling avenue, with secure subterranean parking.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Highlight chips -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-16">
+          {highlights.map(({ icon, title, sub }) => (
+            <div class="flex items-center gap-3 bg-white p-4 rounded-xl shadow-sm hover:shadow-md transition-shadow">
+              <div class="w-10 h-10 rounded-md bg-[#EFF2EC] text-[#5A6351] flex items-center justify-center shrink-0">
+                <span class="material-symbols-outlined text-[20px]">{icon}</span>
+              </div>
+              <div class="flex flex-col">
+                <span class="text-[13px] font-[600] leading-[18px] text-[#1E1B18]">{title}</span>
+                <span class="text-[12px] font-[500] leading-[16px] text-[#8A6D63]">{sub}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Map + Arrival grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+          <!-- Map embed -->
+          <div class="lg:col-span-7 bg-white rounded-2xl p-6 shadow-sm flex flex-col gap-6">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <h3 class="text-[18px] font-[600] leading-[26px] text-[#1E1B18]">Casa Roca Canggu Location</h3>
+                <p class="text-[12px] font-[500] text-[#8A6D63]">Batu Bolong Coastal Zone, Badung Regency</p>
+              </div>
+              <span class="px-2 py-1 bg-[#EFF2EC] text-[#5A6351] rounded-full text-[11px] font-[600] uppercase tracking-widest">Verified Landmark</span>
+            </div>
+
+            <!-- iframe embed — koordinat real -->
+            <div class="relative w-full h-[380px] rounded-xl overflow-hidden shadow-inner">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3944.3770308535572!2d115.12864398899805!3d-8.655645276032939!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd247261ae9af8d%3A0x5c79706e872951c9!2sCasa%20Roca%20Guest%20House%20Canggu!5e0!3m2!1sid!2sid!4v1789962352227!5m2!1sid!2sid"
+                width="100%"
+                height="100%"
+                style="border:0; position:absolute; inset:0;"
+                allowfullscreen
+                loading="lazy"
+                referrerpolicy="strict-origin-when-cross-origin"
+                title="Casa Roca Canggu Google Maps"
+              ></iframe>
+
+              <!-- Overlay card -->
+              <div class="absolute top-4 left-4 bg-[#FAF7F2]/95 backdrop-blur-md p-3 rounded-md shadow-md max-w-[200px] pointer-events-none">
+                <div class="flex items-start gap-2">
+                  <span class="material-symbols-outlined text-[#6E5249] text-[22px]">pin_drop</span>
+                  <div>
+                    <p class="text-[13px] font-[600] text-[#1E1B18]">Casa Roca Canggu</p>
+                    <p class="text-[12px] font-[500] text-[#504441]">Jl. Pantai Batu Bolong</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Distance chip -->
+              <div class="absolute bottom-4 right-4 bg-[#1E1B18]/90 text-white backdrop-blur-sm px-4 py-1 rounded-full text-[12px] font-[500] flex items-center gap-1 shadow-md pointer-events-none">
+                <span class="material-symbols-outlined text-[16px] text-[#e3beb3]">directions_walk</span>
+                <span>200m to Batu Bolong Surf</span>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-wrap items-center gap-4">
+              <a
+                href={MAPS_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1 bg-[#6E5249] hover:bg-[#553b33] text-white px-6 py-2 rounded-md text-[13px] font-[500] shadow-sm transition-all hover:-translate-y-0.5"
+              >
+                <span>Open in Google Maps</span>
+                <span class="material-symbols-outlined text-[18px]">open_in_new</span>
+              </a>
+              <button
+                id="copyAddressBtn"
+                onclick="copyAddressText()"
+                class="inline-flex items-center gap-1 bg-[#ebe8e3] hover:bg-[#e5e2dd] text-[#1E1B18] px-6 py-2 rounded-md text-[13px] font-[500] transition-colors"
+              >
+                <span class="material-symbols-outlined text-[18px]">content_copy</span>
+                <span id="copyBtnText">Copy Exact Address</span>
+              </button>
+              <span class="hidden text-[12px] font-[500] text-[#5A6351]" id="copySuccessMsg">Copied!</span>
+            </div>
+
+            <!-- Driver tip -->
+            <div class="p-4 bg-[#F3EFE8] rounded-xl flex items-start gap-2">
+              <span class="material-symbols-outlined text-[#8A6D63]">navigation</span>
+              <p class="text-[14px] font-[400] leading-[22px] text-[#504441]">
+                <strong class="font-[600] text-[#1E1B18]">Driver instruction:</strong> "Jl. Pantai Batu Bolong, tepat di depan Hotel Aston Canggu."
+              </p>
+            </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-4 w-full md:w-auto shrink-0">
-            <div class="bg-surface-container-lowest p-4 rounded-lg text-center">
-              <div class="font-headline-md text-headline-md text-secondary">2min</div>
-              <div class="font-label-sm text-label-sm text-outline">To Beach</div>
+          <!-- Arrival info cards -->
+          <div class="lg:col-span-5 flex flex-col gap-4">
+
+            <!-- Airport -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col gap-3">
+              <div class="flex items-center gap-2 text-[#6E5249]">
+                <span class="material-symbols-outlined text-[24px]">flight_land</span>
+                <span class="text-[11px] font-[600] uppercase tracking-widest">From Airport (DPS)</span>
+              </div>
+              <h3 class="text-[18px] font-[600] leading-[26px] text-[#1E1B18]">Ngurah Rai International (DPS)</h3>
+              <p class="text-[14px] font-[400] leading-[22px] text-[#504441]">
+                Approximately 45-60 minutes depending on coastal traffic. We strongly recommend booking our trusted private villa driver who greets you at the terminal arrivals gate with your name board.
+              </p>
+              <div class="flex items-center justify-between pt-1">
+                <span class="text-[12px] font-[500] text-[#8A6D63]">Fixed Concierge Rate: IDR 350,000 (~$22 USD)</span>
+                <a href="https://wa.me/62XXXXXXXXX" target="_blank" rel="noopener noreferrer" class="text-[13px] font-[600] text-[#6E5249] hover:underline">Reserve Driver ↗</a>
+              </div>
             </div>
-            <div class="bg-surface-container-lowest p-4 rounded-lg text-center">
-              <div class="font-headline-md text-headline-md text-secondary">45m</div>
-              <div class="font-label-sm text-label-sm text-outline">From DPS</div>
+
+            <!-- Parking -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col gap-3">
+              <div class="flex items-center gap-2 text-[#5A6351]">
+                <span class="material-symbols-outlined text-[24px]">garage_home</span>
+                <span class="text-[11px] font-[600] uppercase tracking-widest">Rare Canggu Amenity</span>
+              </div>
+              <h3 class="text-[18px] font-[600] leading-[26px] text-[#1E1B18]">Free On-Site Basement Parking</h3>
+              <p class="text-[14px] font-[400] leading-[22px] text-[#504441]">
+                Street parking in Canggu is famously congested. Casa Roca provides fully sheltered, free underground basement parking for guest motorbikes and rental cars, protected with 24/7 keycard access.
+              </p>
+              <div class="flex items-center gap-2 text-[12px] font-[500] text-[#8A6D63]">
+                <span class="material-symbols-outlined text-[18px] text-[#5A6351]">check_circle</span>
+                <span>Direct staircase from basement up to sanctuary suites</span>
+              </div>
             </div>
+
+            <!-- Walkability -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm flex flex-col gap-3">
+              <div class="flex items-center gap-2 text-[#6E5249]">
+                <span class="material-symbols-outlined text-[24px]">directions_walk</span>
+                <span class="text-[11px] font-[600] uppercase tracking-widest">Effortless Strolls</span>
+              </div>
+              <h3 class="text-[18px] font-[600] leading-[26px] text-[#1E1B18]">Paved Pedestrian Sidewalks</h3>
+              <p class="text-[14px] font-[400] leading-[22px] text-[#504441]">
+                Unlike many Balinese gangways, Jalan Batu Bolong features a direct paved sidewalk from our gate down to the shoreline. No scooter required for beach visits, dinners, or morning matcha runs.
+              </p>
+            </div>
+
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Map embed -->
-    <section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-section-gap">
-      <div class="relative w-full aspect-video md:aspect-[21/9] rounded-2xl overflow-hidden">
-        <iframe
-          src={`https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d500!2d${LNG}!3d${LAT}!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zLTguNjU3ODY4NjI2MTgyNjA3LCAxMTUuMTMxMDc1OTMzNTY5ODY!5e0!3m2!1sen!2sid!4v1700000000000`}
-          width="100%"
-          height="100%"
-          style="border:0;"
-          allowfullscreen
-          loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"
-          title="Casa Roca Canggu location map"
-          class="absolute inset-0 w-full h-full"
-        ></iframe>
+    <!-- WALKING DISTANCE GUIDE -->
+    <section class="w-full bg-[#F3EFE8] py-16 lg:py-24">
+      <div class="max-w-[1360px] mx-auto px-5 lg:px-12">
 
-        <!-- Overlay card -->
-        <div class="absolute bottom-6 right-6 bg-surface-container-lowest/95 backdrop-blur-sm p-5 rounded-xl max-w-xs pointer-events-none">
-          <div class="font-label-md text-label-md text-secondary mb-1">Casa Roca</div>
-          <div class="font-body-md text-body-md text-on-surface font-medium">Jl. Batu Bolong, Canggu</div>
-          <div class="font-label-sm text-label-sm text-outline mt-1">Next to Aston Canggu Hotel</div>
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-12">
+          <div class="flex flex-col max-w-2xl">
+            <span class="text-[11px] font-[600] uppercase text-[#6E5249] tracking-widest mb-1">Pedestrian Proximity</span>
+            <h2 class="font-['Playfair_Display'] text-[40px] font-[400] leading-[48px] tracking-[-0.01em] text-[#1E1B18]">Within 5 Minutes on Foot</h2>
+            <p class="text-[16px] font-[400] leading-[26px] text-[#504441] mt-2">
+              Leave the scooter keys behind. From early dawn swell checks to late-evening beachfront cocktails, your daily Canggu ritual is just steps away.
+            </p>
+          </div>
+          <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-full shadow-sm shrink-0">
+            <span class="material-symbols-outlined text-[#5A6351] text-[18px]">verified</span>
+            <span class="text-[12px] font-[500] text-[#1E1B18]">Measured flat walking distances</span>
+          </div>
         </div>
-      </div>
 
-      <div class="mt-4 flex justify-end">
-        <a
-          href={MAPS_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 border border-outline text-on-surface px-5 py-2 rounded-full font-label-md text-label-md hover:bg-surface-container transition-colors"
-        >
-          <span class="material-symbols-outlined text-[16px]">open_in_new</span>
-          Open full map
-        </a>
-      </div>
-    </section>
-
-    <!-- Getting here -->
-    <section class="py-section-gap">
-      <div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-        <h2 class="font-headline-lg text-headline-lg mb-12">Getting to Casa Roca</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
-          {gettingHere.map(({ icon, title, body, detail, detailIcon }) => (
-            <div class="flex flex-col gap-4">
-              <span class="material-symbols-outlined text-secondary text-3xl">{icon}</span>
-              <h3 class="font-headline-md text-headline-md text-on-surface">{title}</h3>
-              <p class="font-body-md text-body-md text-on-surface-variant">{body}</p>
-              <div class="mt-auto pt-4 flex items-center gap-2 font-label-md text-label-md text-secondary">
-                <span class="material-symbols-outlined text-[18px]">{detailIcon}</span>
-                {detail}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+          {distances.map(({ dist, time, timeBg, name, desc, icon, tag }) => (
+            <div class="bg-white rounded-xl p-6 flex flex-col justify-between shadow-sm hover:shadow-md transition-all group">
+              <div class="flex flex-col gap-3">
+                <div class="flex items-center justify-between">
+                  <span class="font-['Playfair_Display'] text-[22px] font-[500] text-[#6E5249]">{dist}</span>
+                  <span class={`text-[11px] font-[600] leading-[16px] px-1.5 py-0.5 rounded ${timeBg}`}>{time}</span>
+                </div>
+                <h3 class="text-[18px] font-[600] leading-[26px] text-[#1E1B18] group-hover:text-[#6E5249] transition-colors">{name}</h3>
+                <p class="text-[14px] font-[400] leading-[22px] text-[#504441]">{desc}</p>
+              </div>
+              <div class="pt-4 flex items-center gap-1 text-[#8A6D63] text-[12px] font-[500]">
+                <span class="material-symbols-outlined text-[16px]">{icon}</span>
+                <span>{tag}</span>
               </div>
             </div>
           ))}
@@ -240,26 +299,173 @@ const localSchema = {
       </div>
     </section>
 
-    <!-- What's Nearby -->
-    <section class="py-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
-      <h2 class="font-headline-lg text-headline-lg mb-12">What's Nearby</h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-12 items-start">
-        <NearbyCard {...nearbyBeaches} />
-        <NearbyCard {...nearbyFood} class="md:mt-12" />
-        <NearbyCard {...nearbyEssentials} />
+    <!-- CURATED LOCAL PICKS -->
+    <section class="w-full py-16 lg:py-24">
+      <div class="max-w-[1360px] mx-auto px-5 lg:px-12">
+
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-4 mb-10">
+          <div>
+            <span class="text-[11px] font-[600] uppercase text-[#6E5249] tracking-widest block mb-1">Host Curated</span>
+            <h2 class="font-['Playfair_Display'] text-[40px] font-[400] leading-[48px] tracking-[-0.01em] text-[#1E1B18]">Casa Roca's Canggu Picks</h2>
+            <p class="text-[16px] font-[400] leading-[26px] text-[#504441] mt-2 max-w-xl">
+              Places our team personally returns to, week after week.
+            </p>
+          </div>
+
+          <!-- Filter buttons -->
+          <div class="flex flex-wrap gap-2" id="category-filters">
+            {[
+              { val: 'all',     label: 'All' },
+              { val: 'dining',  label: 'Dining & Cafés' },
+              { val: 'sunset',  label: 'Sunset Spots' },
+              { val: 'wellness',label: 'Surf & Wellness' },
+            ].map(({ val, label }) => (
+              <button
+                data-category={val}
+                class:list={[
+                  'category-btn px-4 py-2 rounded-full text-[13px] font-[500] transition-all',
+                  val === 'all' ? 'bg-[#6E5249] text-white shadow-sm' : 'text-[#504441] bg-[#f0ede9] hover:bg-[#ebe8e3]',
+                ]}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <!-- Cards grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="curated-grid">
+          {curatedPlaces.map(({ cat, dist, tag, name, price, desc, tip, img }) => (
+            <div class="curated-card bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col" data-cat={cat}>
+              <div class="relative h-56 overflow-hidden">
+                <img
+                  src={img}
+                  alt={name}
+                  class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  loading="lazy"
+                />
+                <div class="absolute top-3 left-3 bg-[#1E1B18]/80 text-white px-2 py-0.5 rounded-full text-[12px] font-[500] backdrop-blur-sm">
+                  {dist}
+                </div>
+                <div class="absolute top-3 right-3 bg-white/90 px-2 py-0.5 rounded-full text-[11px] font-[600] uppercase tracking-widest text-[#6E5249]">
+                  {tag}
+                </div>
+              </div>
+              <div class="p-6 flex flex-col flex-1 justify-between gap-4">
+                <div>
+                  <div class="flex items-center justify-between mb-2">
+                    <h3 class="font-['Playfair_Display'] text-[22px] font-[500] leading-[30px] text-[#1E1B18]">{name}</h3>
+                    <span class="text-[#5A6351] text-[12px] font-[500]">{price}</span>
+                  </div>
+                  <p class="text-[14px] font-[400] leading-[22px] text-[#504441]">{desc}</p>
+                </div>
+                <div class="bg-[#F3EFE8] p-3 rounded-md flex items-start gap-2">
+                  <span class="material-symbols-outlined text-[#6E5249] text-[18px] shrink-0 mt-0.5">tips_and_updates</span>
+                  <p class="text-[12px] font-[500] text-[#1E1B18]"><strong class="font-[600]">Host Tip:</strong> {tip}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
 
     <!-- FAQ -->
-    <LocationFAQ items={faqItems} />
+    <section class="w-full bg-[#FAF7F2] py-16 lg:py-24">
+      <div class="max-w-[880px] mx-auto px-5 lg:px-12">
+        <div class="text-center flex flex-col items-center mb-12">
+          <span class="text-[11px] font-[600] uppercase text-[#6E5249] tracking-widest mb-2">Common Questions</span>
+          <h2 class="font-['Playfair_Display'] text-[40px] font-[400] leading-[48px] tracking-[-0.01em] text-[#1E1B18]">Location & Arrival Insights</h2>
+          <p class="text-[16px] font-[400] leading-[26px] text-[#504441] max-w-lg mt-2">
+            Everything you need to know about getting here, parking, neighborhood noise, and navigating Canggu.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-4" id="location-faq">
+          {faqs.map(({ q, a }, i) => (
+            <div class="faq-item bg-white rounded-xl p-6 shadow-sm transition-all">
+              <button class="w-full flex items-center justify-between text-left focus:outline-none gap-4">
+                <span class="text-[18px] font-[600] leading-[26px] text-[#1E1B18]">{q}</span>
+                <span class="faq-icon material-symbols-outlined text-[#6E5249] shrink-0 transition-transform duration-300">expand_more</span>
+              </button>
+              <div class:list={['faq-content pt-4 text-[16px] font-[400] leading-[26px] text-[#504441]', i !== 0 && 'hidden']}>
+                {a}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
 
     <CTABanner
       title="Ready to find us?"
-      body="Book direct for the best rate. 5 minutes walk to Batu Bolong Beach, free parking included."
+      body="Book direct for the best rate. 2 minutes walk to Batu Bolong Beach, free basement parking included."
       ctaLabel="Check Availability"
       ctaHref="/availability"
     />
+
   </main>
 
   <Footer />
+
 </BaseLayout>
+
+<script>
+  // Category filter
+  document.getElementById('category-filters')?.addEventListener('click', (e) => {
+    const btn = (e.target as Element).closest('.category-btn');
+    if (!btn) return;
+    const category = (btn as HTMLElement).dataset.category || 'all';
+
+    document.querySelectorAll('.category-btn').forEach((b) => {
+      b.classList.remove('bg-[#6E5249]', 'text-white', 'shadow-sm');
+      b.classList.add('text-[#504441]', 'bg-[#f0ede9]');
+    });
+    btn.classList.add('bg-[#6E5249]', 'text-white', 'shadow-sm');
+    btn.classList.remove('text-[#504441]', 'bg-[#f0ede9]');
+
+    document.querySelectorAll('.curated-card').forEach((card) => {
+      const el = card as HTMLElement;
+      el.style.display = (category === 'all' || el.dataset.cat === category) ? 'flex' : 'none';
+    });
+  });
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-item').forEach((item) => {
+    item.querySelector('button')?.addEventListener('click', () => {
+      const content = item.querySelector('.faq-content');
+      const icon    = item.querySelector('.faq-icon');
+      const isOpen  = !content?.classList.contains('hidden');
+
+      document.querySelectorAll('.faq-content').forEach((c) => c.classList.add('hidden'));
+      document.querySelectorAll('.faq-icon').forEach((i) => (i as HTMLElement).style.transform = 'rotate(0deg)');
+
+      if (!isOpen && content && icon) {
+        content.classList.remove('hidden');
+        (icon as HTMLElement).style.transform = 'rotate(180deg)';
+      }
+    });
+  });
+
+  // Open first FAQ
+  const firstContent = document.querySelector('.faq-content');
+  const firstIcon    = document.querySelector('.faq-icon');
+  firstContent?.classList.remove('hidden');
+  if (firstIcon) (firstIcon as HTMLElement).style.transform = 'rotate(180deg)';
+
+  // Copy address
+  function copyAddressText() {
+    const address = 'Jl. Pantai Batu Bolong, Canggu, Kuta Utara, Badung, Bali 80361, Indonesia';
+    navigator.clipboard.writeText(address).then(() => {
+      const msg     = document.getElementById('copySuccessMsg');
+      const btnText = document.getElementById('copyBtnText');
+      if (msg) msg.classList.remove('hidden');
+      if (btnText) btnText.textContent = 'Address Copied!';
+      setTimeout(() => {
+        if (msg) msg.classList.add('hidden');
+        if (btnText) btnText.textContent = 'Copy Exact Address';
+      }, 2800);
+    });
+  }
+  (window as any).copyAddressText = copyAddressText;
+</script>
