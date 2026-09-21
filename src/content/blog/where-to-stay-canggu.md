@@ -1,18 +1,12 @@
 ---
-
 title: "Where to Stay in Canggu, Bali - Neighborhoods, Budgets & What to Expect"
-
 description: "A complete guide to finding accommodation in Canggu. Batu Bolong vs Berawa vs Pererenan — which neighborhood is right for you?"
-
 pubDate: 2025-01-15
-
 image: "https://lh3.googleusercontent.com/aida-public/AB6AXuArekaOesNeZZ-Xmc5nt2AywFB4zXVwc1IU8yU10JJOM-kTw6A3VJjBLIhQNHX-qw2K-F3oU0e3HbyqHO3SJUlFlz3hsgylQoIalYhwtTABnioHTYe5-cgnMJQe-cdNwxGXC57zSAEMtchuwZAg_e4IgMoaed2aOttTjwlI0dMYXOU8Q6kT5eZxqtvWRm7dHmT4R8uVLk0De8tcAgNXzk2eORa2tAUGg4nbgh6eMPdToeleE1Wd09mYcrYJKU9VQfSeFzSqn0t89uY"
-
 imageAlt: "Batu Bolong Beach Canggu at golden hour"
-
 category: "Host Recommendations"
-
-## author: "Casa Roca"
+author: "Casa Roca"
+---
 
 Canggu has grown from a quiet surf village into one of Bali's most popular destinations for travelers, digital nomads, and long-term visitors. But "Canggu" covers a lot of ground — and where you stay makes a significant difference to your experience.
 
