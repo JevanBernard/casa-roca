@@ -14,6 +14,7 @@ const blog = defineCollection({
       'Architecture & Design',
       'Mindful Travel',
       'Host Recommendations',
+      'Stayin in Canggu',
     ]),
     readTime: z.string().default('4 min read'),
     author: z.string().default('Casa Roca Team'),
