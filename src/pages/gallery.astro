@@ -2,333 +2,370 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import CTABanner from '../components/CTABanner.astro';
 
-const galleryItems = [
+// ─── Gallery data ──────────────────────────────────────────────────────────────
+// Ganti src dengan path gambar asli: /images/gallery/nama-file.jpg
+const mosaic = [
+  { src: '/images/gallery/hero-facade.jpg',   alt: 'Casa Roca Canggu facade',       title: 'Fasad Arsitektur',    desc: 'Handcrafted sandstone arches welcoming the Bali golden hour' },
+  { src: '/images/gallery/double-bed.jpg',    alt: 'Superior Double bedroom',        title: 'Superior Double',     desc: 'Queen bed with crisp organic linen and terracotta accents' },
+  { src: '/images/gallery/twin-bed.jpg',      alt: 'Superior Twin bedroom',          title: 'Superior Twin',       desc: 'Two single beds with traditional Balinese woven textiles' },
+  { src: '/images/gallery/deluxe-room.jpg',   alt: 'Deluxe Triple Room',             title: 'Deluxe Triple',       desc: 'Spacious suite with king bed and single daybed' },
+  { src: '/images/gallery/balcony.jpg',       alt: 'Private balcony garden view',    title: 'Balkon Pribadi',      desc: 'Secluded tropical terrace overlooking palm canopies' },
+];
+
+const categories = [
   {
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBnZx-BSnNWyDcU10TMoUwqQCJUr0xKsx8Wm8r4-Gg47bKdqcNNUTTruiIi84vOYX5NVzYgHLqN6LifqukJOxoV_CDNTJnemVee33tVWWmHR8ps_ygzgyXWx6sbL3FyXURoNGB76IwlLV1VzUSca3UKI1EFwEEH_vYzjSRKfdSUc74nkn27wQqrixbY-jswysJMMFssBZadoUtJGqJqb4c-j4jDruSLxh-c5tMaTQrqdMiEZC7oZg09_q1m4FG9_DDSEjAnyvAppjE',
-    alt: 'Superior Room - Casa Roca Canggu',
-    caption: 'Superior Room',
-    category: 'rooms',
-    cols: 8,
-    height: 'h-[500px]',
+    id: 'category-double',
+    title: 'Superior Double Room',
+    photos: [
+      { src: '/images/gallery/double-bed.jpg',      alt: 'Kamar Tidur Utama Superior Double', label: 'Kamar Tidur Utama',  title: 'Kamar Tidur Utama — Superior Double', desc: 'Queen bed with crisp linen and terracotta accents' },
+      { src: '/images/gallery/double-bathroom.jpg', alt: 'En-suite bathroom Superior Double',  label: 'Kamar Mandi En-Suite', title: 'Kamar Mandi En-Suite', desc: 'Handmade zellige terracotta tiles and open skylight rain shower' },
+      { src: '/images/gallery/double-balcony.jpg',  alt: 'Private balcony Superior Double',    label: 'Balkon Pribadi',    title: 'Balkon Pribadi',      desc: 'Private sunlit terrace with rattan daybed' },
+    ],
   },
   {
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAs3jECiGwHnBcaPyQKR_HhBZbbPBUuc4IruEN-LrrP7bSphTrKHGKtuyDg_SpBtYm68HT-bJa2ChWi9GLkrUH_NP7pi7Wdn1mjw9AJUkAq1uZ12rT7pUe7U7YY_YTodUOKJqPbxk_kJ9Bsvi3x4gdBvytZvqBNvIq9OyHzlBLPQjLNrS8R1TMrt0Z1ARPIL_uHpYQRyV1BxoSjc56MpYgBke-8j8UNjrTg-cFO8iLCPgLTZgF84TK3IQFOJWanG--Ud3PNZt4hp-0',
-    alt: 'Teak Craftsmanship - Casa Roca Canggu',
-    caption: 'Teak Craftsmanship',
-    category: 'details',
-    cols: 4,
-    height: 'h-[500px]',
+    id: 'category-twin',
+    title: 'Superior Twin Room',
+    photos: [
+      { src: '/images/gallery/twin-bed.jpg',      alt: '2 Single Beds Superior Twin',  label: '2 Single Beds',        title: '2 Single Beds — Twin Sanctuary', desc: 'Twin bedroom with clean organic linen and ambient lighting' },
+      { src: '/images/gallery/twin-bathroom.jpg', alt: 'En-suite bathroom Twin Room',  label: 'Kamar Mandi En-Suite', title: 'Kamar Mandi En-Suite',           desc: 'Rain shower with warm stone finish' },
+      { src: '/images/gallery/twin-balcony.jpg',  alt: 'Private balcony Twin Room',    label: 'Balkon Pribadi',       title: 'Balkon Pribadi',                 desc: 'Shaded balcony with tropical garden view' },
+    ],
   },
   {
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuD_SpGX64-4isKLfbZ3d3Gd__6E42k8sqmSAKOA2zLkry8VBdLu4GtIzNTeWEteVq8cvBC5N3BPlxMoHvlH7KrcnTG9Gub6Eo8Hsumm9HrmCwuYWZBIaGtSTd8xrWdewenmR1rlx3_a5g9MtdfPejWof14MEJbQg-8XH6knQEJN-lPam4MP1JXu5ilDjnJeZzc7NfclXIVrUjp5Cxoy5sY2LrzeqYY8Y2Dwt6w5mJKzzVNYGmLsQst_j29fSl8wOxaerZ2OYbs53RU',
-    alt: 'Batu Bolong Beach at golden hour',
-    caption: 'Batu Bolong Sands',
-    category: 'around',
-    cols: 4,
-    height: 'h-[350px]',
+    id: 'category-triple',
+    title: 'Deluxe Triple Room',
+    photos: [
+      { src: '/images/gallery/deluxe-room.jpg',      alt: 'Deluxe Triple king + single', label: 'King + Single Bed',     title: 'Deluxe Triple — Expanded Suite', desc: 'King bed and single daybed in an expanded 32 sqm layout' },
+      { src: '/images/gallery/deluxe-bathroom.jpg',  alt: 'Deluxe en-suite bathroom',    label: 'Kamar Mandi Deluxe',    title: 'Kamar Mandi Deluxe',             desc: 'Larger en-suite bathroom with premium rain shower' },
+      { src: '/images/gallery/deluxe-balcony.jpg',   alt: 'Expanded balcony Deluxe',     label: 'Balkon Terrace',        title: 'Balkon Terrace Expanded',        desc: 'Wider private terrace with garden lounge area' },
+    ],
   },
   {
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCr69Iu_ODkEmRUHrozx3MFH5l150_L0P8dCn13PbdLdSFD4kczWjBcP0jhF4V07WkPAfsqF1hlEqL-6pW2EdrQ-nK_F7WNzUEeoYQt4T5DpqGGvEAZDkB6KxpyExYVvgJM4e9wuL-TTg3fncq6CdmPlMq6MSRMGyApUKCdI5j-3UZVWGzR-DNZ1nxGU--bLTFv_vdDgSXqK68eIjg5CH8a30k2pT0sdtPQWRDMsAMFFCW9ZhptxoCRjYFSzvVnRdDUcsBdTAX518I',
-    alt: 'Casa Roca private balconies exterior',
-    caption: 'Private Balconies',
-    category: 'rooms',
-    cols: 8,
-    height: 'h-[350px]',
-  },
-  {
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBWVzDBM1VDznaBnESekQagtIwcMSB3_GDEXXmXq9RsZk3KHmXs9QjpVVktBSZjqguSt_olwwZOuSJA1nujMP6BcuTfbMH_jTbilC1YARSe9NXLsZXLlbxoWXzQq4T__Ne8orm_Q4bpOlWaoMzzIlkb8di3EUzuCxrguvOtH31ihp0fGMlKlAUHxJl8mFbpHVnPurXY08JNW8QGIA5MVDXMUagTw9pnrsH64kddsx0wseOV-ywP5Z9Lwm8alN-L4XqfMsJGpx0_tF4',
-    alt: 'Deluxe Room interior Casa Roca',
-    caption: 'Deluxe Living',
-    category: 'details',
-    cols: 4,
-    height: 'h-[500px]',
-  },
-  {
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAZHsm5Be1efEhWJiOSRhTGwJqWwk6SYb-r94E8zmcZj2ImhmVQqblQFBwBHFezUFhJzZmNnGmQRbq69Gy6deEzu4oxzDOZ3gP9jIp02U73696vPaxvwOtF3RlMYMKLfIkuzKLYj2zvMgrAkqjbp8SQvE6bHQXslJUwqg0uIP3fBPCvuQ2_K2HiIXW7wANcfKUFuB4c-VRhutRSC-pcK4cKdmaSEsdLnRoD76lB5OASYRXKdk1q_I5dUgs1JIist3KEaU7IQL2HbMs',
-    alt: 'Casa Roca sanctuary atmosphere',
-    caption: 'The Sanctuary',
-    category: 'details',
-    cols: 8,
-    height: 'h-[500px]',
-  },
-  {
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBp8Mzsxm8jbudU-jht1w4_yDYI96kJB1pPJ_9iQiXdY2DOxdQ5zT37SNKzFakkcd2_mRFL2uMgT-MK82p3yHucAu8M2JmlTFlEp-w3_FwQJ6dihIBHDuwZw2NH1OVYHGLuMNfdMiXcy-6eGF79wtkhAm3zOSrdaGgBdbS5_HocAvCdNSbaLw7oGmmij_KDcdLDpbCRuaFL8akALcekkuLIIxpNPqsh1uM_nPs8-CuWJfE_fUZrRuMwvhb92DciqYnviyCgq-FSjxY',
-    alt: 'Boutique cafe in Canggu Batu Bolong',
-    caption: 'Canggu Culture',
-    category: 'around',
-    cols: 6,
-    height: 'h-[400px]',
-  },
-  {
-    src: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCSio3RvLHczV2MykpPuFpSnXvg11zf1Bc4HTTt4JI7dbGcJYDWtWdcaJqwglFZhh1dD8bCj4d3udcefiq9syhlhBgxe-mwOl6-El3uExgIrwMXJSMwDOpNeenCtEcJrRcChJChLTsFOTZ_etfVBoJD6aRxwvtqT0HXGeYvaI0xtUunWXYVqNqVfMSaSBBtMNdstcAZIb7SUQMCht-VVdhNHzETIqC5FMf3qAR0OPek5_0KhU5SncUbL72Ox9Mv1VW0Ry-lc2yqh6c',
-    alt: 'Stone basin bathroom detail Casa Roca',
-    caption: 'Honed Textures',
-    category: 'details',
-    cols: 6,
-    height: 'h-[400px]',
+    id: 'category-outdoors',
+    title: 'Outdoor & Suasana',
+    photos: [
+      { src: '/images/gallery/hero-facade.jpg',    alt: 'Casa Roca facade exterior',    label: 'Fasad Eksterior',       title: 'Fasad Arsitektur Casa Roca',   desc: 'Sun-bleached limestone arches and terracotta warmth' },
+      { src: '/images/gallery/courtyard.jpg',      alt: 'Casa Roca inner courtyard',    label: 'Courtyard',             title: 'Inner Courtyard',              desc: 'Tropical garden sanctuary at the heart of the property' },
+      { src: '/images/gallery/street-view.jpg',    alt: 'Jl. Batu Bolong street view',  label: 'Suasana Jl. Batu Bolong', title: 'Suasana Jl. Batu Bolong',    desc: 'The iconic beachside street just outside our gate' },
+    ],
   },
 ];
+
+// Flatten all photos for lightbox navigation
+const allPhotos = categories.flatMap((c) => c.photos.map((p) => ({ ...p, category: c.id })));
 ---
 
 <BaseLayout
-  title="Gallery Casa Roca Canggu | Artisanal Sanctuary in Bali"
-  description="Browse photos of Casa Roca Canggu — Superior and Deluxe rooms, architectural details, and the Batu Bolong neighbourhood."
-  canonical="https://casaroca.com/gallery"
+  title="Gallery — Casa Roca Canggu | Superior Double, Twin & Deluxe Triple Rooms"
+  description="Browse photos of Casa Roca Canggu — Superior Double, Superior Twin, and Deluxe Triple rooms with private balconies, en-suite bathrooms, and tropical outdoor spaces on Jl. Batu Bolong."
+  canonical="https://casarocacanggu.com/gallery"
 >
   <Header />
 
-  <main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop">
+  <main class="w-full pt-20 bg-[#fcf9f4]">
 
     <!-- Header -->
-    <header class="pt-24 pb-16 md:pt-32 md:pb-24">
-      <div class="max-w-3xl">
-        <h1 class="font-headline-xl-mobile md:font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-surface mb-8">
-          Gallery - Artisanal Sanctuary in Canggu
-        </h1>
-        <p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
-          A careful dialogue between structure and nature. Casa Roca Batu Bolong is defined by its
-          architectural intentionality, featuring solid teak furniture and rough-hewn stone
-          finishes. Nestled near the vibrant pulse of Batu Bolong, our sanctuary remains a silent
-          retreat for those who seek tactile luxury and a serene sense of place.
-        </p>
-      </div>
-    </header>
-
-    <!-- Filters -->
-    <div class="flex flex-wrap gap-8 mb-12 border-b border-surface-variant" id="filters">
-      <button class="filter-btn active pb-4 font-label-md text-label-md uppercase tracking-widest transition-all" data-filter="all">All</button>
-      <button class="filter-btn pb-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant hover:text-secondary transition-all" data-filter="rooms">Rooms</button>
-      <button class="filter-btn pb-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant hover:text-secondary transition-all" data-filter="details">Details</button>
-      <button class="filter-btn pb-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant hover:text-secondary transition-all" data-filter="around">Around Canggu</button>
-    </div>
-
-    <!-- Gallery Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-12 gap-gutter" id="gallery-grid">
-      {galleryItems.map((item, index) => (
-        <div
-          class={`gallery-item md:col-span-${item.cols} group overflow-hidden rounded-xl relative cursor-zoom-in`}
-          data-category={item.category}
-          data-index={index}
-        >
-          <img
-            src={item.src}
-            alt={item.alt}
-            class={`w-full ${item.height} object-cover transition-transform duration-700 group-hover:scale-105`}
-            loading="lazy"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-8">
-            <span class="font-label-sm text-label-sm text-white uppercase tracking-widest">{item.caption}</span>
+    <section class="w-full pt-6 pb-3">
+      <div class="max-w-[1360px] mx-auto px-5 lg:px-12">
+        <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div class="flex flex-col gap-1">
+            <h1 class="font-['Playfair_Display'] text-[28px] lg:text-[40px] font-[400] leading-[36px] lg:leading-[48px] tracking-[-0.01em] text-[#1E1B18]">
+              Galeri Foto — Casa Roca Canggu
+            </h1>
+            <div class="flex items-center gap-2 text-[#8A6D63] text-[14px] font-[400]">
+              <span>10 Private Rooms</span>
+              <span>·</span>
+              <span>Jl. Batu Bolong, Canggu, Bali</span>
+            </div>
           </div>
-        </div>
-      ))}
-    </div>
-
-    <!-- CTA -->
-    <section class="mt-section-gap mb-section-gap py-20 bg-surface-container-low rounded-xl px-8 text-center relative overflow-hidden">
-      <div class="absolute inset-0 opacity-10 bg-gradient-to-br from-secondary to-transparent pointer-events-none"></div>
-      <div class="relative z-10 max-w-2xl mx-auto">
-        <h2 class="font-headline-lg text-headline-lg text-on-surface mb-6">Experience the Sanctuary</h2>
-        <p class="font-body-md text-body-md text-on-surface-variant mb-10">
-          Your journey to the heart of Canggu begins here. Secure your artisanal escape and
-          rediscover the luxury of silence.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-          <a href="/availability" class="bg-secondary text-on-secondary px-10 py-4 rounded-lg font-label-md text-label-md hover:opacity-90 transition-all hover:-translate-y-1 active:translate-y-0">
-            Check Availability
-          </a>
-          <a href="/rooms" class="border border-secondary text-secondary px-10 py-4 rounded-lg font-label-md text-label-md hover:bg-secondary/5 transition-all">
-            View Room Rates
+          <a
+            href="/availability"
+            class="shrink-0 inline-flex items-center gap-1 bg-[#6E5249] hover:bg-[#553b33] text-white px-5 py-2.5 rounded-md text-[13px] font-[500] transition-all hover:-translate-y-0.5 shadow-sm"
+          >
+            <span class="material-symbols-outlined text-[18px]">calendar_today</span>
+            Book Direct
           </a>
         </div>
       </div>
     </section>
 
+    <!-- Hero Mosaic -->
+    <section class="w-full py-4">
+      <div class="max-w-[1360px] mx-auto px-5 lg:px-12">
+        <div class="relative rounded-2xl overflow-hidden shadow-sm border border-[#EAE5DC] bg-[#F3EFE8]">
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-1.5 h-[300px] sm:h-[420px] lg:h-[500px]">
+
+            <!-- Main large photo — col 1-2 -->
+            <div
+              class="md:col-span-2 relative h-full overflow-hidden cursor-zoom-in group"
+              onclick={`openLightbox(0)`}
+            >
+              <img
+                src={mosaic[0].src}
+                alt={mosaic[0].alt}
+                class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                loading="eager"
+              />
+              <div class="absolute inset-0 bg-[#1E1B18]/10 group-hover:bg-transparent transition-colors"></div>
+            </div>
+
+            <!-- 2×2 grid right -->
+            <div class="hidden md:grid md:col-span-2 grid-cols-2 gap-1.5 h-full">
+              {mosaic.slice(1).map((photo, idx) => (
+                <div
+                  class="relative h-full overflow-hidden cursor-zoom-in group"
+                  onclick={`openLightbox(${idx + 1})`}
+                >
+                  <img
+                    src={photo.src}
+                    alt={photo.alt}
+                    class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="eager"
+                  />
+                  <div class="absolute inset-0 bg-[#1E1B18]/10 group-hover:bg-transparent transition-colors"></div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+
+          <!-- Show all photos button -->
+          <button
+            onclick="openLightbox(0)"
+            class="absolute bottom-4 right-4 bg-white/95 backdrop-blur-md text-[#1E1B18] hover:bg-[#F3EFE8] px-4 py-2 rounded-md text-[13px] font-[600] shadow-md flex items-center gap-1 transition-colors"
+          >
+            <span class="material-symbols-outlined text-[18px]">photo_library</span>
+            Lihat Semua Foto ({allPhotos.length})
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sticky Category Nav -->
+    <div class="sticky top-20 z-30 w-full bg-[#FAF7F2]/95 backdrop-blur-md py-2.5 border-b border-[#EAE5DC] shadow-[0_2px_8px_rgba(30,27,24,0.02)]">
+      <div class="max-w-[1360px] mx-auto px-5 lg:px-12">
+        <div class="flex items-center gap-2 overflow-x-auto py-0.5 scrollbar-none" id="gallery-nav">
+          <button
+            class="cat-nav-btn px-4 py-2 rounded-full text-[13px] font-[500] transition-all bg-[#6E5249] text-white shadow-sm whitespace-nowrap"
+            data-target="all"
+          >
+            Semua Foto
+          </button>
+          {categories.map((cat) => (
+            <button
+              class="cat-nav-btn px-4 py-2 rounded-full text-[13px] font-[500] transition-all bg-[#F3EFE8] text-[#504441] hover:bg-[#f0ede9] hover:text-[#1E1B18] whitespace-nowrap"
+              data-target={cat.id}
+            >
+              {cat.title}
+            </button>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Photo Sections per Category -->
+    <div class="w-full pb-24">
+      {categories.map((cat) => (
+        <section class="gallery-category-section w-full pt-10 pb-8" id={cat.id}>
+          <div class="max-w-[1360px] mx-auto px-5 lg:px-12">
+
+            <!-- Section header -->
+            <div class="flex items-center justify-between pb-4 border-b border-[#EAE5DC]/70 mb-5">
+              <div class="flex items-center gap-2">
+                <h2 class="font-['Playfair_Display'] text-[22px] font-[500] leading-[30px] text-[#1E1B18]">{cat.title}</h2>
+                <span class="text-[#8A6D63] text-[12px] font-[500]">· {cat.photos.length} foto</span>
+              </div>
+              <a
+                href="/rooms"
+                class="text-[#6E5249] hover:text-[#553b33] hover:underline text-[13px] font-[500] inline-flex items-center gap-1 transition-colors"
+              >
+                <span>Detail Kamar</span>
+                <span class="material-symbols-outlined text-[16px]">chevron_right</span>
+              </a>
+            </div>
+
+            <!-- Photo grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {cat.photos.map((photo) => {
+                const globalIdx = allPhotos.findIndex((p) => p.src === photo.src && p.category === cat.id);
+                return (
+                  <div
+                    class="group relative rounded-xl overflow-hidden bg-[#F3EFE8] border border-[#EAE5DC] cursor-zoom-in shadow-sm hover:shadow-md transition-all"
+                    onclick={`openLightbox(${globalIdx})`}
+                  >
+                    <div class="aspect-[4/3] w-full overflow-hidden">
+                      <img
+                        src={photo.src}
+                        alt={photo.alt}
+                        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div class="p-3 bg-white flex items-center justify-between">
+                      <span class="text-[13px] font-[600] text-[#1E1B18]">{photo.label}</span>
+                      <span class="material-symbols-outlined text-[18px] text-[#8A6D63] group-hover:text-[#6E5249] transition-colors">zoom_in</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+          </div>
+        </section>
+      ))}
+    </div>
+
+    <CTABanner
+      title="Suka dengan apa yang kamu lihat?"
+      body="10 private rooms on Jl. Batu Bolong, Canggu — 200m from Batu Bolong Beach. Book direct for the lowest guaranteed rate."
+      ctaLabel="Check Availability"
+      ctaHref="/availability"
+    />
+
   </main>
 
   <Footer />
 
-  <!-- Lightbox -->
-  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
-    <button id="lightbox-close" aria-label="Close lightbox">
-      <span class="material-symbols-outlined" style="font-size:32px">close</span>
-    </button>
-    <button id="lightbox-prev" aria-label="Previous image">
-      <span class="material-symbols-outlined" style="font-size:40px">chevron_left</span>
-    </button>
-    <img id="lightbox-img" src="" alt="" />
-    <button id="lightbox-next" aria-label="Next image">
-      <span class="material-symbols-outlined" style="font-size:40px">chevron_right</span>
-    </button>
-    <div id="lightbox-caption"></div>
+  <!-- Lightbox Modal -->
+  <div
+    class="fixed inset-0 z-50 bg-[#1E1B18]/95 backdrop-blur-md hidden items-center justify-center p-4"
+    id="gallery-lightbox"
+  >
+    <div class="relative max-w-5xl w-full max-h-[92vh] flex flex-col bg-white rounded-2xl overflow-hidden shadow-2xl border border-[#EAE5DC]">
+
+      <!-- Top bar -->
+      <div class="flex items-center justify-between px-5 py-3 bg-white border-b border-[#EAE5DC]">
+        <div class="flex items-center gap-3">
+          <span class="text-[18px] font-[600] text-[#1E1B18]" id="lightbox-title">Casa Roca Canggu</span>
+          <span class="text-[13px] font-[500] text-[#8A6D63]" id="lightbox-counter">1 / 12</span>
+        </div>
+        <button
+          aria-label="Close"
+          class="w-8 h-8 rounded-full bg-[#F3EFE8] flex items-center justify-center text-[#1E1B18] hover:bg-[#f0ede9] transition-colors"
+          onclick="closeLightbox()"
+        >
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+
+      <!-- Image -->
+      <div class="relative w-full flex-1 max-h-[70vh] bg-[#1E1B18]/5 flex items-center justify-center overflow-hidden">
+        <img
+          alt="Casa Roca Canggu"
+          class="max-w-full max-h-[66vh] object-contain"
+          id="lightbox-img"
+          src=""
+        />
+
+        <!-- Prev / Next -->
+        <button
+          onclick="navigateLightbox(-1)"
+          class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-md hover:bg-white transition-colors"
+          aria-label="Previous"
+        >
+          <span class="material-symbols-outlined text-[20px]">chevron_left</span>
+        </button>
+        <button
+          onclick="navigateLightbox(1)"
+          class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-md hover:bg-white transition-colors"
+          aria-label="Next"
+        >
+          <span class="material-symbols-outlined text-[20px]">chevron_right</span>
+        </button>
+      </div>
+
+      <!-- Caption bar -->
+      <div class="px-5 py-3 bg-white border-t border-[#EAE5DC] flex items-center justify-between gap-4">
+        <p class="text-[14px] font-[400] text-[#504441] line-clamp-1" id="lightbox-desc">
+          Batu Bolong, Canggu, Bali
+        </p>
+        <a
+          href="/availability"
+          class="shrink-0 inline-flex items-center gap-1 bg-[#6E5249] hover:bg-[#553b33] text-white px-4 py-1.5 rounded-md text-[13px] font-[500] transition-colors"
+        >
+          Book Direct
+          <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+        </a>
+      </div>
+    </div>
   </div>
 
 </BaseLayout>
 
-<style>
-  .filter-btn.active {
-    color: #77574d;
-    border-bottom: 2px solid #77574d;
-  }
-  .gallery-item {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-  }
-  .gallery-item.hidden-item {
-    opacity: 0;
-    transform: scale(0.96);
-    pointer-events: none;
-    position: absolute;
-    visibility: hidden;
-  }
-
-  /* Lightbox */
-  #lightbox {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 100;
-    background: rgba(0, 0, 0, 0.92);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    align-items: center;
-    justify-content: center;
-  }
-  #lightbox.open {
-    display: flex;
-  }
-  #lightbox img {
-    max-width: 90vw;
-    max-height: 85vh;
-    object-fit: contain;
-    border-radius: 8px;
-    box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5);
-    transition: opacity 0.2s ease;
-  }
-  #lightbox-caption {
-    position: absolute;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: rgba(255, 255, 255, 0.6);
-    font-family: Inter, sans-serif;
-    font-size: 12px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  #lightbox-close {
-    position: absolute;
-    top: 24px;
-    right: 24px;
-    color: white;
-    cursor: pointer;
-    opacity: 0.7;
-    transition: opacity 0.2s;
-    background: none;
-    border: none;
-  }
-  #lightbox-close:hover { opacity: 1; }
-  #lightbox-prev,
-  #lightbox-next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    color: white;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: opacity 0.2s;
-    padding: 16px;
-    background: none;
-    border: none;
-  }
-  #lightbox-prev:hover,
-  #lightbox-next:hover { opacity: 1; }
-  #lightbox-prev { left: 16px; }
-  #lightbox-next { right: 16px; }
-</style>
-
-<script>
-  // ─── Filter ───────────────────────────────────────────────────────────────
-  document.querySelectorAll('.filter-btn').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      const filter = btn.dataset.filter;
-
-      document.querySelectorAll('.filter-btn').forEach((b) => {
-        b.classList.remove('active');
-        b.classList.add('text-on-surface-variant');
+<script define:vars={{ allPhotos }}>
+  // ─── Category filter / scroll ──────────────────────────────────────────────
+  document.querySelectorAll('.cat-nav-btn').forEach((btn) => {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.cat-nav-btn').forEach((b) => {
+        b.classList.remove('bg-[#6E5249]', 'text-white', 'shadow-sm');
+        b.classList.add('bg-[#F3EFE8]', 'text-[#504441]');
       });
-      btn.classList.add('active');
-      btn.classList.remove('text-on-surface-variant');
+      this.classList.add('bg-[#6E5249]', 'text-white', 'shadow-sm');
+      this.classList.remove('bg-[#F3EFE8]', 'text-[#504441]');
 
-      document.querySelectorAll('.gallery-item').forEach((item) => {
-        const match = filter === 'all' || item.dataset.category === filter;
-        item.classList.toggle('hidden-item', !match);
-      });
+      const target = this.dataset.target;
+      const sections = document.querySelectorAll('.gallery-category-section');
+
+      if (target === 'all') {
+        sections.forEach((s) => s.classList.remove('hidden'));
+        const first = document.getElementById('category-double');
+        if (first) window.scrollTo({ top: first.offsetTop - 150, behavior: 'smooth' });
+      } else {
+        sections.forEach((s) => {
+          if (s.id === target) {
+            s.classList.remove('hidden');
+            s.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          } else {
+            s.classList.add('hidden');
+          }
+        });
+      }
     });
   });
 
   // ─── Lightbox ─────────────────────────────────────────────────────────────
-  const lightbox  = document.getElementById('lightbox');
-  const lbImg     = document.getElementById('lightbox-img');
-  const lbCaption = document.getElementById('lightbox-caption');
-  const lbClose   = document.getElementById('lightbox-close');
-  const lbPrev    = document.getElementById('lightbox-prev');
-  const lbNext    = document.getElementById('lightbox-next');
+  const modal    = document.getElementById('gallery-lightbox');
+  const lbImg    = document.getElementById('lightbox-img');
+  const lbTitle  = document.getElementById('lightbox-title');
+  const lbDesc   = document.getElementById('lightbox-desc');
+  const lbCtr    = document.getElementById('lightbox-counter');
+  let currentIdx = 0;
 
-  let currentIndex = 0;
-
-  function getVisibleItems() {
-    return [...document.querySelectorAll('.gallery-item:not(.hidden-item)')];
+  function renderLightbox(idx) {
+    currentIdx = (idx + allPhotos.length) % allPhotos.length;
+    const photo = allPhotos[currentIdx];
+    lbImg.src          = photo.src;
+    lbImg.alt          = photo.alt;
+    lbTitle.textContent = photo.title || 'Casa Roca Canggu';
+    lbDesc.textContent  = photo.desc  || 'Batu Bolong, Canggu, Bali';
+    lbCtr.textContent   = `${currentIdx + 1} / ${allPhotos.length}`;
   }
 
-  function openLightbox(index) {
-    currentIndex = index;
-    const items = getVisibleItems();
-    const item = items[currentIndex];
-    const img = item.querySelector('img');
-    lbImg.src = img.src;
-    lbImg.alt = img.alt;
-    lbCaption.textContent = item.querySelector('span') ? item.querySelector('span').textContent : '';
-    lightbox.classList.add('open');
+  window.openLightbox = function (idx) {
+    renderLightbox(idx);
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
     document.body.style.overflow = 'hidden';
-  }
+  };
 
-  function closeLightbox() {
-    lightbox.classList.remove('open');
+  window.closeLightbox = function () {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
     document.body.style.overflow = '';
-  }
+  };
 
-  function navigate(dir) {
-    const items = getVisibleItems();
-    currentIndex = (currentIndex + dir + items.length) % items.length;
-    const item = items[currentIndex];
-    const img = item.querySelector('img');
-    lbImg.style.opacity = '0';
-    setTimeout(() => {
-      lbImg.src = img.src;
-      lbImg.alt = img.alt;
-      lbCaption.textContent = item.querySelector('span') ? item.querySelector('span').textContent : '';
-      lbImg.style.opacity = '1';
-    }, 150);
-  }
+  window.navigateLightbox = function (dir) {
+    renderLightbox(currentIdx + dir);
+  };
 
-  document.querySelectorAll('.gallery-item').forEach((item) => {
-    item.addEventListener('click', () => {
-      const visible = getVisibleItems();
-      const idx = visible.indexOf(item);
-      if (idx !== -1) openLightbox(idx);
-    });
-  });
-
-  lbClose.addEventListener('click', closeLightbox);
-  lbPrev.addEventListener('click', () => navigate(-1));
-  lbNext.addEventListener('click', () => navigate(1));
-  lightbox.addEventListener('click', (e) => { if (e.target === lightbox) closeLightbox(); });
+  modal?.addEventListener('click', (e) => { if (e.target === modal) window.closeLightbox(); });
 
   document.addEventListener('keydown', (e) => {
-    if (!lightbox.classList.contains('open')) return;
-    if (e.key === 'Escape') closeLightbox();
-    if (e.key === 'ArrowLeft') navigate(-1);
-    if (e.key === 'ArrowRight') navigate(1);
+    if (!modal || modal.classList.contains('hidden')) return;
+    if (e.key === 'Escape')      window.closeLightbox();
+    if (e.key === 'ArrowLeft')   window.navigateLightbox(-1);
+    if (e.key === 'ArrowRight')  window.navigateLightbox(1);
   });
 </script>
