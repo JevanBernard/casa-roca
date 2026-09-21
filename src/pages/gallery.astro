@@ -72,21 +72,12 @@ const allPhotos = categories.flatMap((c) => c.photos.map((p) => ({ ...p, categor
         <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
           <div class="flex flex-col gap-1">
             <h1 class="font-['Playfair_Display'] text-[28px] lg:text-[40px] font-[400] leading-[36px] lg:leading-[48px] tracking-[-0.01em] text-[#1E1B18]">
-              Galeri Foto — Casa Roca Canggu
+              Gallery - Casa Roca Canggu
             </h1>
             <div class="flex items-center gap-2 text-[#8A6D63] text-[14px] font-[400]">
               <span>10 Private Rooms</span>
-              <span>·</span>
-              <span>Jl. Batu Bolong, Canggu, Bali</span>
             </div>
           </div>
-          <a
-            href="/availability"
-            class="shrink-0 inline-flex items-center gap-1 bg-[#6E5249] hover:bg-[#553b33] text-white px-5 py-2.5 rounded-md text-[13px] font-[500] transition-all hover:-translate-y-0.5 shadow-sm"
-          >
-            <span class="material-symbols-outlined text-[18px]">calendar_today</span>
-            Book Direct
-          </a>
         </div>
       </div>
     </section>
@@ -137,7 +128,7 @@ const allPhotos = categories.flatMap((c) => c.photos.map((p) => ({ ...p, categor
             class="absolute bottom-4 right-4 bg-white/95 backdrop-blur-md text-[#1E1B18] hover:bg-[#F3EFE8] px-4 py-2 rounded-md text-[13px] font-[600] shadow-md flex items-center gap-1 transition-colors"
           >
             <span class="material-symbols-outlined text-[18px]">photo_library</span>
-            Lihat Semua Foto ({allPhotos.length})
+            See All Photos ({allPhotos.length})
           </button>
         </div>
       </div>
@@ -151,7 +142,7 @@ const allPhotos = categories.flatMap((c) => c.photos.map((p) => ({ ...p, categor
             class="cat-nav-btn px-4 py-2 rounded-full text-[13px] font-[500] transition-all bg-[#6E5249] text-white shadow-sm whitespace-nowrap"
             data-target="all"
           >
-            Semua Foto
+            All Photos
           </button>
           {categories.map((cat) => (
             <button
