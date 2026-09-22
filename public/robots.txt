@@ -30,4 +30,4 @@ Allow: /
 User-agent: CCBot
 Disallow: /
 
-Sitemap: https://casarocacanggu.com/sitemap.xml
+Sitemap: https://casarocacanggu.com/sitemap-index.xml

@@ -115,13 +115,22 @@ Push to the connected branch on GitHub and Vercel builds & deploys automatically
 
 > Note: [netlify.toml](netlify.toml) is still present in the repo from an earlier Netlify setup but is unused now that the site deploys on Vercel — safe to delete unless you still keep a Netlify deployment around as a fallback.
 
-## SEO
+## SEO & GEO (AI answer engines)
 
-- Schema markup (`LodgingBusiness`) in `BaseLayout.astro`
+- Schema markup in `BaseLayout.astro`: `Organization`, `WebSite`, and `LodgingBusiness` on every page, plus a page-specific `schema` prop (e.g. `Article` on blog posts, local `FAQPage` on the location page)
 - FAQ schema in `FAQSection.astro` / `LocationFAQ.astro`
-- Unique title/description per page
+- Unique title/description per page, plus `og:image` / Twitter Card (`summary_large_image`) meta — defaults to `/images/hero.jpg` site-wide, overridden per blog post via its frontmatter `image`
 - `robots.txt` — allows AI crawlers (GPTBot, PerplexityBot, ClaudeBot, etc.) for GEO citation, blocks `CCBot`
 - `llms.txt` — structured context file for AI answer engines
-- Sitemap generated at build time via `@astrojs/sitemap`, registered in `astro.config.mjs` (emits `sitemap-index.xml` and `sitemap-0.xml` into `dist/`)
+- Sitemap generated at build time via `@astrojs/sitemap`, registered in `astro.config.mjs` (emits `sitemap-index.xml` and `sitemap-0.xml` into `dist/`), referenced from `robots.txt`
   - Pinned to `3.2.1` in `package.json` — later `@astrojs/sitemap` releases (3.3.0+) target Astro 5+'s `astro:routes:resolved` integration hook, which doesn't exist in this project's Astro 4, and crash the build with `Cannot read properties of undefined (reading 'reduce')`. Don't `npm update` this package past 3.2.x without upgrading Astro first.
 - `site` in `astro.config.mjs` is set to `https://casarocacanggu.com`, matching the canonical/schema URLs used in `BaseLayout.astro`, `robots.txt`, and `llms.txt`
+
+### Manual setup still needed (not code)
+
+- Submit `https://casarocacanggu.com/sitemap-index.xml` to Google Search Console and Bing Webmaster Tools
+- Verify the domain in both
+
+### Known content gap
+
+- Blog frontmatter (`src/content/blog/*.md`) references images under `public/images/blog/`, but only `batu-bolong-surf.jpg` actually exists there — the other 5 posts' `image:` paths, and `blog/index.astro`'s `/images/blog/default.jpg` fallback, point at files that don't exist and will render broken images (including in the `og:image`/Twitter Card preview). Needs real photos added at those paths.

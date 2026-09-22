@@ -3,23 +3,31 @@ export interface Props {
   title?: string;
   description?: string;
   canonical?: string;
+  image?: string;
   schema?: object;
 }
 
+const SITE_URL = 'https://casarocacanggu.com';
+
 const {
-  title = 'Casa Roca Canggu — Boutique Guest House in Batu Bolong, Bali',
+  title = 'Casa Roca Canggu - Boutique Guest House in Batu Bolong, Bali',
   description = 'Casa Roca is a 10-room boutique guest house on Jl. Batu Bolong, Canggu, Bali. Private balcony, en-suite bathroom, AC, TV & free parking. 2 minutes walk to Batu Bolong Beach. Book direct for best rates.',
-  canonical = 'https://casarocacanggu.com/',
+  canonical = `${SITE_URL}/`,
+  image = `${SITE_URL}/images/hero.jpg`,
   schema,
 } = Astro.props;
+
+// Absolute-ify page-supplied image paths (e.g. blog post frontmatter uses site-relative paths).
+const ogImage = image.startsWith('http') ? image : `${SITE_URL}${image}`;
 
 const schemaLodging = {
   '@context': 'https://schema.org',
   '@type': 'LodgingBusiness',
   name: 'Casa Roca Canggu',
   description: 'Casa Roca is a 10-room boutique guest house on Jl. Batu Bolong, Canggu, Bali.',
-  url: 'https://casarocacanggu.com',
+  url: SITE_URL,
   email: 'info@casarocacanggu.com',
+  image: `${SITE_URL}/images/hero.jpg`,
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Jl. Batu Bolong',
@@ -38,6 +46,24 @@ const schemaLodging = {
   checkoutTime: '12:00',
   priceRange: '$$',
 };
+
+// Site-wide entity graph — helps Google's Knowledge Panel and gives AI/GEO
+// engines a clean Organization/WebSite record to cite Casa Roca by name.
+const schemaOrganization = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Casa Roca Canggu',
+  url: SITE_URL,
+  logo: `${SITE_URL}/images/logo.png`,
+  email: 'info@casarocacanggu.com',
+};
+
+const schemaWebsite = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'Casa Roca Canggu',
+  url: SITE_URL,
+};
 ---
 
 <!doctype html>
@@ -52,6 +78,12 @@ const schemaLodging = {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content="Casa Roca Canggu" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -66,6 +98,8 @@ const schemaLodging = {
     />
 
     <!-- Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify(schemaOrganization)} />
+    <script type="application/ld+json" set:html={JSON.stringify(schemaWebsite)} />
     <script type="application/ld+json" set:html={JSON.stringify(schemaLodging)} />
     {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
 
