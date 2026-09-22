@@ -41,7 +41,7 @@
         <!-- CTAs -->
         <div class="flex flex-wrap items-center gap-4">
           <a
-            href="#availability"
+            href="/availability"
             class="inline-flex items-center justify-center bg-[#fcf9f4] hover:bg-[#F3EFE8] text-[#1E1B18] px-10 py-4 rounded-md text-[13px] font-[600] transition-all duration-300 shadow-[0_12px_32px_-8px_rgba(0,0,0,0.35)] hover:-translate-y-0.5"
           >
             Book a Room — Best Rate Direct
@@ -60,15 +60,17 @@
   <!-- Floating Booking Bar -->
   <div class="relative z-20 max-w-[1360px] mx-auto px-6 lg:px-12 -mt-14 mb-16" id="availability">
     <div class="bg-white rounded-xl shadow-[0_20px_48px_-12px_rgba(30,27,24,0.12)] p-4 lg:p-6">
-      <form class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-center" onsubmit="event.preventDefault();window.location.href='/availability'">
+      <form id="hero-booking-form" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4 items-center">
 
         <!-- Check-in -->
         <div class="lg:col-span-3 bg-[#f6f3ee] p-2 rounded-md hover:bg-[#f0ede9] transition-colors">
-          <label class="block text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#8A6D63] mb-0.5">Check In</label>
+          <label for="hero-checkin" class="block text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#8A6D63] mb-0.5">Check In</label>
           <div class="flex items-center gap-1 text-[#1E1B18]">
             <span class="material-symbols-outlined text-[#6E5249] text-[20px]">calendar_today</span>
             <input
               type="date"
+              id="hero-checkin"
+              name="checkin"
               class="bg-transparent text-[13px] font-[600] text-[#1E1B18] focus:outline-none w-full cursor-pointer"
             />
           </div>
@@ -76,11 +78,13 @@
 
         <!-- Check-out -->
         <div class="lg:col-span-3 bg-[#f6f3ee] p-2 rounded-md hover:bg-[#f0ede9] transition-colors">
-          <label class="block text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#8A6D63] mb-0.5">Check Out</label>
+          <label for="hero-checkout" class="block text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#8A6D63] mb-0.5">Check Out</label>
           <div class="flex items-center gap-1 text-[#1E1B18]">
             <span class="material-symbols-outlined text-[#6E5249] text-[20px]">event</span>
             <input
               type="date"
+              id="hero-checkout"
+              name="checkout"
               class="bg-transparent text-[13px] font-[600] text-[#1E1B18] focus:outline-none w-full cursor-pointer"
             />
           </div>
@@ -88,27 +92,27 @@
 
         <!-- Room Type -->
         <div class="lg:col-span-2 bg-[#f6f3ee] p-2 rounded-md hover:bg-[#f0ede9] transition-colors">
-          <label class="block text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#8A6D63] mb-0.5">Room Type</label>
+          <label for="hero-room" class="block text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#8A6D63] mb-0.5">Room Type</label>
           <div class="flex items-center gap-1 text-[#1E1B18]">
             <span class="material-symbols-outlined text-[#6E5249] text-[20px]">bed</span>
-            <select class="bg-transparent text-[13px] font-[600] text-[#1E1B18] focus:outline-none w-full cursor-pointer">
-              <option>All Room Types</option>
-              <option>Superior Double</option>
-              <option>Superior Twin</option>
-              <option>Deluxe Double+Twin</option>
+            <select id="hero-room" name="room" class="bg-transparent text-[13px] font-[600] text-[#1E1B18] focus:outline-none w-full cursor-pointer">
+              <option value="">All Room Types</option>
+              <option value="double">Superior Double</option>
+              <option value="twin">Superior Twin</option>
+              <option value="triple">Deluxe Triple</option>
             </select>
           </div>
         </div>
 
         <!-- Guests -->
         <div class="lg:col-span-2 bg-[#f6f3ee] p-2 rounded-md hover:bg-[#f0ede9] transition-colors">
-          <label class="block text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#8A6D63] mb-0.5">Guests</label>
+          <label for="hero-guests" class="block text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#8A6D63] mb-0.5">Guests</label>
           <div class="flex items-center gap-1 text-[#1E1B18]">
             <span class="material-symbols-outlined text-[#6E5249] text-[20px]">group</span>
-            <select class="bg-transparent text-[13px] font-[600] text-[#1E1B18] focus:outline-none w-full cursor-pointer">
-              <option>1 Guest</option>
-              <option selected>2 Guests</option>
-              <option>3 Guests</option>
+            <select id="hero-guests" name="guests" class="bg-transparent text-[13px] font-[600] text-[#1E1B18] focus:outline-none w-full cursor-pointer">
+              <option value="1">1 Guest</option>
+              <option value="2" selected>2 Guests</option>
+              <option value="3">3 Guests</option>
             </select>
           </div>
         </div>
@@ -143,3 +147,20 @@
     </div>
   </div>
 </section>
+
+<script>
+  // Carry the visitor's search into /availability instead of discarding it —
+  // the previous version always redirected with no query params.
+  const heroForm = document.getElementById('hero-booking-form');
+  heroForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(heroForm as HTMLFormElement);
+    const params = new URLSearchParams();
+    for (const key of ['checkin', 'checkout', 'room', 'guests']) {
+      const value = data.get(key);
+      if (value) params.set(key, String(value));
+    }
+    const query = params.toString();
+    window.location.href = query ? `/availability?${query}` : '/availability';
+  });
+</script>

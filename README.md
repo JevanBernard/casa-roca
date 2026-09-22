@@ -1,4 +1,4 @@
-# Casa Roca — Website
+# Casa Roca Canggu— Website
 
 Astro + Tailwind CSS marketing site for Casa Roca, a 10-room boutique guest house on Jl. Batu Bolong, Canggu, Bali.
 

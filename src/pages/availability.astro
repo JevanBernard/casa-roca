@@ -24,8 +24,11 @@ const whyDirectPoints = [
 // Kept in sync with the room data on /rooms — see src/pages/rooms.astro.
 // priceValue/maxGuests are numeric so the client-side script below can do
 // nights × rate math and cap the guest stepper per room.
+// ids match the room ids used on /rooms and in the search-bar query params
+// (?room=double|twin|triple) so a link from elsewhere can pre-select a room.
 const rooms = [
   {
+    id: 'double',
     name: 'Superior Double Room',
     image: '/images/superior-double-room.jpg',
     imageAlt: 'Superior Double Room at Casa Roca Canggu — queen bed with private balcony',
@@ -39,6 +42,7 @@ const rooms = [
     ],
   },
   {
+    id: 'twin',
     name: 'Superior Twin Room',
     image: '/images/superior-twin-room.jpg',
     imageAlt: 'Superior Twin Room at Casa Roca Canggu — two single beds with private balcony',
@@ -52,6 +56,7 @@ const rooms = [
     ],
   },
   {
+    id: 'triple',
     name: 'Deluxe Triple Room',
     image: '/images/deluxe-room.jpg',
     imageAlt: 'Deluxe Triple Room at Casa Roca Canggu — king bed and single bed with expanded balcony',
@@ -203,6 +208,7 @@ const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
               {rooms.map((room) => (
                 <div
                   class="room-card bg-surface rounded-lg overflow-hidden flex flex-col md:flex-row border border-outline-variant/20 group hover:shadow-md transition-shadow"
+                  data-room-id={room.id}
                   data-room-name={room.name}
                   data-room-price={room.priceValue}
                   data-max-guests={room.maxGuests}
@@ -462,14 +468,18 @@ const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
       guestsCountEl.textContent = `${guests} ${guests === 1 ? 'Adult' : 'Adults'}`;
     }
 
-    roomCards.forEach((card) => {
-      const btn = card.querySelector('.select-room-btn');
+    function selectRoomByCard(card) {
       const name = card.dataset.roomName;
       const price = Number(card.dataset.roomPrice);
       const maxGuests = Number(card.dataset.maxGuests);
+      selectRoom({ name, price, maxGuests }, card);
+    }
+
+    roomCards.forEach((card) => {
+      const btn = card.querySelector('.select-room-btn');
       if (!btn) return;
       btn.addEventListener('click', () => {
-        selectRoom({ name, price, maxGuests }, card);
+        selectRoomByCard(card);
         bookingNoticeEl.classList.add('hidden');
         const original = btn.textContent.trim();
         btn.textContent = 'Selected ✓';
@@ -526,6 +536,44 @@ const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
     });
 
+    // Pre-fill from a search elsewhere on the site (hero search bar, /rooms
+    // filter bar, or a room card's "Reserve" link) instead of ignoring it —
+    // e.g. /availability?checkin=2026-10-01&checkout=2026-10-03&room=twin&guests=2
+    function applySearchParams() {
+      const params = new URLSearchParams(window.location.search);
+      const parseParamDate = (value) => {
+        if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+        const [y, m, d] = value.split('-').map(Number);
+        const date = new Date(y, m - 1, d);
+        return isPast(date) ? null : date;
+      };
+
+      const paramCheckIn = parseParamDate(params.get('checkin'));
+      const paramCheckOut = parseParamDate(params.get('checkout'));
+      if (paramCheckIn && paramCheckOut && paramCheckOut > paramCheckIn && !hasBlockedBetween(paramCheckIn, paramCheckOut)) {
+        checkIn = paramCheckIn;
+        checkOut = paramCheckOut;
+        viewYear = checkIn.getFullYear();
+        viewMonth = checkIn.getMonth();
+      } else if (paramCheckIn) {
+        checkIn = paramCheckIn;
+        viewYear = checkIn.getFullYear();
+        viewMonth = checkIn.getMonth();
+      }
+
+      const paramRoom = params.get('room');
+      if (paramRoom) {
+        const card = Array.from(roomCards).find((c) => c.dataset.roomId === paramRoom);
+        if (card) selectRoomByCard(card);
+      }
+
+      const paramGuests = Number(params.get('guests'));
+      if (Number.isInteger(paramGuests) && paramGuests > 0) {
+        guests = selectedRoom ? Math.min(paramGuests, selectedRoom.maxGuests) : paramGuests;
+      }
+    }
+
+    applySearchParams();
     updateGuestsLabel();
     renderCalendar();
     updateSummary();
