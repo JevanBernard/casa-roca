@@ -1,12 +1,21 @@
 ---
+import { rooms, getRoomById } from '../data/rooms';
+
+const bathroomLabel = (type: 'rain-shower' | 'bathtub') =>
+  type === 'rain-shower' ? 'Private En-Suite Rain Shower' : 'Private En-Suite Bathtub';
+
+const double = getRoomById('double')!;
+const twin = getRoomById('twin')!;
+const triple = getRoomById('triple')!;
+
 const rows = [
-  { label: 'Room Size',        double: '22 m²',              twin: '22 m²',              triple: '32 m² (Expanded)' },
-  { label: 'Bed Configuration', double: '1 Queen Bed (160×200)', twin: '2 Single Beds (100×200)', triple: '1 King + 1 Single Bed' },
-  { label: 'Max Occupancy',    double: '2 Adults',            twin: '2 Adults',            triple: 'Up to 3 Adults' },
-  { label: 'Balcony Type',     double: 'Standard Private',    twin: 'Standard Private',    triple: 'Standard Private' },
-  { label: 'Bathroom',         double: 'Private En-Suite Rain Shower', twin: 'Private En-Suite Rain Shower', triple: 'Private En-Suite Rain Shower' },
-  { label: 'Smart TV',         double: '32" 4K Flat Screen',  twin: '32" 4K Flat Screen',  triple: '32" 4K Flat Screen' },
-  { label: 'Ideal For',        double: 'Solo workers & couples', twin: 'Surf buddies & travel friends', triple: 'Small families & extended stays' },
+  { label: 'Room Size',         double: double.size,                        twin: twin.size,                        triple: `${triple.size} (Expanded)` },
+  { label: 'Bed Configuration', double: double.bed,                         twin: twin.bed,                         triple: triple.bed },
+  { label: 'Max Occupancy',     double: `${double.capacity} Adults`,        twin: `${twin.capacity} Adults`,        triple: `Up to ${triple.capacity} Adults` },
+  { label: 'Balcony Type',      double: 'Standard Private',                 twin: 'Standard Private',               triple: 'Standard Private' },
+  { label: 'Bathroom',          double: bathroomLabel(double.bathroomType), twin: bathroomLabel(twin.bathroomType), triple: bathroomLabel(triple.bathroomType) },
+  { label: 'Smart TV',          double: '32" 4K Flat Screen',               twin: '32" 4K Flat Screen',             triple: '32" 4K Flat Screen' },
+  { label: 'Ideal For',         double: 'Solo workers & couples',           twin: 'Surf buddies & travel friends',  triple: 'Small families & extended stays' },
 ];
 ---
 
@@ -53,29 +62,27 @@ const rows = [
         <!-- Price row -->
         <tr class="bg-[#F3EFE8]">
           <td class="p-4 lg:p-6 font-semibold text-[#1E1B18]">Direct Rate</td>
-          <td class="p-4 lg:p-6 font-semibold text-[#6E5249]">from IDR 750,000</td>
-          <td class="p-4 lg:p-6 font-semibold text-[#6E5249]">from IDR 850,000</td>
-          <td class="p-4 lg:p-6 bg-[#EFF2EC] font-semibold text-[#5A6351]">from IDR 1,150,000</td>
+          <td class="p-4 lg:p-6 font-semibold text-[#6E5249]">from IDR {double.priceValue.toLocaleString('en-US')}</td>
+          <td class="p-4 lg:p-6 font-semibold text-[#6E5249]">from IDR {twin.priceValue.toLocaleString('en-US')}</td>
+          <td class="p-4 lg:p-6 bg-[#EFF2EC] font-semibold text-[#5A6351]">from IDR {triple.priceValue.toLocaleString('en-US')}</td>
         </tr>
 
         <!-- CTA row -->
         <tr class="bg-white">
           <td class="p-4 lg:p-6"></td>
-          <td class="p-4 lg:p-6">
-            <a href="/availability" class="inline-flex items-center justify-center w-full py-2 px-3 bg-[#6E5249] hover:bg-[#553b33] text-white text-[13px] font-[500] rounded shadow-sm transition-all">
-              Book Double
-            </a>
-          </td>
-          <td class="p-4 lg:p-6">
-            <a href="/availability" class="inline-flex items-center justify-center w-full py-2 px-3 bg-[#6E5249] hover:bg-[#553b33] text-white text-[13px] font-[500] rounded shadow-sm transition-all">
-              Book Twin
-            </a>
-          </td>
-          <td class="p-4 lg:p-6 bg-[#EFF2EC]/30">
-            <a href="/availability" class="inline-flex items-center justify-center w-full py-2 px-3 bg-[#3b4433] hover:bg-[#1E1B18] text-white text-[13px] font-[500] rounded shadow-sm transition-all">
-              Book Triple
-            </a>
-          </td>
+          {rooms.map((room) => (
+            <td class:list={['p-4 lg:p-6', room.id === 'triple' && 'bg-[#EFF2EC]/30']}>
+              <a
+                href={`/availability?room=${room.id}`}
+                class:list={[
+                  'inline-flex items-center justify-center w-full py-2 px-3 text-white text-[13px] font-[500] rounded shadow-sm transition-all',
+                  room.id === 'triple' ? 'bg-[#3b4433] hover:bg-[#1E1B18]' : 'bg-[#6E5249] hover:bg-[#553b33]',
+                ]}
+              >
+                Book {room.name.replace(/^(Superior|Deluxe)\s/, '').replace(/\sRoom$/, '')}
+              </a>
+            </td>
+          ))}
         </tr>
       </tbody>
     </table>

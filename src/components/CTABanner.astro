@@ -1,4 +1,5 @@
 ---
+import { property } from '../data/property';
 ---
 
 <section class="w-full max-w-[1360px] mx-auto px-6 lg:px-12 py-16 lg:pb-24">
@@ -29,7 +30,7 @@
           Check Availability
         </a>
         <a
-          href="https://wa.me/62XXXXXXXXX"
+          href={`https://wa.me/${property.whatsapp}`}
           target="_blank"
           rel="noopener noreferrer"
           class="inline-flex items-center justify-center gap-1 bg-[#5A6351]/40 hover:bg-[#5A6351]/60 text-[#fcf9f4] backdrop-blur-md px-6 py-4 rounded-md text-[13px] font-[500] transition-colors"

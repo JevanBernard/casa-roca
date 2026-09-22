@@ -1,4 +1,9 @@
 ---
+import { getRoomById } from '../data/rooms';
+
+// Price comes from the shared room data source so it can't drift from
+// /rooms or /availability again; the rest is this card's own curated
+// homepage copy (subtitle, short amenity chips) rather than raw fact data.
 const rooms = [
   {
     id: 'superior-twin',
@@ -7,7 +12,7 @@ const rooms = [
     subtitle: '2 Single Beds · Sleeps 2',
     description:
       'Perfect for two travelers or solo guests who want extra space. Two single beds with solid teak furniture, large windows, and a private balcony overlooking the garden.',
-    priceFrom: 'IDR 850,000',
+    priceFrom: `IDR ${getRoomById('twin')!.priceValue.toLocaleString('en-US')}`,
     image: '/images/superior-twin-room.jpg',
     imageAlt: 'Superior Twin Room at Casa Roca Canggu - two single beds and private balcony',
     href: '/rooms#twin',
@@ -20,7 +25,7 @@ const rooms = [
     subtitle: '1 Double Bed · Sleeps 2',
     description:
       'Ideal for couples. One double bed with solid teak furniture, large windows, and a private balcony. Same premium finishes as the Twin in a more intimate layout.',
-    priceFrom: 'IDR 750,000',
+    priceFrom: `IDR ${getRoomById('double')!.priceValue.toLocaleString('en-US')}`,
     image: '/images/superior-double-room.jpg',
     imageAlt: 'Superior Double Room at Casa Roca Canggu - double bed and private balcony',
     href: '/rooms#double',
@@ -33,7 +38,7 @@ const rooms = [
     subtitle: 'Double + Twin Beds · Sleeps up to 3',
     description:
       'More floor space, same premium finishes. The Deluxe is the right choice for longer stays, families, or anyone who wants room to actually breathe. Sleeps up to 3 guests.',
-    priceFrom: 'IDR 1,150,000',
+    priceFrom: `IDR ${getRoomById('triple')!.priceValue.toLocaleString('en-US')}`,
     image: '/images/deluxe-room.jpg',
     imageAlt: 'Deluxe Triple Room at Casa Roca Canggu - spacious room with en-suite bathroom',
     href: '/rooms#triple',

@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { getCollection } from 'astro:content';
+import { property } from '../../data/property';
 
 const allPosts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
@@ -261,7 +262,7 @@ function formatDate(date: Date) {
             <span class="material-symbols-outlined text-[18px]">calendar_today</span>
           </a>
           <a
-            href="https://wa.me/62XXXXXXXXX"
+            href={`https://wa.me/${property.whatsapp}`}
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center justify-center gap-2 border border-white/40 text-white hover:bg-white/10 px-8 py-4 rounded-md text-[13px] font-[500] transition-colors"

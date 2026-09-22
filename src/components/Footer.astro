@@ -1,4 +1,6 @@
 ---
+import { property } from '../data/property';
+
 const sanctuaryLinks = [
   { label: 'Suites & Studios', href: '/rooms' },
   { label: 'Visual Gallery',   href: '/gallery' },
@@ -55,13 +57,13 @@ const sanctuaryLinks = [
       <div class="md:col-span-4 lg:col-span-3 flex flex-col gap-4">
         <h3 class="text-[11px] font-[600] leading-[16px] tracking-[0.12em] uppercase text-[#1E1B18]">Location & Hours</h3>
         <div class="flex flex-col gap-1 text-[14px] font-[400] leading-[22px] text-[#504441]">
-          <p>Jl. Batu Bolong, Canggu</p>
-          <p>Badung, Bali 80361, Indonesia</p>
-          <p class="text-[12px] font-[500] text-[#8A6D63] pt-1">Reception: 08:00 – 20:00 WITA</p>
-          <p class="text-[12px] font-[500] text-[#8A6D63]">Check-in: 14:00 · Check-out: 12:00</p>
+          <p>{property.address.street}, {property.address.locality}</p>
+          <p>{property.address.region} {property.address.postalCode}, {property.address.country}</p>
+          <p class="text-[12px] font-[500] text-[#8A6D63] pt-1">Reception: {property.receptionHours} {property.timezoneLabel}</p>
+          <p class="text-[12px] font-[500] text-[#8A6D63]">Check-in: {property.checkIn} · Check-out: {property.checkOut}</p>
           <div class="pt-1">
             <a
-              href="https://maps.app.goo.gl/DK2PNL8ZCmrYri848"
+              href={property.mapsUrl}
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex items-center gap-1 text-[12px] font-[500] text-[#6E5249] hover:text-[#553b33] transition-colors hover:underline"
@@ -81,7 +83,7 @@ const sanctuaryLinks = [
           Connect instantly with our hosts for room questions, special requests, and direct guest privileges.
         </p>
         <a
-          href="https://wa.me/62XXXXXXXXX"
+          href={`https://wa.me/${property.whatsapp}`}
           target="_blank"
           rel="noopener noreferrer"
           class="inline-flex items-center justify-center gap-1 bg-[#5A6351] hover:bg-[#3b4433] text-white py-2 px-4 rounded-md text-[13px] font-[500] transition-colors"
@@ -94,8 +96,9 @@ const sanctuaryLinks = [
 
     <!-- Bottom bar -->
     <div class="pt-6 border-t border-[#EAE5DC] flex flex-col sm:flex-row items-center justify-between gap-4 text-[#504441] text-[12px] font-[500]">
-      <p>© {new Date().getFullYear()} Casa Roca Canggu. All rights reserved.</p>
+      <p>© {new Date().getFullYear()} {property.name}. All rights reserved.</p>
       <div class="flex items-center gap-6">
+        <a href="/house-rules" class="hover:text-[#1c1c19] transition-colors">House Rules</a>
         <a href="/privacy" class="hover:text-[#1c1c19] transition-colors">Privacy Policy</a>
         <a href="/terms" class="hover:text-[#1c1c19] transition-colors">Terms of Stay</a>
       </div>

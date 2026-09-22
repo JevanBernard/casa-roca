@@ -1,0 +1,128 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { property } from '../data/property';
+
+// Each rule is marked `verified: true` only when it's backed by an existing,
+// established statement elsewhere in the codebase (StayPolicies.astro,
+// about.astro, etc.) — see the comment on each. Unverified rows are
+// deliberately left general and flagged rather than invented, per the
+// "do not invent property information" rule.
+const rules = [
+  {
+    icon: 'schedule',
+    title: 'Check-in & Check-out',
+    desc: `Check-in from ${property.checkIn} ${property.timezoneLabel}, check-out by ${property.checkOut} ${property.timezoneLabel}. Reception is available ${property.receptionHours} ${property.timezoneLabel} daily.`,
+    verified: true,
+  },
+  {
+    icon: 'pets',
+    title: 'Pets',
+    desc: property.pets.description,
+    verified: true,
+  },
+  {
+    icon: 'child_care',
+    title: 'Children & Extra Beds',
+    desc: 'Children are welcome. Rooms accommodate a maximum of the specified guest count per room category; no rollaway beds or extra cots are available.',
+    verified: true,
+  },
+  {
+    icon: 'cancel',
+    title: 'Cancellation',
+    desc: property.cancellationPolicy.summary,
+    verified: true,
+  },
+  {
+    icon: 'smoke_free',
+    title: 'Smoking',
+    // TODO: PROPERTY OWNER VERIFICATION REQUIRED — no smoking policy is
+    // established anywhere in the codebase.
+    desc: 'Please contact us via WhatsApp to confirm the property\'s current smoking policy before booking if this matters to your stay.',
+    verified: false,
+  },
+  {
+    icon: 'celebration',
+    title: 'Parties & Events',
+    // TODO: PROPERTY OWNER VERIFICATION REQUIRED — no explicit parties/events
+    // policy is established anywhere in the codebase, though the site's
+    // "quiet, private retreat" positioning throughout (about.astro, homepage)
+    // strongly implies parties/events are not part of the property's offering.
+    desc: 'Casa Roca is positioned as a quiet, private retreat rather than a party venue. Contact us via WhatsApp for specific questions about group bookings or events.',
+    verified: false,
+  },
+  {
+    icon: 'nightlight',
+    title: 'Quiet Hours',
+    // TODO: PROPERTY OWNER VERIFICATION REQUIRED — no specific quiet-hours
+    // window is established anywhere in the codebase.
+    desc: 'As a private-room property, please be considerate of other guests, especially in the evening and early morning. A specific quiet-hours window has not yet been published — contact us to confirm.',
+    verified: false,
+  },
+  {
+    icon: 'group',
+    title: 'Visitors',
+    // TODO: PROPERTY OWNER VERIFICATION REQUIRED — no visitor/guest policy is
+    // established anywhere in the codebase.
+    desc: 'Please contact us via WhatsApp in advance if you would like to bring a visitor onto the property.',
+    verified: false,
+  },
+  {
+    icon: 'local_parking',
+    title: 'Parking',
+    desc: `${property.parking.type}, ${property.parking.access.toLowerCase()} for cars and motorbikes.`,
+    verified: true,
+  },
+  {
+    icon: 'handyman',
+    title: 'Damage',
+    desc: 'Guests are responsible for any damage to the room or property caused during their stay, beyond normal wear and tear.',
+    verified: true,
+  },
+];
+---
+
+<BaseLayout
+  title="House Rules — Casa Roca Canggu"
+  description="Practical house rules for staying at Casa Roca Canggu — check-in/out, pets, cancellation, parking, and more."
+  canonical="https://casarocacanggu.com/house-rules"
+>
+  <Header />
+
+  <main class="w-full pt-20 bg-[#fcf9f4]">
+    <section class="max-w-[900px] mx-auto px-5 lg:px-12 pt-10 pb-8">
+      <span class="text-[11px] font-[600] leading-[16px] tracking-[0.2em] uppercase text-[#6E5249]">Guest Essentials</span>
+      <h1 class="font-['Playfair_Display'] text-[36px] lg:text-[44px] font-[400] leading-[44px] lg:leading-[52px] tracking-[-0.01em] text-[#1E1B18] mt-2 mb-3">
+        House Rules
+      </h1>
+      <p class="text-[15px] font-[400] leading-[24px] text-[#504441] max-w-2xl">
+        The practical details for your stay. Anything marked "pending confirmation" isn't yet published
+        by the property — reach out via WhatsApp if it matters to your booking.
+      </p>
+    </section>
+
+    <section class="max-w-[900px] mx-auto px-5 lg:px-12 pb-24">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        {rules.map(({ icon, title, desc, verified }) => (
+          <div class="p-5 bg-white rounded-xl shadow-sm space-y-2">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2 text-[#6E5249]">
+                <span class="material-symbols-outlined text-[20px]">{icon}</span>
+                <span class="text-[16px] font-[600] leading-[24px] text-[#1E1B18]">{title}</span>
+              </div>
+              {!verified && (
+                <span class="text-[10px] font-[600] uppercase tracking-wider text-[#8A6D63] bg-[#F3EFE8] px-2 py-0.5 rounded-full whitespace-nowrap">
+                  Pending confirmation
+                </span>
+              )}
+            </div>
+            <p class="text-[14px] font-[400] leading-[22px] text-[#504441]">{desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

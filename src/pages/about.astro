@@ -3,11 +3,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CTABanner from '../components/CTABanner.astro';
+import { property } from '../data/property';
 
 const stats = [
   { icon: 'bedroom_parent', value: '10',   label: 'Bespoke Private Suites' },
   { icon: 'surfing',        value: '200m', label: 'Flat Walk to Batu Bolong Surf' },
-  { icon: 'shield',         value: '100%', label: 'Dedicated Private Space' },
+  { icon: 'shield',         value: '0',    label: 'Shared Guest Rooms' },
   { icon: 'concierge',      value: '08–20h', label: 'On-Site Concierge & Host' },
 ];
 
@@ -32,14 +33,14 @@ const standards = [
   },
   {
     icon: 'support_agent',
-    title: 'Attentive Villa Team',
+    title: 'Attentive Casa Roca Team',
     desc: 'On-site reception open 08:00 to 20:00 WITA, offering discreet support, local insider advice, and instant WhatsApp concierge.',
     footnote: 'Daily on-property',
   },
 ];
 
 const amenities = [
-  { icon: 'bathtub',       title: 'Private Bathroom',       desc: 'En-suite bathroom in every room for exclusive privacy without sharing.' },
+  { icon: 'bathroom',      title: 'Private Bathroom',       desc: 'En-suite bathroom in every room for exclusive privacy without sharing.' },
   { icon: 'shower',        title: 'Walk-in Rain Shower',    desc: 'High-pressure shower with hot water, toiletries, and rainfall head.' },
   { icon: 'water_heater',  title: 'Hot Water Heater',       desc: 'Instant continuous hot water available 24 hours a day.' },
   { icon: 'wifi',          title: 'High-Speed Free Wi-Fi',  desc: 'Super-fast fiber internet connection for remote work & streaming.' },
@@ -306,7 +307,7 @@ const faqs = [
               "We want Casa Roca to be the quiet refuge you look forward to returning to after an active surf session or exploring the cafés of Canggu."
             </p>
             <a
-              href="https://wa.me/62XXXXXXXXX"
+              href={`https://wa.me/${property.whatsapp}`}
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex items-center gap-1 text-[13px] font-[500] text-[#6E5249] hover:text-[#553b33] transition-colors group"

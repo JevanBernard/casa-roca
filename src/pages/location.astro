@@ -3,33 +3,84 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import CTABanner from '../components/CTABanner.astro';
+import { property } from '../data/property';
+import { nearbyPlaces, type TransportMode } from '../data/nearbyPlaces';
 
-const MAPS_URL = 'https://maps.app.goo.gl/XDhPWpNPfqz8EDCD8';
-const ADDRESS  = 'Jl. Pantai Batu Bolong, Canggu, Kuta Utara, Badung, Bali 80361, Indonesia';
+const MAPS_URL = property.mapsUrl;
+const ADDRESS  = property.address.full;
+
+const modeLabel: Record<TransportMode, string> = { walking: 'WALK', scooter: 'SCOOTER', driving: 'DRIVE' };
 
 const highlights = [
-  { icon: 'surfing',        title: '2 Min Walk',        sub: 'Batu Bolong Beach (200m)' },
+  { icon: 'surfing',        title: `${property.beach.walkingTime} Walk`,        sub: `${property.beach.name} (${property.beach.distance})` },
   { icon: 'apartment',     title: 'Prime Landmark',     sub: 'Directly next to Aston Canggu' },
-  { icon: 'local_parking', title: 'Free Basement Parking', sub: 'Secure cars & motorbikes' },
-  { icon: 'flight_land',   title: '45–60 Min Drive',   sub: 'From Ngurah Rai Airport (DPS)' },
+  { icon: 'local_parking', title: property.parking.type, sub: 'Secure cars & motorbikes' },
+  { icon: 'flight_land',   title: `${property.airport.driveTime} Drive`,   sub: `From ${property.airport.name}` },
 ];
 
-const distances = [
-  { dist: '200m', time: '2 MIN WALK',    timeBg: 'bg-[#EFF2EC] text-[#5A6351]', name: 'Batu Bolong Beach',     desc: 'Legendary surf break ideal for longboards and beginners, black volcanic sands, and vibrant oceanside community shacks.', icon: 'waves', tag: 'Surf & Sunsets' },
-  { dist: '120m', time: '1 MIN WALK',    timeBg: 'bg-[#e6ded9] text-[#504441]', name: "Old Man's Canggu",      desc: 'The quintessential open-air beachfront beer garden and social hub. Cold Bintang, live acoustic gigs, and sunset vibes.', icon: 'local_bar', tag: 'Iconic Social Spot' },
-  { dist: '210m', time: '3 MIN WALK',    timeBg: 'bg-[#e6ded9] text-[#504441]', name: 'The Lawn Canggu',       desc: 'Oceanfront daybeds, saltwater infinity pool, artisan cocktails, and refined dining facing the sunset surf lineup.', icon: 'pool', tag: 'Beach Club & Dining' },
-  { dist: '700m', time: '8 MIN WALK',    timeBg: 'bg-[#e6ded9] text-[#504441]', name: 'Crate Café',           desc: 'The pulse of Canggu breakfast culture. Generous chia bowls, specialty drip coffee, and an art-filled industrial space.', icon: 'local_cafe', tag: 'Specialty Coffee' },
-  { dist: '1.5km', time: '5 MIN SCOOTER', timeBg: 'bg-[#e6ded9] text-[#504441]', name: 'Echo Beach',           desc: "Canggu's most photogenic sunset backdrop, with larger swell and a lively strip of sunset bars and warungs.", icon: 'beach_access', tag: 'Beach & Sunset' },
-];
+// Both lists below previously hard-coded their own distance/time numbers
+// independently and had drifted apart — e.g. Old Man's showed 120m in one
+// list and 450m in the other, with a 200m value used elsewhere in the blog.
+// They now both read from the single reconciled source in src/data/nearbyPlaces.ts.
+const distanceIds = ['batu-bolong-beach', 'old-mans', 'the-lawn', 'crate-cafe', 'echo-beach'] as const;
+const distanceIcons: Record<string, { icon: string; tag: string }> = {
+  'batu-bolong-beach': { icon: 'waves', tag: 'Surf & Sunsets' },
+  'old-mans': { icon: 'local_bar', tag: 'Iconic Social Spot' },
+  'the-lawn': { icon: 'pool', tag: 'Beach Club & Dining' },
+  'crate-cafe': { icon: 'local_cafe', tag: 'Specialty Coffee' },
+  'echo-beach': { icon: 'beach_access', tag: 'Beach & Sunset' },
+};
+const distances = distanceIds.map((id) => {
+  const place = nearbyPlaces.find((p) => p.id === id)!;
+  return {
+    dist: place.distance,
+    time: `${place.time.toUpperCase()} ${modeLabel[place.transportMode]}`,
+    timeBg: id === 'batu-bolong-beach' ? 'bg-[#EFF2EC] text-[#5A6351]' : 'bg-[#e6ded9] text-[#504441]',
+    name: place.name,
+    desc: place.description,
+    icon: distanceIcons[id].icon,
+    tag: distanceIcons[id].tag,
+  };
+});
 
-const curatedPlaces = [
-  { cat: 'dining',  dist: '700m • 8 min walk',     tag: 'Specialty Coffee',    name: 'Crate Café',              price: '$$',  desc: 'The pulse of Canggu breakfast culture. Generous, vibrant chia bowls, specialty drip coffee, and an art-filled industrial space.', tip: 'Arrive before 08:30 AM to secure a breezy table without queueing.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCvlGcVHZyKFllH3nD3inwlPLlxnFUqWYUKIu4eT77oQXvHlJMOtb3fFD1RW0GD7Gmrb5Kvn6crqGLEwbgzB5yp9ohgkohMSirlReBDdpM_QxerG5OlbRjPziWExSe9QMDEPBnITSny6FKAeIT2SeHUKiUr76V1CuDTmaWRzorvCRNKHoAOsOOcAl2iPlaH8-C222d5bZi9-LkzOx2Ut4PQ5OIs819P4DKiCZAVJJ0SaxACJWiBBNpKAmp0mZcA1WB4DNRwDmZHIUYG' },
-  { cat: 'sunset',  dist: '500m • 6 min walk',     tag: 'Beach Lounge',        name: 'The Lawn Canggu',         price: '$$$', desc: 'The premier spot for beachfront daybeds, elevated small plates, and cocktails as the ocean turns pink and purple at dusk.', tip: 'Our concierge can pre-book premium ocean daybeds for Casa Roca guests.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBY02_xaOAiUw87jJi6hMjMnFwSBMsz5uFTpRPXdaZrPJfCuN21CgCJoAgpNP_ae_SF2GAYJIH2U-C7LzHHsLyS8Wite00Dl2AwDJH5922HUxyaNKoiXY5iN2fa_ugcjQUClS0i2coR0z3W38nC3gLwOproFe3asXluBDCPvdmGDm2aqeYK4xA42KJLjpa4c5Sz0cKB1hdorFKEWEYm2Bs_UcH6fFHH9vi19MlXOA' },
-  { cat: 'wellness', dist: '400m • 3 min walk',    tag: 'Surf & Coaching',     name: 'Batu Bolong Surf Guides', price: '$$',  desc: "Gentle reef breaks make Batu Bolong one of the world's best longboard waves. Dedicated local surf instructors for all skill levels.", tip: 'Mid-tide mornings offer the cleanest peeling waves with minimal offshore wind.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuChQyDKf7wIxKaOQhPLvfID81fyJY-QvSU_1EQyEGMdxlictlrxqgGcwZlO86i7snGN-FRxtqS2bwbwqQ2fulNnOVD0Ez9uGdn2RuPHIALZ0VSo8xXzOhA0UZTZQInazJLH0ROqT29vImCk-rRMNU41nxG8AG8huJKgM-fmKVa5oplvytvbQUJOT0Xz3wJ_HIeEizR4djG3x_CupGmGWsJ4F7nWcwWxNPVuHZYdwg' },
-  { cat: 'dining',  dist: '800m • 3 min scooter',  tag: 'Plant-Based Dining',  name: 'The Shady Shack',         price: '$$',  desc: 'Lush garden sanctuary overlooking rice fields, renowned for artisan vegetarian bowls, fresh cold-press tonics, and cacao treats.', tip: 'Try the halloumi wrap and fresh iced lemongrass brew under the shady tamarind tree.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAHQq3dKy4oFV8tiR7wG2Lzbk72MdH7Feq7QIMDHiaxtVNbY-6dPZvvXYxc4HA-_Nie5ETk2u2M6VQUKGG1Gf8kPWmkvL5z9ov04qGCzsxdOSCeleR0TfSzKyvmaZNbTfTNoC8VGOSIa5-iz0Wzqv7C_N2jL49j9nzqePc-YIn8aSXnMuXHPof3qGQBCjFUNlvOMmGhatDc4Q3f4YizrkyR2rTjebtU0fG3o5j8vA' },
-  { cat: 'wellness', dist: '1.2km • 4 min scooter', tag: 'Yoga & Wellness',    name: 'Samadi Yoga',             price: '$$',  desc: 'Authentic Ashtanga, Yin, and breathwork practices in an expansive open-air timber shala, alongside a weekly Sunday organic farmers market.', tip: 'Sunday 09:00 Yin followed by the local market is a Canggu classic.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuArFYTSZQHc-fRExdTvz2KF5U5PVWs9Kr1Ruh3QM-qzWL5qRuKlSyzFxQPtwp34zC1LiiL1YgTMiBhfTTS4L4s02jyXEYHcFaqASsFEixJL9IvYNKMs-_6RNpG7rY23Nehv8YpZzk64Iq3M3Y7kb3O6EYn9mMzsA3S7SorSpnZhWAJHtBdQh_qHB2CQGoW9J1xFvucDpMctlg5UJLUJeETe8oCn84Ugk__sjqReug' },
-  { cat: 'sunset',  dist: '450m • 5 min walk',     tag: 'Sunset & Music',      name: "Old Man's Sunset Social", price: '$',   desc: "The unpretentious cornerstone of Canggu's beach life. After-surf cold beers, casual burgers, live DJs, and sunset crowd gatherings.", tip: 'Wednesday evening features famous Canggu local live music and social sessions.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBLwMtzp3UPPyf4cPPrbbJ4HTxXQ4aIDrEjgR-GAu4TlfPJItTqCMysUZzd5MPuo2OeJvePgykFlICYmu-wm6E44VIv30vR6WH5xq5NKdsxULGVRavPDMk3OMhA6Ehnttiw7L90eN9cP0NK282jg94Ro05eah5bqH7UUbQagUvjnEOCQNd-PDqO3DG3g9zsWy7v7jzLDZe3dSOJq3U7OLhqrKfjsIfUANwAUPhkkA' },
-];
+const curatedIds = ['crate-cafe', 'the-lawn', 'shady-shack', 'samadi-yoga', 'old-mans'] as const;
+const curatedMeta: Record<string, { cat: string; tag: string; price: string; tip: string; img: string }> = {
+  'crate-cafe': { cat: 'dining', tag: 'Specialty Coffee', price: '$$', tip: 'Arrive before 08:30 AM to secure a breezy table without queueing.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCvlGcVHZyKFllH3nD3inwlPLlxnFUqWYUKIu4eT77oQXvHlJMOtb3fFD1RW0GD7Gmrb5Kvn6crqGLEwbgzB5yp9ohgkohMSirlReBDdpM_QxerG5OlbRjPziWExSe9QMDEPBnITSny6FKAeIT2SeHUKiUr76V1CuDTmaWRzorvCRNKHoAOsOOcAl2iPlaH8-C222d5bZi9-LkzOx2Ut4PQ5OIs819P4DKiCZAVJJ0SaxACJWiBBNpKAmp0mZcA1WB4DNRwDmZHIUYG' },
+  'the-lawn': { cat: 'sunset', tag: 'Beach Lounge', price: '$$$', tip: 'Our concierge can pre-book premium ocean daybeds for Casa Roca guests.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBY02_xaOAiUw87jJi6hMjMnFwSBMsz5uFTpRPXdaZrPJfCuN21CgCJoAgpNP_ae_SF2GAYJIH2U-C7LzHHsLyS8Wite00Dl2AwDJH5922HUxyaNKoiXY5iN2fa_ugcjQUClS0i2coR0z3W38nC3gLwOproFe3asXluBDCPvdmGDm2aqeYK4xA42KJLjpa4c5Sz0cKB1hdorFKEWEYm2Bs_UcH6fFHH9vi19MlXOA' },
+  'shady-shack': { cat: 'dining', tag: 'Plant-Based Dining', price: '$$', tip: 'Try the halloumi wrap and fresh iced lemongrass brew under the shady tamarind tree.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAHQq3dKy4oFV8tiR7wG2Lzbk72MdH7Feq7QIMDHiaxtVNbY-6dPZvvXYxc4HA-_Nie5ETk2u2M6VQUKGG1Gf8kPWmkvL5z9ov04qGCzsxdOSCeleR0TfSzKyvmaZNbTfTNoC8VGOSIa5-iz0Wzqv7C_N2jL49j9nzqePc-YIn8aSXnMuXHPof3qGQBCjFUNlvOMmGhatDc4Q3f4YizrkyR2rTjebtU0fG3o5j8vA' },
+  'samadi-yoga': { cat: 'wellness', tag: 'Yoga & Wellness', price: '$$', tip: 'Sunday 09:00 Yin followed by the local market is a Canggu classic.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuArFYTSZQHc-fRExdTvz2KF5U5PVWs9Kr1Ruh3QM-qzWL5qRuKlSyzFxQPtwp34zC1LiiL1YgTMiBhfTTS4L4s02jyXEYHcFaqASsFEixJL9IvYNKMs-_6RNpG7rY23Nehv8YpZzk64Iq3M3Y7kb3O6EYn9mMzsA3S7SorSpnZhWAJHtBdQh_qHB2CQGoW9J1xFvucDpMctlg5UJLUJeETe8oCn84Ugk__sjqReug' },
+  'old-mans': { cat: 'sunset', tag: 'Sunset & Music', price: '$', tip: 'Wednesday evening features famous Canggu local live music and social sessions.', img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuBLwMtzp3UPPyf4cPPrbbJ4HTxXQ4aIDrEjgR-GAu4TlfPJItTqCMysUZzd5MPuo2OeJvePgykFlICYmu-wm6E44VIv30vR6WH5xq5NKdsxULGVRavPDMk3OMhA6Ehnttiw7L90eN9cP0NK282jg94Ro05eah5bqH7UUbQagUvjnEOCQNd-PDqO3DG3g9zsWy7v7jzLDZe3dSOJq3U7OLhqrKfjsIfUANwAUPhkkA' },
+};
+const shortModeLabel: Record<TransportMode, string> = { walking: 'walk', scooter: 'scooter', driving: 'drive' };
+const curatedPlaces = curatedIds.map((id) => {
+  const place = nearbyPlaces.find((p) => p.id === id)!;
+  const meta = curatedMeta[id];
+  return {
+    cat: meta.cat,
+    dist: `${place.distance} • ${place.time} ${shortModeLabel[place.transportMode]}`,
+    tag: meta.tag,
+    name: place.name,
+    price: meta.price,
+    desc: place.description,
+    tip: meta.tip,
+    img: meta.img,
+  };
+});
+
+// Not one of the previously-conflicting distance entries (only ever appeared
+// once, at 400m, with no contradicting mention anywhere else in the
+// codebase) — kept as page-specific curated content rather than routed
+// through the centralized nearby-places list.
+curatedPlaces.splice(2, 0, {
+  cat: 'wellness',
+  dist: '400m • 3 min walk',
+  tag: 'Surf & Coaching',
+  name: 'Batu Bolong Surf Guides',
+  price: '$$',
+  desc: "Gentle reef breaks make Batu Bolong one of the world's best longboard waves. Dedicated local surf instructors for all skill levels.",
+  tip: 'Mid-tide mornings offer the cleanest peeling waves with minimal offshore wind.',
+  img: 'https://lh3.googleusercontent.com/aida-public/AB6AXuChQyDKf7wIxKaOQhPLvfID81fyJY-QvSU_1EQyEGMdxlictlrxqgGcwZlO86i7snGN-FRxtqS2bwbwqQ2fulNnOVD0Ez9uGdn2RuPHIALZ0VSo8xXzOhA0UZTZQInazJLH0ROqT29vImCk-rRMNU41nxG8AG8huJKgM-fmKVa5oplvytvbQUJOT0Xz3wJ_HIeEizR4djG3x_CupGmGWsJ4F7nWcwWxNPVuHZYdwg',
+});
 
 const faqs = [
   {
@@ -53,20 +104,24 @@ const faqs = [
 const localSchema = {
   '@context': 'https://schema.org',
   '@type': 'LodgingBusiness',
-  name: 'Casa Roca Canggu',
+  name: property.name,
   url: 'https://casarocacanggu.com',
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'Jl. Pantai Batu Bolong',
-    addressLocality: 'Canggu',
-    addressRegion: 'Kuta Utara, Badung, Bali',
-    postalCode: '80361',
-    addressCountry: 'ID',
+    streetAddress: property.address.street,
+    addressLocality: property.address.locality,
+    addressRegion: property.address.region,
+    postalCode: property.address.postalCode,
+    addressCountry: property.address.countryCode,
   },
+  // Previously used a *different* coordinate pair here than BaseLayout's
+  // default schema (~300m apart) — this was the map-viewport-center portion
+  // of the Google Maps share link, not the actual place pin. Now uses the
+  // same verified pin coordinates as everywhere else; see src/data/property.ts.
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: -8.655645276032939,
-    longitude: 115.12864398899805,
+    latitude: property.coordinates.latitude,
+    longitude: property.coordinates.longitude,
   },
   hasMap: MAPS_URL,
 };
@@ -179,6 +234,7 @@ const localSchema = {
               </a>
               <button
                 id="copyAddressBtn"
+                data-full-address={ADDRESS}
                 onclick="copyAddressText()"
                 class="inline-flex items-center gap-1 bg-[#ebe8e3] hover:bg-[#e5e2dd] text-[#1E1B18] px-6 py-2 rounded-md text-[13px] font-[500] transition-colors"
               >
@@ -212,7 +268,7 @@ const localSchema = {
               </p>
               <div class="flex items-center justify-between pt-1">
                 <span class="text-[12px] font-[500] text-[#8A6D63]">Fixed Concierge Rate: IDR 350,000 (~$22 USD)</span>
-                <a href="https://wa.me/62XXXXXXXXX" target="_blank" rel="noopener noreferrer" class="text-[13px] font-[600] text-[#6E5249] hover:underline">Reserve Driver ↗</a>
+                <a href={`https://wa.me/${property.whatsapp}`} target="_blank" rel="noopener noreferrer" class="text-[13px] font-[600] text-[#6E5249] hover:underline">Reserve Driver ↗</a>
               </div>
             </div>
 
@@ -444,7 +500,7 @@ const localSchema = {
 
   // Copy address
   function copyAddressText() {
-    const address = 'Jl. Pantai Batu Bolong, Canggu, Kuta Utara, Badung, Bali 80361, Indonesia';
+    const address = document.getElementById('copyAddressBtn')?.dataset.fullAddress || '';
     navigator.clipboard.writeText(address).then(() => {
       const msg     = document.getElementById('copySuccessMsg');
       const btnText = document.getElementById('copyBtnText');

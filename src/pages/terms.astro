@@ -1,0 +1,121 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { property } from '../data/property';
+
+const lastUpdated = 'September 2026';
+
+const sections = [
+  {
+    title: 'Bookings',
+    body: [
+      `A booking is confirmed once you have received confirmation from ${property.name} directly (via WhatsApp, email, or our booking page) or through a third-party booking platform, as applicable.`,
+      'Please check that your name, dates, and room type are correct at the time of booking — it is your responsibility to review the confirmation.',
+    ],
+  },
+  {
+    title: 'Payment',
+    body: [
+      // TODO: PROPERTY OWNER VERIFICATION REQUIRED — no specific payment
+      // method, deposit requirement, or currency-handling policy is
+      // established anywhere in the codebase.
+      'Payment terms (deposit requirements, accepted payment methods, and currency) are confirmed directly with our team at the time of booking.',
+    ],
+  },
+  {
+    title: 'Cancellation',
+    body: [
+      property.cancellationPolicy.summary,
+    ],
+  },
+  {
+    title: 'No-Show',
+    body: [
+      `A guest who does not arrive on the scheduled check-in date without prior notice is treated as a no-show and charged as described in the Cancellation section above (${property.cancellationPolicy.noShowCharge}).`,
+    ],
+  },
+  {
+    title: 'Check-in / Check-out',
+    body: [
+      `Check-in is from ${property.checkIn} ${property.timezoneLabel}. Check-out is by ${property.checkOut} ${property.timezoneLabel}. Reception is available ${property.receptionHours} ${property.timezoneLabel} daily.`,
+      'Early check-in or late check-out may be possible on request, subject to availability, and is not guaranteed.',
+    ],
+  },
+  {
+    title: 'Guest Responsibilities',
+    body: [
+      'Guests are expected to treat the property, its staff, and other guests with respect, and to comply with reasonable requests from our team regarding safety and house policies.',
+      `The number of guests staying in a room may not exceed that room's stated maximum occupancy.`,
+    ],
+  },
+  {
+    title: 'Property Rules',
+    body: [
+      `${property.name} is a room-only property with no shared kitchen or shared pool. See our House Rules page for specific policies on smoking, pets, and quiet hours.`,
+      property.pets.description,
+    ],
+  },
+  {
+    title: 'Damages',
+    body: [
+      'Guests are responsible for any damage to the room or property caused during their stay, beyond normal wear and tear. Costs for repair or replacement may be charged to the guest.',
+    ],
+  },
+  {
+    title: 'Force Majeure',
+    body: [
+      'Neither party is liable for a failure to perform an obligation under these terms where that failure is caused by circumstances beyond their reasonable control (including, without limitation, natural disaster, government action, or public health emergency).',
+    ],
+  },
+  {
+    title: 'Contact',
+    body: [
+      `Questions about these terms can be sent to ${property.email} or via WhatsApp.`,
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Terms of Stay — Casa Roca Canggu"
+  description="Booking, payment, cancellation, and stay terms for Casa Roca Canggu."
+  canonical="https://casarocacanggu.com/terms"
+>
+  <Header />
+
+  <main class="w-full pt-20 bg-[#fcf9f4]">
+    <section class="max-w-[900px] mx-auto px-5 lg:px-12 pt-10 pb-8">
+      <span class="text-[11px] font-[600] leading-[16px] tracking-[0.2em] uppercase text-[#6E5249]">Legal</span>
+      <h1 class="font-['Playfair_Display'] text-[36px] lg:text-[44px] font-[400] leading-[44px] lg:leading-[52px] tracking-[-0.01em] text-[#1E1B18] mt-2 mb-3">
+        Terms of Stay
+      </h1>
+      <p class="text-[14px] font-[500] text-[#8A6D63]">Last updated: {lastUpdated}</p>
+    </section>
+
+    <section class="max-w-[900px] mx-auto px-5 lg:px-12 pb-24 space-y-10">
+      {sections.map(({ title, body }) => (
+        <div>
+          <h2 class="font-['Playfair_Display'] text-[22px] font-[500] leading-[30px] text-[#1E1B18] mb-3">
+            {title}
+          </h2>
+          <div class="space-y-3">
+            {body.map((p) => (
+              <p class="text-[15px] font-[400] leading-[26px] text-[#504441]">{p}</p>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <div class="pt-6 border-t border-[#EAE5DC]">
+        <p class="text-[13px] font-[400] leading-[22px] text-[#8A6D63]">
+          These terms use general, neutral language reflecting current property policy as recorded on
+          this website. They are not a substitute for formal legal advice; the property owner should
+          review payment terms and applicable local law before relying on this as a complete legal document.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

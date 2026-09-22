@@ -1,0 +1,111 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { property } from '../data/property';
+
+const lastUpdated = 'September 2026';
+
+const sections = [
+  {
+    title: 'Information We Collect',
+    body: [
+      'When you contact us to check availability or make a booking, we collect the information you choose to share with us directly — typically your name, contact details, preferred dates, and any special requests.',
+      'If you message us on WhatsApp, we receive whatever information WhatsApp provides for that conversation (your name/number as registered with WhatsApp, and the content of your messages).',
+    ],
+  },
+  {
+    title: 'Booking Information',
+    body: [
+      'This website does not currently process payments or store payment card details directly. Booking requests made through this site (via the availability page or WhatsApp) are confirmed manually with our team.',
+      'If you book through a third-party platform (such as an OTA — online travel agency), that platform\'s own privacy policy governs the information you provide there.',
+    ],
+  },
+  {
+    title: 'WhatsApp & Contact Data',
+    body: [
+      `We use WhatsApp as a direct communication channel with guests. Messages sent to our WhatsApp number are subject to WhatsApp's own privacy policy and terms, in addition to this one.`,
+      `Contact details you share with us (email, phone/WhatsApp number) are used only to respond to your enquiry or manage your stay, and are not sold or shared with third parties for marketing purposes.`,
+    ],
+  },
+  {
+    title: 'Analytics & Cookies',
+    body: [
+      'This site uses Google Analytics (GA4) to understand how visitors use the website — for example, which pages are viewed and how visitors arrive at the site. This may set cookies in your browser.',
+      'Analytics data is aggregated and used to improve the website; we do not use it to identify individual visitors personally.',
+      'You can control or disable cookies through your browser settings, or use a browser extension that blocks Google Analytics.',
+    ],
+  },
+  {
+    title: 'Third-Party Services',
+    body: [
+      'This website loads fonts from Google Fonts and uses Google Analytics/Google Tag Manager for site analytics. These third parties may process limited technical data (such as your IP address) as part of providing those services.',
+      'We do not use any other third-party advertising or tracking scripts on this site beyond what is listed above.',
+    ],
+  },
+  {
+    // TODO: PROPERTY OWNER VERIFICATION REQUIRED — no specific retention
+    // period is established anywhere in the codebase or booking process;
+    // the paragraph below is deliberately general until one is confirmed.
+    title: 'Data Retention',
+    body: [
+      'We retain guest enquiry and booking-related communication for as long as reasonably necessary to manage your stay and for legitimate record-keeping purposes.',
+    ],
+  },
+  {
+    title: 'Your Rights',
+    body: [
+      'You can ask us at any time what information we hold about you, request a correction, or ask us to delete it, by contacting us using the details below.',
+    ],
+  },
+  {
+    title: 'Contact',
+    body: [
+      `For any privacy question or request, contact us at ${property.email}.`,
+    ],
+  },
+];
+---
+
+<BaseLayout
+  title="Privacy Policy — Casa Roca Canggu"
+  description="How Casa Roca Canggu collects, uses, and protects your information when you contact us, check availability, or stay with us."
+  canonical="https://casarocacanggu.com/privacy"
+>
+  <Header />
+
+  <main class="w-full pt-20 bg-[#fcf9f4]">
+    <section class="max-w-[900px] mx-auto px-5 lg:px-12 pt-10 pb-8">
+      <span class="text-[11px] font-[600] leading-[16px] tracking-[0.2em] uppercase text-[#6E5249]">Legal</span>
+      <h1 class="font-['Playfair_Display'] text-[36px] lg:text-[44px] font-[400] leading-[44px] lg:leading-[52px] tracking-[-0.01em] text-[#1E1B18] mt-2 mb-3">
+        Privacy Policy
+      </h1>
+      <p class="text-[14px] font-[500] text-[#8A6D63]">Last updated: {lastUpdated}</p>
+    </section>
+
+    <section class="max-w-[900px] mx-auto px-5 lg:px-12 pb-24 space-y-10">
+      {sections.map(({ title, body }) => (
+        <div>
+          <h2 class="font-['Playfair_Display'] text-[22px] font-[500] leading-[30px] text-[#1E1B18] mb-3">
+            {title}
+          </h2>
+          <div class="space-y-3">
+            {body.map((p) => (
+              <p class="text-[15px] font-[400] leading-[26px] text-[#504441]">{p}</p>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      <div class="pt-6 border-t border-[#EAE5DC]">
+        <p class="text-[13px] font-[400] leading-[22px] text-[#8A6D63]">
+          This policy uses general, neutral language and reflects how this website currently operates.
+          It is not a substitute for formal legal advice; the property owner should review it against
+          applicable local data-protection law before relying on it as a complete legal document.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

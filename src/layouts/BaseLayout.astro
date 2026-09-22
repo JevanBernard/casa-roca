@@ -1,4 +1,6 @@
 ---
+import { property } from '../data/property';
+
 export interface Props {
   title?: string;
   description?: string;
@@ -7,7 +9,7 @@ export interface Props {
   schema?: object;
 }
 
-const SITE_URL = 'https://casarocacanggu.com';
+const SITE_URL = property.siteUrl;
 
 const {
   title = 'Casa Roca Canggu - Boutique Guest House in Batu Bolong, Bali',
@@ -23,27 +25,27 @@ const ogImage = image.startsWith('http') ? image : `${SITE_URL}${image}`;
 const schemaLodging = {
   '@context': 'https://schema.org',
   '@type': 'LodgingBusiness',
-  name: 'Casa Roca Canggu',
-  description: 'Casa Roca is a 10-room boutique guest house on Jl. Batu Bolong, Canggu, Bali.',
+  name: property.name,
+  description: `${property.name} is a ${property.roomCount}-room boutique guest house on Jl. Batu Bolong, Canggu, Bali.`,
   url: SITE_URL,
-  email: 'info@casarocacanggu.com',
+  email: property.email,
   image: `${SITE_URL}/images/hero.jpg`,
   address: {
     '@type': 'PostalAddress',
-    streetAddress: 'Jl. Batu Bolong',
-    addressLocality: 'Canggu',
-    addressRegion: 'Kuta Utara, Badung, Bali',
-    postalCode: '80361',
-    addressCountry: 'ID',
+    streetAddress: property.address.street,
+    addressLocality: property.address.locality,
+    addressRegion: property.address.region,
+    postalCode: property.address.postalCode,
+    addressCountry: property.address.countryCode,
   },
   geo: {
     '@type': 'GeoCoordinates',
-    latitude: -8.657868626182607,
-    longitude: 115.13107593356986,
+    latitude: property.coordinates.latitude,
+    longitude: property.coordinates.longitude,
   },
-  numberOfRooms: 10,
-  checkinTime: '14:00',
-  checkoutTime: '12:00',
+  numberOfRooms: property.roomCount,
+  checkinTime: property.checkIn,
+  checkoutTime: property.checkOut,
   priceRange: '$$',
 };
 
@@ -52,16 +54,16 @@ const schemaLodging = {
 const schemaOrganization = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Casa Roca Canggu',
+  name: property.name,
   url: SITE_URL,
   logo: `${SITE_URL}/images/logo.png`,
-  email: 'info@casarocacanggu.com',
+  email: property.email,
 };
 
 const schemaWebsite = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
-  name: 'Casa Roca Canggu',
+  name: property.name,
   url: SITE_URL,
 };
 ---

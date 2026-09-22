@@ -2,6 +2,8 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { rooms as roomData } from '../data/rooms';
+import { property } from '../data/property';
 
 const whyDirectPoints = [
   {
@@ -12,7 +14,7 @@ const whyDirectPoints = [
   {
     icon: 'event_available',
     title: 'Free Cancellation',
-    body: 'Free cancellation up to 48 hours before check-in when you book direct with us.',
+    body: `Free cancellation up to ${property.cancellationPolicy.freeUntilHoursBeforeCheckIn} hours before check-in when you book direct with us.`,
   },
   {
     icon: 'schedule',
@@ -21,55 +23,20 @@ const whyDirectPoints = [
   },
 ];
 
-// Kept in sync with the room data on /rooms — see src/pages/rooms.astro.
-// priceValue/maxGuests are numeric so the client-side script below can do
-// nights × rate math and cap the guest stepper per room.
-// ids match the room ids used on /rooms and in the search-bar query params
-// (?room=double|twin|triple) so a link from elsewhere can pre-select a room.
-const rooms = [
-  {
-    id: 'double',
-    name: 'Superior Double Room',
-    image: '/images/superior-double-room.jpg',
-    imageAlt: 'Superior Double Room at Casa Roca Canggu — queen bed with private balcony',
-    description: 'Queen bed, private balcony, en-suite rain shower bathroom, AC, and 4K Smart TV. Ideal for couples and solo travelers.',
-    priceValue: 750000,
-    maxGuests: 2,
-    tags: [
-      { icon: 'wifi', label: 'Free Wi-Fi' },
-      { icon: 'ac_unit', label: 'Climate Control' },
-      { icon: 'balcony', label: 'Private Balcony' },
-    ],
-  },
-  {
-    id: 'twin',
-    name: 'Superior Twin Room',
-    image: '/images/superior-twin-room.jpg',
-    imageAlt: 'Superior Twin Room at Casa Roca Canggu — two single beds with private balcony',
-    description: 'Two single beds, the same premium finishes and private balcony as the Double. Ideal for friends or surf buddies.',
-    priceValue: 850000,
-    maxGuests: 2,
-    tags: [
-      { icon: 'wifi', label: 'Free Wi-Fi' },
-      { icon: 'ac_unit', label: 'Climate Control' },
-      { icon: 'balcony', label: 'Private Balcony' },
-    ],
-  },
-  {
-    id: 'triple',
-    name: 'Deluxe Triple Room',
-    image: '/images/deluxe-room.jpg',
-    imageAlt: 'Deluxe Triple Room at Casa Roca Canggu — king bed and single bed with expanded balcony',
-    description: 'Our most generous layout at 32m² — a king bed plus a single bed, sleeping up to 3 guests, with an expanded balcony.',
-    priceValue: 1150000,
-    maxGuests: 3,
-    tags: [
-      { icon: 'balcony', label: 'Expanded Balcony' },
-      { icon: 'shower', label: 'Rain Shower' },
-      { icon: 'local_parking', label: 'Free Parking' },
-    ],
-  },
-];
+// Room data (name/price/images/capacity) now comes from the shared source in
+// src/data/rooms.ts — see that file's comment for why this matters: this
+// page used to hard-code its own separate room list that had drifted to
+// different prices and a different room lineup than /rooms.
+const rooms = roomData.map((room) => ({
+  id: room.id,
+  name: room.name,
+  image: room.image,
+  imageAlt: room.imageAlt,
+  description: room.shortDescription,
+  priceValue: room.priceValue,
+  maxGuests: room.capacity,
+  tags: room.quickTags,
+}));
 
 // This booking panel is a real interactive date/room/price calculator, but it
 // is not wired to a live PMS/channel manager — there is no source of true
@@ -288,7 +255,7 @@ const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
           events, or room details. We reply within the hour.
         </p>
         <a
-          href="https://wa.me/62XXXXXXXXX"
+          href={`https://wa.me/${property.whatsapp}`}
           target="_blank"
           rel="noopener noreferrer"
           class="bg-secondary text-on-secondary px-10 py-4 rounded-full font-label-md text-label-md flex items-center gap-2 hover:opacity-90 transition-opacity"
@@ -306,13 +273,12 @@ const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
 </BaseLayout>
 
-<script>
+<script define:vars={{ WHATSAPP_NUMBER: property.whatsapp }}>
   // Casa Roca booking widget: real client-side date/room/price logic.
   // There is no live PMS behind this yet — UNAVAILABLE_DATES is an empty
   // illustrative placeholder, not real booked-out inventory. Replace it (and
   // the WhatsApp hand-off at the bottom) with a real booking engine when one
   // is connected.
-  const WHATSAPP_NUMBER = '62XXXXXXXXX';
   const UNAVAILABLE_DATES = []; // e.g. ['2026-10-05', '2026-10-06']
 
   const monthLabelEl = document.getElementById('calendar-month-label');
