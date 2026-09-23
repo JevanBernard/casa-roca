@@ -39,12 +39,9 @@ const rooms = roomData.map((room) => ({
 }));
 
 // Real availability calendar, embedded from the property's own booking
-// system. Query params forwarded from elsewhere on the site (hero search
-// bar, /rooms filter bar, a room card's "Reserve" link — e.g.
-// ?checkin=2026-10-01&checkout=2026-10-03&room=twin&guests=2) are appended
-// onto the iframe src client-side on a best-effort basis in the script
-// below, in case the embed recognizes them; if it doesn't, it simply
-// ignores the extra params.
+// system. This is view-only — guests check dates here, then book by
+// messaging us on WhatsApp (see the CTA right below the embed, and the
+// WhatsApp card further down this page).
 const AVAILABILITY_EMBED_URL = 'https://ical.casarocacanggu.com/?embed=1';
 ---
 
@@ -99,6 +96,23 @@ const AVAILABILITY_EMBED_URL = 'https://ical.casarocacanggu.com/?embed=1';
                   loading="lazy"
                   title="Casa Roca Canggu Availability Calendar"
                 ></iframe>
+              </div>
+
+              <!-- Booking happens via WhatsApp, not through this calendar directly:
+                   check dates above, then message us to confirm. -->
+              <div class="mt-4 pt-4 border-t border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <p class="font-body-md text-body-md text-on-surface-variant text-center sm:text-left">
+                  Found dates that work? Message us on WhatsApp with your dates to confirm your booking.
+                </p>
+                <a
+                  href={`https://wa.me/${property.whatsapp}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="shrink-0 inline-flex items-center justify-center gap-2 bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity"
+                >
+                  <span class="material-symbols-outlined text-[20px]">chat</span>
+                  Book via WhatsApp
+                </a>
               </div>
             </div>
 
@@ -216,27 +230,9 @@ const AVAILABILITY_EMBED_URL = 'https://ical.casarocacanggu.com/?embed=1';
     }
   });
 
-  // Best-effort: forward this page's own ?checkin/?checkout/?room/?guests
-  // (set by the hero search bar, the /rooms filter bar, or a room card's
-  // "Reserve" link) onto the embed's src, in case it recognizes them. If it
-  // doesn't, the extra params are simply ignored by the embed.
-  (function forwardSearchParamsToEmbed() {
-    const incoming = new URLSearchParams(window.location.search);
-    const forwardKeys = ['checkin', 'checkout', 'room', 'guests'];
-    const toForward = forwardKeys.filter((k) => incoming.get(k));
-    if (toForward.length === 0) return;
-
-    const iframe = document.getElementById('casa-roca-iframe');
-    if (!iframe) return;
-
-    const src = new URL(iframe.getAttribute('src'), window.location.href);
-    toForward.forEach((k) => src.searchParams.set(k, incoming.get(k)));
-    iframe.setAttribute('src', src.toString());
-  })();
-
-  // Each room card's "Check Dates" button scrolls to the live calendar above
-  // rather than running a price calculator — the embed is now the actual
-  // source of availability and pricing.
+  // Each room card's "Check Dates" button scrolls to the calendar above —
+  // booking itself happens via the WhatsApp CTA next to the calendar, not
+  // through this page directly.
   document.querySelectorAll('.select-room-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       document.getElementById('availability-embed')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
