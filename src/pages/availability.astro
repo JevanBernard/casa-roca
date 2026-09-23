@@ -38,21 +38,14 @@ const rooms = roomData.map((room) => ({
   tags: room.quickTags,
 }));
 
-// This booking panel is a real interactive date/room/price calculator, but it
-// is not wired to a live PMS/channel manager — there is no source of true
-// availability yet, so UNAVAILABLE_DATES below (in the client script) is an
-// empty illustrative placeholder, not real booked-out data. Wire up a real
-// booking engine (e.g. Little Hotelier, Cloudbeds) to replace it before
-// relying on this page for real reservations. The month shown server-side is
-// computed at request/build time so it never shows a stale year; the client
-// script takes over immediately for month navigation and selection.
-const now = new Date();
-const calendarMonthName = now.toLocaleString('en-US', { month: 'long' });
-const calendarYear = now.getFullYear();
-const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-const firstWeekdayMondayIndexed = (new Date(now.getFullYear(), now.getMonth(), 1).getDay() + 6) % 7;
-const leadingBlankDays = Array.from({ length: firstWeekdayMondayIndexed });
-const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+// Real availability calendar, embedded from the property's own booking
+// system. Query params forwarded from elsewhere on the site (hero search
+// bar, /rooms filter bar, a room card's "Reserve" link — e.g.
+// ?checkin=2026-10-01&checkout=2026-10-03&room=twin&guests=2) are appended
+// onto the iframe src client-side on a best-effort basis in the script
+// below, in case the embed recognizes them; if it doesn't, it simply
+// ignores the extra params.
+const AVAILABILITY_EMBED_URL = 'https://ical.casarocacanggu.com/?embed=1';
 ---
 
 <BaseLayout
@@ -96,77 +89,16 @@ const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
         <div class="flex-grow p-8 md:p-12 relative" style="background-image: radial-gradient(circle at 2px 2px, #e4e2e1 1px, transparent 0); background-size: 24px 24px;">
           <div class="max-w-4xl mx-auto space-y-12">
 
-            <!-- Calendar + Summary -->
-            <div class="bg-surface rounded-xl p-8 border border-outline-variant/20">
-              <div class="flex flex-col md:flex-row gap-8">
-
-                <!-- Calendar -->
-                <div class="flex-grow">
-                  <div class="flex items-center justify-between mb-6">
-                    <h3 class="font-headline-md text-headline-md text-on-surface" id="calendar-month-label">{calendarMonthName} {calendarYear}</h3>
-                    <div class="flex gap-2">
-                      <button type="button" id="cal-prev" class="p-2 hover:bg-surface-container-low rounded-full transition-colors" aria-label="Previous month">
-                        <span class="material-symbols-outlined">chevron_left</span>
-                      </button>
-                      <button type="button" id="cal-next" class="p-2 hover:bg-surface-container-low rounded-full transition-colors" aria-label="Next month">
-                        <span class="material-symbols-outlined">chevron_right</span>
-                      </button>
-                    </div>
-                  </div>
-
-                  <!-- Day headers -->
-                  <div class="grid grid-cols-7 gap-2 text-center mb-2">
-                    {['Mo','Tu','We','Th','Fr','Sa','Su'].map(d => (
-                      <div class="font-label-sm text-label-sm text-outline uppercase">{d}</div>
-                    ))}
-                  </div>
-
-                  <!-- Days: computed for the current month at build time so this
-                       never shows a stale year. No real availability data is
-                       plugged in yet — every day renders the same "available" style. -->
-                  <div class="grid grid-cols-7 gap-2" id="calendar-days">
-                    {leadingBlankDays.map(() => (
-                      <div class="h-12"></div>
-                    ))}
-                    {monthDays.map(d => (
-                      <div class="h-12 flex items-center justify-center font-body-md text-on-surface hover:bg-secondary-container rounded-lg cursor-pointer transition-colors cal-day" data-day={d}>{d}</div>
-                    ))}
-                  </div>
-                </div>
-
-                <!-- Summary -->
-                <div class="md:w-64 flex flex-col justify-between border-t md:border-t-0 md:border-l border-outline-variant/20 pt-6 md:pt-0 md:pl-8">
-                  <div class="space-y-6">
-                    <div>
-                      <label class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1">Selected Stay</label>
-                      <div class="font-body-md text-body-md text-on-surface" id="selected-stay">Select your dates</div>
-                      <div class="font-label-sm text-label-sm text-secondary mt-1" id="nights-count">&nbsp;</div>
-                    </div>
-                    <div>
-                      <label class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1">Guests</label>
-                      <div class="flex items-center justify-between">
-                        <button type="button" id="guests-minus" aria-label="Fewer guests" class="w-7 h-7 flex items-center justify-center rounded-full border border-outline-variant text-on-surface hover:bg-secondary-container transition-colors">−</button>
-                        <span class="font-body-md text-body-md text-on-surface" id="guests-count">2 Adults</span>
-                        <button type="button" id="guests-plus" aria-label="More guests" class="w-7 h-7 flex items-center justify-center rounded-full border border-outline-variant text-on-surface hover:bg-secondary-container transition-colors">+</button>
-                      </div>
-                    </div>
-                    <div class="pt-4 border-t border-outline-variant/20">
-                      <label class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1">Room</label>
-                      <div class="font-body-md text-body-md text-on-surface" id="summary-room">No room selected</div>
-                      <div class="font-label-sm text-label-sm text-on-surface-variant mt-1" id="summary-nightly">&nbsp;</div>
-                    </div>
-                    <div id="summary-total-row" class="pt-4 border-t border-outline-variant/20 hidden">
-                      <label class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1">Estimated Total</label>
-                      <div class="font-headline-sm text-headline-sm text-secondary" id="summary-total"></div>
-                    </div>
-                  </div>
-                  <div>
-                    <p id="booking-notice" class="font-label-sm text-label-sm text-red-600 mt-4 hidden"></p>
-                    <button id="check-availability-btn" type="button" class="bg-secondary text-on-secondary w-full rounded-lg font-label-md text-label-md py-4 mt-4 hover:opacity-90 transition-all active:scale-95">
-                      Check Availability
-                    </button>
-                  </div>
-                </div>
+            <!-- Live availability calendar (real booking system) -->
+            <div id="availability-embed" class="bg-surface rounded-xl p-4 md:p-6 border border-outline-variant/20">
+              <div id="casa-roca-availability">
+                <iframe
+                  id="casa-roca-iframe"
+                  src={AVAILABILITY_EMBED_URL}
+                  style="width:100%; border:0; display:block; min-height:600px;"
+                  loading="lazy"
+                  title="Casa Roca Canggu Availability Calendar"
+                ></iframe>
               </div>
             </div>
 
@@ -214,8 +146,9 @@ const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
                     <button
                       type="button"
                       class="select-room-btn mt-8 border border-secondary text-secondary hover:bg-secondary hover:text-on-secondary px-8 py-3 rounded-lg font-label-md text-label-md transition-all self-start"
+                      data-room-id={room.id}
                     >
-                      Select Room
+                      Check Dates for {room.name.split(' ')[0]} {room.name.split(' ')[1]}
                     </button>
                   </div>
                 </div>
@@ -273,275 +206,40 @@ const monthDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
 </BaseLayout>
 
-<script define:vars={{ WHATSAPP_NUMBER: property.whatsapp }}>
-  // Casa Roca booking widget: real client-side date/room/price logic.
-  // There is no live PMS behind this yet — UNAVAILABLE_DATES is an empty
-  // illustrative placeholder, not real booked-out inventory. Replace it (and
-  // the WhatsApp hand-off at the bottom) with a real booking engine when one
-  // is connected.
-  const UNAVAILABLE_DATES = []; // e.g. ['2026-10-05', '2026-10-06']
-
-  const monthLabelEl = document.getElementById('calendar-month-label');
-  const daysGridEl = document.getElementById('calendar-days');
-  const prevBtn = document.getElementById('cal-prev');
-  const nextBtn = document.getElementById('cal-next');
-  const selectedStayEl = document.getElementById('selected-stay');
-  const nightsCountEl = document.getElementById('nights-count');
-  const guestsCountEl = document.getElementById('guests-count');
-  const guestsMinusBtn = document.getElementById('guests-minus');
-  const guestsPlusBtn = document.getElementById('guests-plus');
-  const roomCards = document.querySelectorAll('.room-card');
-  const summaryRoomEl = document.getElementById('summary-room');
-  const summaryNightlyEl = document.getElementById('summary-nightly');
-  const summaryTotalRow = document.getElementById('summary-total-row');
-  const summaryTotalEl = document.getElementById('summary-total');
-  const checkAvailabilityBtn = document.getElementById('check-availability-btn');
-  const bookingNoticeEl = document.getElementById('booking-notice');
-
-  if (daysGridEl && monthLabelEl && prevBtn && nextBtn && checkAvailabilityBtn) {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    let viewYear = today.getFullYear();
-    let viewMonth = today.getMonth(); // 0-indexed
-    let checkIn = null;   // Date
-    let checkOut = null;  // Date
-    let selectedRoom = null; // { name, price, maxGuests }
-    let guests = 2;
-
-    const idr = (n) => `IDR ${n.toLocaleString('en-US')}`;
-    const toISODate = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-    const isUnavailable = (d) => UNAVAILABLE_DATES.includes(toISODate(d));
-    const isPast = (d) => d < today;
-    const isSameDay = (a, b) => !!a && !!b && a.getTime() === b.getTime();
-    const isInRange = (d) => !!checkIn && !!checkOut && d > checkIn && d < checkOut;
-    const nightsBetween = (a, b) => Math.round((b - a) / 86400000);
-    const formatShort = (d) => d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-
-    function hasBlockedBetween(start, end) {
-      const cursor = new Date(start);
-      cursor.setDate(cursor.getDate() + 1);
-      while (cursor < end) {
-        if (isUnavailable(cursor)) return true;
-        cursor.setDate(cursor.getDate() + 1);
-      }
-      return false;
+<script>
+  // Real availability calendar embed. The iframe posts its content height so
+  // we can resize the wrapper to fit (no internal scrollbar).
+  window.addEventListener('message', function (e) {
+    if (e.data && typeof e.data.casaRocaAvailabilityHeight === 'number') {
+      var iframe = document.getElementById('casa-roca-iframe');
+      if (iframe) iframe.style.height = e.data.casaRocaAvailabilityHeight + 'px';
     }
+  });
 
-    function renderCalendar() {
-      monthLabelEl.textContent = new Date(viewYear, viewMonth, 1).toLocaleString('en-US', { month: 'long', year: 'numeric' });
-      daysGridEl.innerHTML = '';
+  // Best-effort: forward this page's own ?checkin/?checkout/?room/?guests
+  // (set by the hero search bar, the /rooms filter bar, or a room card's
+  // "Reserve" link) onto the embed's src, in case it recognizes them. If it
+  // doesn't, the extra params are simply ignored by the embed.
+  (function forwardSearchParamsToEmbed() {
+    const incoming = new URLSearchParams(window.location.search);
+    const forwardKeys = ['checkin', 'checkout', 'room', 'guests'];
+    const toForward = forwardKeys.filter((k) => incoming.get(k));
+    if (toForward.length === 0) return;
 
-      const firstWeekday = (new Date(viewYear, viewMonth, 1).getDay() + 6) % 7; // Monday = 0
-      const daysInMonth = new Date(viewYear, viewMonth + 1, 0).getDate();
+    const iframe = document.getElementById('casa-roca-iframe');
+    if (!iframe) return;
 
-      for (let i = 0; i < firstWeekday; i++) {
-        const blank = document.createElement('div');
-        blank.className = 'h-12';
-        daysGridEl.appendChild(blank);
-      }
+    const src = new URL(iframe.getAttribute('src'), window.location.href);
+    toForward.forEach((k) => src.searchParams.set(k, incoming.get(k)));
+    iframe.setAttribute('src', src.toString());
+  })();
 
-      for (let day = 1; day <= daysInMonth; day++) {
-        const date = new Date(viewYear, viewMonth, day);
-        const cell = document.createElement('button');
-        cell.type = 'button';
-        cell.textContent = String(day);
-        cell.className = 'h-12 flex items-center justify-center font-body-md rounded-lg transition-colors';
-
-        const past = isPast(date);
-        const blocked = isUnavailable(date);
-
-        if (past || blocked) {
-          cell.disabled = true;
-          cell.classList.add('text-outline/40', 'line-through', 'cursor-not-allowed', 'bg-surface-container-low');
-          if (blocked && !past) cell.title = 'Not available';
-        } else {
-          if (isSameDay(date, checkIn) || isSameDay(date, checkOut)) {
-            cell.classList.add('bg-secondary', 'text-on-secondary', 'cursor-pointer');
-          } else if (isInRange(date)) {
-            cell.classList.add('bg-secondary-container', 'text-on-secondary-container', 'cursor-pointer');
-          } else {
-            cell.classList.add('text-on-surface', 'hover:bg-secondary-container', 'cursor-pointer');
-          }
-          cell.addEventListener('click', () => onDayClick(date));
-        }
-
-        daysGridEl.appendChild(cell);
-      }
-    }
-
-    function onDayClick(date) {
-      if (!checkIn || checkOut) {
-        checkIn = date;
-        checkOut = null;
-      } else if (date <= checkIn || hasBlockedBetween(checkIn, date)) {
-        checkIn = date;
-        checkOut = null;
-      } else {
-        checkOut = date;
-      }
-      bookingNoticeEl.classList.add('hidden');
-      updateSummary();
-      renderCalendar();
-    }
-
-    function updateSummary() {
-      if (checkIn && checkOut) {
-        const nights = nightsBetween(checkIn, checkOut);
-        selectedStayEl.textContent = `${formatShort(checkIn)} – ${formatShort(checkOut)}, ${checkOut.getFullYear()}`;
-        nightsCountEl.textContent = `${nights} Night${nights > 1 ? 's' : ''}`;
-      } else if (checkIn) {
-        selectedStayEl.textContent = `${formatShort(checkIn)} — now pick a check-out date`;
-        nightsCountEl.textContent = ' ';
-      } else {
-        selectedStayEl.textContent = 'Select your dates';
-        nightsCountEl.textContent = ' ';
-      }
-      updateTotal();
-    }
-
-    function updateTotal() {
-      if (!selectedRoom) {
-        summaryRoomEl.textContent = 'No room selected';
-        summaryNightlyEl.textContent = ' ';
-        summaryTotalRow.classList.add('hidden');
-        return;
-      }
-      summaryRoomEl.textContent = selectedRoom.name;
-      summaryNightlyEl.textContent = `${idr(selectedRoom.price)} / night`;
-
-      if (checkIn && checkOut) {
-        const nights = nightsBetween(checkIn, checkOut);
-        summaryTotalRow.classList.remove('hidden');
-        // Nights > 1 scales linearly with the nightly rate; adjust here if
-        // weekly/long-stay discounts are ever introduced.
-        summaryTotalEl.textContent = `${idr(selectedRoom.price * nights)} for ${nights} night${nights > 1 ? 's' : ''}`;
-      } else {
-        summaryTotalRow.classList.add('hidden');
-      }
-    }
-
-    function selectRoom(room, cardEl) {
-      selectedRoom = room;
-      roomCards.forEach((c) => c.classList.remove('ring-2', 'ring-secondary'));
-      cardEl.classList.add('ring-2', 'ring-secondary');
-      guests = Math.min(guests, room.maxGuests);
-      updateGuestsLabel();
-      updateTotal();
-    }
-
-    function updateGuestsLabel() {
-      guestsCountEl.textContent = `${guests} ${guests === 1 ? 'Adult' : 'Adults'}`;
-    }
-
-    function selectRoomByCard(card) {
-      const name = card.dataset.roomName;
-      const price = Number(card.dataset.roomPrice);
-      const maxGuests = Number(card.dataset.maxGuests);
-      selectRoom({ name, price, maxGuests }, card);
-    }
-
-    roomCards.forEach((card) => {
-      const btn = card.querySelector('.select-room-btn');
-      if (!btn) return;
-      btn.addEventListener('click', () => {
-        selectRoomByCard(card);
-        bookingNoticeEl.classList.add('hidden');
-        const original = btn.textContent.trim();
-        btn.textContent = 'Selected ✓';
-        setTimeout(() => { btn.textContent = original; }, 2000);
-      });
+  // Each room card's "Check Dates" button scrolls to the live calendar above
+  // rather than running a price calculator — the embed is now the actual
+  // source of availability and pricing.
+  document.querySelectorAll('.select-room-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.getElementById('availability-embed')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
-
-    guestsMinusBtn?.addEventListener('click', () => {
-      guests = Math.max(1, guests - 1);
-      updateGuestsLabel();
-    });
-    guestsPlusBtn?.addEventListener('click', () => {
-      const cap = selectedRoom?.maxGuests ?? 3;
-      guests = Math.min(cap, guests + 1);
-      updateGuestsLabel();
-    });
-
-    prevBtn.addEventListener('click', () => {
-      viewMonth -= 1;
-      if (viewMonth < 0) { viewMonth = 11; viewYear -= 1; }
-      renderCalendar();
-    });
-    nextBtn.addEventListener('click', () => {
-      viewMonth += 1;
-      if (viewMonth > 11) { viewMonth = 0; viewYear += 1; }
-      renderCalendar();
-    });
-
-    checkAvailabilityBtn.addEventListener('click', () => {
-      if (!checkIn || !checkOut) {
-        bookingNoticeEl.textContent = 'Please select your check-in and check-out dates.';
-        bookingNoticeEl.classList.remove('hidden');
-        return;
-      }
-      if (!selectedRoom) {
-        bookingNoticeEl.textContent = 'Please select a room type below.';
-        bookingNoticeEl.classList.remove('hidden');
-        return;
-      }
-      bookingNoticeEl.classList.add('hidden');
-
-      const nights = nightsBetween(checkIn, checkOut);
-      const total = selectedRoom.price * nights;
-      const message = [
-        "Hi Casa Roca, I'd like to check availability:",
-        `Room: ${selectedRoom.name}`,
-        `Check-in: ${formatShort(checkIn)} ${checkIn.getFullYear()}`,
-        `Check-out: ${formatShort(checkOut)} ${checkOut.getFullYear()}`,
-        `Nights: ${nights}`,
-        `Guests: ${guests}`,
-        `Estimated total: ${idr(total)}`,
-      ].join('\n');
-
-      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`, '_blank', 'noopener');
-    });
-
-    // Pre-fill from a search elsewhere on the site (hero search bar, /rooms
-    // filter bar, or a room card's "Reserve" link) instead of ignoring it —
-    // e.g. /availability?checkin=2026-10-01&checkout=2026-10-03&room=twin&guests=2
-    function applySearchParams() {
-      const params = new URLSearchParams(window.location.search);
-      const parseParamDate = (value) => {
-        if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
-        const [y, m, d] = value.split('-').map(Number);
-        const date = new Date(y, m - 1, d);
-        return isPast(date) ? null : date;
-      };
-
-      const paramCheckIn = parseParamDate(params.get('checkin'));
-      const paramCheckOut = parseParamDate(params.get('checkout'));
-      if (paramCheckIn && paramCheckOut && paramCheckOut > paramCheckIn && !hasBlockedBetween(paramCheckIn, paramCheckOut)) {
-        checkIn = paramCheckIn;
-        checkOut = paramCheckOut;
-        viewYear = checkIn.getFullYear();
-        viewMonth = checkIn.getMonth();
-      } else if (paramCheckIn) {
-        checkIn = paramCheckIn;
-        viewYear = checkIn.getFullYear();
-        viewMonth = checkIn.getMonth();
-      }
-
-      const paramRoom = params.get('room');
-      if (paramRoom) {
-        const card = Array.from(roomCards).find((c) => c.dataset.roomId === paramRoom);
-        if (card) selectRoomByCard(card);
-      }
-
-      const paramGuests = Number(params.get('guests'));
-      if (Number.isInteger(paramGuests) && paramGuests > 0) {
-        guests = selectedRoom ? Math.min(paramGuests, selectedRoom.maxGuests) : paramGuests;
-      }
-    }
-
-    applySearchParams();
-    updateGuestsLabel();
-    renderCalendar();
-    updateSummary();
-  }
+  });
 </script>
