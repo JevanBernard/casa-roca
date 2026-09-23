@@ -86,9 +86,20 @@ const AVAILABILITY_EMBED_URL = 'https://ical.casarocacanggu.com/?embed=1';
         <div class="flex-grow p-8 md:p-12 relative" style="background-image: radial-gradient(circle at 2px 2px, #e4e2e1 1px, transparent 0); background-size: 24px 24px;">
           <div class="max-w-4xl mx-auto space-y-12">
 
-            <!-- Live availability calendar (real booking system) -->
+            <!-- Live availability calendar (real booking system).
+                 The embed is a full page from ical.casarocacanggu.com (its
+                 own header, hero copy, and "Staff Login" link) — that's a
+                 different origin, so we cannot reach into its DOM to remove
+                 those from here; the wrapper below just visually crops the
+                 top of it off-screen instead. #EMBED_CROP_TOP_PX in the
+                 script tag controls how much gets cropped — it's a rough
+                 estimate, not measured against the real embed, and it won't
+                 adapt if that page reflows to a different header height on
+                 mobile or if its layout changes later. The correct long-term
+                 fix is a real "hide header" embed setting on that tool, if
+                 one exists — worth checking before relying on this crop. -->
             <div id="availability-embed" class="bg-surface rounded-xl p-4 md:p-6 border border-outline-variant/20">
-              <div id="casa-roca-availability">
+              <div id="casa-roca-availability" style="overflow: hidden;">
                 <iframe
                   id="casa-roca-iframe"
                   src={AVAILABILITY_EMBED_URL}
@@ -98,22 +109,34 @@ const AVAILABILITY_EMBED_URL = 'https://ical.casarocacanggu.com/?embed=1';
                 ></iframe>
               </div>
 
-              <!-- Booking happens via WhatsApp, not through this calendar directly:
-                   check dates above, then message us to confirm. -->
-              <div class="mt-4 pt-4 border-t border-outline-variant/20 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <p class="font-body-md text-body-md text-on-surface-variant text-center sm:text-left">
-                  Found dates that work? Message us on WhatsApp with your dates to confirm your booking.
-                </p>
-                <a
-                  href={`https://wa.me/${property.whatsapp}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="shrink-0 inline-flex items-center justify-center gap-2 bg-secondary text-on-secondary px-6 py-3 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity"
-                >
-                  <span class="material-symbols-outlined text-[20px]">chat</span>
-                  Book via WhatsApp
-                </a>
-              </div>
+              <!-- Booking happens via WhatsApp, not through the calendar directly:
+                   check dates above, fill them in here, and it opens WhatsApp
+                   with your dates pre-filled for our team to confirm. -->
+              <form id="availability-whatsapp-form" class="mt-4 pt-4 border-t border-outline-variant/20 grid grid-cols-1 sm:grid-cols-4 gap-3 items-end">
+                <div class="sm:col-span-1">
+                  <label for="wa-checkin" class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1">Check-in</label>
+                  <input type="date" id="wa-checkin" required class="w-full bg-surface-container-low border border-outline-variant/40 rounded-lg px-3 py-2.5 text-on-surface text-body-md" />
+                </div>
+                <div class="sm:col-span-1">
+                  <label for="wa-checkout" class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1">Check-out</label>
+                  <input type="date" id="wa-checkout" required class="w-full bg-surface-container-low border border-outline-variant/40 rounded-lg px-3 py-2.5 text-on-surface text-body-md" />
+                </div>
+                <div class="sm:col-span-1">
+                  <label for="wa-guests" class="font-label-sm text-label-sm text-outline uppercase tracking-wider block mb-1">Guests</label>
+                  <select id="wa-guests" class="w-full bg-surface-container-low border border-outline-variant/40 rounded-lg px-3 py-2.5 text-on-surface text-body-md">
+                    <option value="1">1 Guest</option>
+                    <option value="2" selected>2 Guests</option>
+                    <option value="3">3 Guests</option>
+                  </select>
+                </div>
+                <div class="sm:col-span-1">
+                  <button type="submit" class="w-full inline-flex items-center justify-center gap-2 bg-secondary text-on-secondary px-6 py-2.5 rounded-lg font-label-md text-label-md hover:opacity-90 transition-opacity">
+                    <span class="material-symbols-outlined text-[20px]">chat</span>
+                    Book via WhatsApp
+                  </button>
+                </div>
+                <p id="wa-form-notice" class="sm:col-span-4 font-label-sm text-label-sm text-red-600 hidden"></p>
+              </form>
             </div>
 
             <!-- Room Selection -->
@@ -220,22 +243,78 @@ const AVAILABILITY_EMBED_URL = 'https://ical.casarocacanggu.com/?embed=1';
 
 </BaseLayout>
 
-<script>
+<script define:vars={{ WHATSAPP_NUMBER: property.whatsapp }}>
   // Real availability calendar embed. The iframe posts its content height so
-  // we can resize the wrapper to fit (no internal scrollbar).
+  // we can resize the wrapper to fit (no internal scrollbar). We also crop a
+  // fixed amount off the TOP of that height for our own wrapper, to hide the
+  // embed's own header/hero/"Staff Login" row that we can't reach into
+  // directly (different origin). Tune this if it's misaligned — it's a
+  // rough estimate, not a measurement of the real embed, and it's a single
+  // fixed value that won't adapt per breakpoint if that page's header height
+  // changes on mobile.
+  var EMBED_CROP_TOP_PX = 300;
+
   window.addEventListener('message', function (e) {
     if (e.data && typeof e.data.casaRocaAvailabilityHeight === 'number') {
       var iframe = document.getElementById('casa-roca-iframe');
-      if (iframe) iframe.style.height = e.data.casaRocaAvailabilityHeight + 'px';
+      var wrapper = document.getElementById('casa-roca-availability');
+      var fullHeight = e.data.casaRocaAvailabilityHeight;
+      if (iframe) {
+        iframe.style.height = fullHeight + 'px';
+        iframe.style.marginTop = '-' + EMBED_CROP_TOP_PX + 'px';
+      }
+      if (wrapper) {
+        wrapper.style.height = Math.max(0, fullHeight - EMBED_CROP_TOP_PX) + 'px';
+      }
     }
   });
 
   // Each room card's "Check Dates" button scrolls to the calendar above —
-  // booking itself happens via the WhatsApp CTA next to the calendar, not
+  // booking itself happens via the WhatsApp form next to the calendar, not
   // through this page directly.
   document.querySelectorAll('.select-room-btn').forEach((btn) => {
     btn.addEventListener('click', () => {
       document.getElementById('availability-embed')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
+  });
+
+  // Check-in/out + guests → a pre-filled WhatsApp message, same pattern as
+  // the hero search bar and the /rooms filter bar use.
+  var waForm = document.getElementById('availability-whatsapp-form');
+  var waNotice = document.getElementById('wa-form-notice');
+  waForm?.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var checkin = document.getElementById('wa-checkin')?.value;
+    var checkout = document.getElementById('wa-checkout')?.value;
+    var guests = document.getElementById('wa-guests')?.value || '2';
+
+    if (!checkin || !checkout) {
+      if (waNotice) {
+        waNotice.textContent = 'Please choose both a check-in and check-out date.';
+        waNotice.classList.remove('hidden');
+      }
+      return;
+    }
+    if (checkout <= checkin) {
+      if (waNotice) {
+        waNotice.textContent = 'Check-out must be after check-in.';
+        waNotice.classList.remove('hidden');
+      }
+      return;
+    }
+    waNotice?.classList.add('hidden');
+
+    var formatDate = function (isoDate) {
+      var d = new Date(isoDate + 'T00:00:00');
+      return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    };
+    var message = [
+      "Hi Casa Roca, I'd like to check availability:",
+      'Check-in: ' + formatDate(checkin),
+      'Check-out: ' + formatDate(checkout),
+      'Guests: ' + guests,
+    ].join('\n');
+
+    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(message), '_blank', 'noopener');
   });
 </script>
